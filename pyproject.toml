@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "aa",
     "jinja2>=3.1.6",
 ]
 
@@ -12,3 +13,6 @@ dependencies = [
 dev = [
     "ipython>=9.6.0",
 ]
+
+[tool.uv.sources]
+aa = { path = "../automation", editable = true }

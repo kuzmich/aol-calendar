@@ -1,7 +1,12 @@
 import calendar
-from datetime import date
+from datetime import date, timedelta
+from itertools import groupby
+import json
 import logging
+from pathlib import Path
+import re
 
+from aa.proxy.admin import log_in, find_courses
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
@@ -25,6 +30,7 @@ def write_to_file(output, output_file):
 
 
 def get_month_dates(year, month):
+    """Возвращает даты текущего месяца, сгрупированные по неделям"""
     cal = calendar.Calendar()
 
     # >>> cal.monthdatescalendar(2025, 10)
@@ -46,22 +52,260 @@ def get_month_dates(year, month):
     return cal.monthdatescalendar(year, month)
 
 
-def get_events(year, month):
-    events = [
-        {'name': 'Счастье',
-         'type': 'happiness',
-         'teachers': ['Артиш', 'Кузьминич'],
-         'dates': [date(2025, 10, 17), date(2025, 10, 19)]}
+def _month_week():
+    """Closure для month_week"""
+    # кеш соответствия даты месяца и недели месяца
+    # {(2025, 10): {(9, 29): 1, (9, 30): 1,
+    #               (10, 1): 1, (10, 2): 1, (10, 3): 1, (10, 4): 1, (10, 5): 1, (10, 6): 2, (10, 7): 2,
+    #               ...,
+    #               (10, 31): 5, (11, 1): 5, (11, 2): 5},
+    #  ...}
+    day_week_map = {
+    }
+
+    def month_week(d, month):
+        """Возвращает для даты номер недели внутри месяца"""
+
+        year, month = d.year, month
+        if (year, month) not in day_week_map:
+            cal = calendar.Calendar()
+            # для каждой даты календарного месяца посчитаем, какая это неделя
+            day_week_map[(year, month)] = {
+                (dt.month, dt.day): week
+                for week, dates in enumerate(cal.monthdatescalendar(year, month), 1)
+                for dt in dates
+            }
+        return day_week_map[(year, month)][(d.month, d.day)]
+
+    return month_week
+
+month_week = _month_week()
+
+
+def get_cal_blocks(start_date, end_date):
+    """Возвращает блоки дней для каждой недели события, не выходящие за рамки месяца"""
+
+    # (datetime.date(2025, 10, 25), datetime.date(2025, 10, 28)) ->
+    # [{'week': 4, 'start': 6, 'end': 7},
+    #  {'week': 5, 'start': 1, 'end': 2}]
+    # Т.е. для события с 25 по 28 октября 2025 вернется два блока:
+    # сб, вс на 4 неделе и пн, вт для 5 недели
+    month = start_date.month
+    start_week = month_week(start_date, month)
+
+    # последняя дата в месяце (может быть из следующего месяца)
+    last_date = calendar.Calendar().monthdatescalendar(start_date.year, month)[-1][-1]
+
+    dates = [
+        dt
+        for i in range((end_date - start_date).days + 1)
+        # не выходим за границы календаря текущего месяца
+        if (dt := start_date + timedelta(days=i)) <= last_date
     ]
-    events_data = [
-        {'name': 'Счастье Артиш + Кузьминич',
-         'type': 'happiness',
-         'pos': {'week': 3, 'start': 5, 'end': 7, 'index': 1}},
-        {'name': 'Счастье 2',
-         'type': 'happiness',
-         'pos': {'week': 3, 'start': 5, 'end': 7, 'index': 2}},
-    ]
-    return events_data
+    for week, group in groupby(dates, lambda d: month_week(d, month)):
+        # если переходим в другой месяц, то заканчиваем
+        if week < start_week:
+            break
+        block_dates = list(group)
+        yield {'week': week, 'start': block_dates[0].isoweekday(), 'end': block_dates[-1].isoweekday()}
+
+
+class AdminCourses:
+    """Курсы из админки сайта artofliving.ru"""
+
+    course_name_type = {
+        'счастье': 'happiness',
+        'блессинг': 'blessing',
+        'yes!': 'yes',
+        'art excel': 'art_excel',
+        'процесс интуиции 5-8 лет': 'intuition',
+        'поддерживающее занятие online': 'practices',
+        'глубокий сон и снятие тревожности': 'deep_sleep',
+    }
+
+    _sess = None
+
+    def __init__(self, credentials, data_dir='data'):
+        self.credentials = credentials
+        self.data_dir = Path(data_dir)
+
+    def _get_course_type(self, name):
+        return self.course_name_type.get(name.lower(), 'unknown')
+
+    def _parse_dates(self, date_str, year):
+        """
+        Парсит строку в одну или две даты в зависимости от формата.
+
+        Args:
+            date_str (str): Строка с датой или диапазоном дат.
+            Примеры: '31 Октября-2 Ноября', '17-19 Октября', '19 Октября'.
+
+        Returns:
+            list: Список объектов datetime.date.
+            Например: [datetime.date(2025, 10, 31), datetime.date(2025, 11, 2)]
+        """
+
+        # Словарик для перевода названий месяцев
+        month_map = {
+            'января': 1, 'февраля': 2, 'марта': 3, 'апреля': 4,
+            'мая': 5, 'июня': 6, 'июля': 7, 'августа': 8,
+            'сентября': 9, 'октября': 10, 'ноября': 11, 'декабря': 12
+        }
+
+        # Регулярные выражения для разных форматов
+        # 1. '31 Октября-2 Ноября'
+        pattern_full_range = r'(\d+)\s+([А-Яа-я]+)[-–](\d+)\s+([А-Яа-я]+)'
+        # 2. '17-19 Октября'
+        pattern_month_range = r'(\d+)[-–](\d+)\s+([А-Яа-я]+)'
+        # 3. '19 Октября'
+        pattern_single_date = r'(\d+)\s+([А-Яа-я]+)'
+
+        # Попытка найти совпадение по регулярным выражениям
+        match_full_range = re.match(pattern_full_range, date_str, re.IGNORECASE)
+        match_month_range = re.match(pattern_month_range, date_str, re.IGNORECASE)
+        match_single_date = re.match(pattern_single_date, date_str, re.IGNORECASE)
+
+        # Обработка совпадений
+        if match_full_range:
+            day1_str, month1_str, day2_str, month2_str = match_full_range.groups()
+            month1 = month_map[month1_str.lower()]
+            month2 = month_map[month2_str.lower()]
+
+            date1 = date(year, month1, int(day1_str))
+            date2 = date(year, month2, int(day2_str))
+            return [date1, date2]
+
+        elif match_month_range:
+            day1_str, day2_str, month_str = match_month_range.groups()
+            month = month_map[month_str.lower()]
+
+            date1 = date(year, month, int(day1_str))
+            date2 = date(year, month, int(day2_str))
+            return [date1, date2]
+
+        elif match_single_date:
+            day_str, month_str = match_single_date.groups()
+            month = month_map[month_str.lower()]
+
+            single_date = date(year, month, int(day_str))
+            return [single_date]
+
+        else:
+            raise ValueError(f"Неизвестный формат строки: '{date_str}'")
+
+    @property
+    def _session(self):
+        if not self._sess:
+            self._sess = log_in(*self.credentials)
+        return self._sess
+
+    def _get_courses(self, year, month):
+        # [{'date': '31 Октября-2 Ноября', 'place': 'Театральная, 17', 'name': 'Блессинг'},
+        #  {'date': '17-19 Октября', 'place': 'Театральная, 17', 'name': 'Счастье'},
+        #  {'date': '25–28 Октября', 'place': 'Театральная, 17', 'name': 'YES!'}
+        #  {'date': '19 Октября', 'place': 'Онлайн, время МСК+5', 'Поддерживающее занятие online'},
+        return find_courses(self._session, month=date(year, month, 1))
+
+    def _courses2events(self, courses, year):
+        def parse(courses):
+            # [
+            #     {'name': 'Счастье',
+            #      'type': 'happiness',
+            #      'teachers': ['Артиш', 'Кузьминич'],
+            #      'dates': [date(2025, 10, 17), date(2025, 10, 19)]},
+            #     ...
+            # ]
+            for c in courses:
+                yield {
+                    'name': c['name'],
+                    'type': self._get_course_type(c['name']),
+                    'dates': self._parse_dates(c['date'], year),
+                }
+
+        def make_cal_blocks(events):
+            # [
+            #     {'name': 'Счастье Артиш + Кузьминич',
+            #      'type': 'happiness',
+            #      'pos': {'week': 3, 'start': 5, 'end': 7, 'index': 1}},
+            #     {'name': 'YES!',
+            #      'type': 'yes',
+            #      'pos': {'week': 4, 'start': 6, 'end': 7, 'index': 1}},
+            #     {'name': 'YES!',
+            #      'type': 'yes',
+            #      'pos': {'week': 5, 'start': 1, 'end': 2, 'index': 1}},
+            # ]
+            for e in events:
+                for i, block in enumerate(get_cal_blocks(e['dates'][0], e['dates'][-1]), 1):
+                    block['index'] = i
+                    yield {
+                        'name': e['name'],
+                        'type': e['type'],
+                        'dates': e['dates'],
+                        'pos': block
+                    }
+
+        def assign_levels(events):
+            events = sorted(events, key=lambda e: e['pos']['start'])
+            levels = []  # [(end, level_index), ...]
+            next_level = 1
+
+            for event in events:
+                start, end = event['pos']['start'], event['pos']['end']
+
+                # пробуем найти уровень, где текущее событие помещается
+                for i, l in enumerate(levels, 1):
+                    if l[0] < start:
+                        # l[0] = end
+                        levels[i-1] = (end, i)
+                        event['pos']['index'] = i
+                        break
+                else:
+                    levels.append((end, next_level))
+                    event['pos']['index'] = next_level
+                    next_level += 1
+
+                # if levels and levels[0][0] < start:  # можно переиспользовать уровень
+                #     last_end, level = heapq.heappop(levels)
+                # else:
+                #     level = next_level
+                #     next_level += 1
+                # event['pos']['index'] = level
+                # heapq.heappush(levels, (end, level))
+
+            return events
+
+        parsed = (e for e in parse(courses))
+        blocks = (e for e in make_cal_blocks(parsed))
+        blocks = sorted(blocks, key=lambda e: (e['pos']['week'], e['pos']['start']))
+        indexed = []
+        for _, group in groupby(blocks, lambda e: e['pos']['week']):
+            indexed.extend(assign_levels(group))
+
+        return list(indexed)
+
+    def _save(self, year, month, courses):
+        with (self.data_dir / f'{year}_{month}.json').open('wt') as f:
+            json.dump(courses, f, indent=2)
+
+    def _load(self, year, month):
+        with (self.data_dir / f'{year}_{month}.json').open('rt') as f:
+            return json.load(f)
+
+    def get(self, year, month):
+        try:
+            courses = self._load(year, month)
+        except Exception:
+            courses = self._get_courses(year, month)
+            self._save(year, month, courses)
+
+        events = self._courses2events(courses, year)
+        return events
+
+
+def get_events(year, month, credentials):
+    adm = AdminCourses(credentials)
+    events = adm.get(year, month)
+    return events
 
 
 if __name__ == "__main__":
@@ -70,11 +314,15 @@ if __name__ == "__main__":
     template_file = 'calendar-template.html'
     output_file = 'out/calendar.html'
 
+    email = '***REMOVED***'
+    password = '***REMOVED***'
+
     month_dates = get_month_dates(2025, 10)
+    events = get_events(2025, 10, (email, password))
 
     output = render_calendar(
         {'month_dates': month_dates,
-         'events': get_events(2025, 10),
+         'events': events,
          'cur_month': 10},
         template_file
     )

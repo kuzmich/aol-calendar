@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание курсов и мероприятий ИЖ в Иркутске</title>
+    <link rel="stylesheet" href="calendar.css?ver=2025-10-25T10:05:00+08:00">
+</head>
+<body>
+  {% for data in calendar_data %}
+    {% include 'calendar.html' %}
+  {% endfor %}
+</body>
+</html>

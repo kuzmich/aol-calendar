@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def render_calendar(context, template_file):
     env = Environment(
-        loader=FileSystemLoader("."),
+        loader=FileSystemLoader("templates"),
         autoescape=select_autoescape()
     )
     template = env.get_template(template_file)
@@ -302,28 +302,38 @@ class AdminCourses:
         return events
 
 
-def get_events(year, month, credentials):
-    adm = AdminCourses(credentials)
-    events = adm.get(year, month)
-    return events
-
-
 if __name__ == "__main__":
     logging.basicConfig(level='DEBUG')
 
-    template_file = 'calendar-template.html'
+    template_file = 'page.html'
     output_file = 'out/calendar.html'
 
     email = '***REMOVED***'
     password = '***REMOVED***'
 
-    month_dates = get_month_dates(2025, 10)
-    events = get_events(2025, 10, (email, password))
+    month_names = ['январь', 'февраль', 'март',
+                   'апрель', 'май', 'июнь',
+                   'июль', 'август', 'сентябрь',
+                   'октябрь', 'ноябрь', 'декабрь']
+
+    adm = AdminCourses((email, password))
+
+    calendar_data = []
+    year = 2025
+    for month in range(1, 12+1):
+        calendar_data.append({
+            'dates': get_month_dates(year, month),
+            'events': adm.get(year, month),
+            'month': month,
+            'month_name': month_names[month - 1].title(),
+            'year': year
+        })
 
     output = render_calendar(
-        {'month_dates': month_dates,
-         'events': events,
-         'cur_month': 10},
+        {'calendar_data': calendar_data},
+        # {'month_dates': month_dates,
+        #  'events': events,
+        #  'cur_month': 10},
         template_file
     )
     write_to_file(output, output_file)

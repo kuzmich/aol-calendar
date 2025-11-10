@@ -8,16 +8,12 @@
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
     {%- for week in data.dates %}
-    {% set week_num = loop.index %}
+    {%- set week_num = loop.index %}
     {%- for date in week %}
     <div class="day week{{ week_num }} weekday{{ loop.index }}{% if date.month != data.month %} off-month{% endif %}">{{ date.day }}</div>
     {%- endfor %}
     {%- endfor %}
     {%- for event in data.events %}
-    {# <div class="event line-clamp {{ event.type }} event-num-{{ event.pos.index }}"
-	    style="grid-row: {{ event.pos.week + 1}}; grid-column: {{ event.pos.start }} / {{ event.pos.end + 1 }}">
-      {{ event.name }}
-    </div> #}
     <button class="event line-clamp {{ event.type }} event-num-{{ event.pos.index }}"
 	    style="grid-row: {{ event.pos.week + 1}}; grid-column: {{ event.pos.start }} / {{ event.pos.end + 1 }}"
 	    data-name="{{ event.name }}"

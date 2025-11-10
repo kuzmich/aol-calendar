@@ -4,33 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Расписание курсов и мероприятий ИЖ в Иркутске</title>
-    <link rel="stylesheet" href="calendar.css?ver=2025-11-09T19:45:00+08:00">
-    <script src="calendar.js?ver=2025-11-09T19:45:00+08:00" defer></script>
+    <link rel="stylesheet" href="calendar.css?ver=2025-11-10T14:15:00+08:00">
+    <script src="calendar.js?ver=2025-11-10T13:15:00+08:00" defer></script>
 </head>
 <body>
   <dialog class="event-details">
     <header>
-      <h3></h3>
+      <h3>Информация о событии</h3>
       <button class="close">X</button>
     </header>
-    <dl>
-      <div>
-	<dt>Даты:</dt>
-	<dd data-name="dates"></dd>
-      </div>
-      <div>
-	<dt>Место:</dt>
-	<dd data-name="place"></dd>
-      </div>
-      <div>
-	<dt>Учителя:</dt>
-	<dd data-name="teachers"></dd>
-      </div>
-      <div>
-	<dt>Участников:</dt>
-	<dd data-name="people"></dd>
-      </div>
-    </dl>
+    <table>
+      <tbody>
+	<tr>
+	  <th scope="row">Курс</th>
+	  <td data-name="name"></td>
+	</tr>
+	<tr>
+	  <th scope="row">Даты</th>
+	  <td data-name="dates"></td>
+	</tr>
+	<tr>
+	  <th scope="row">Место</th>
+	  <td data-name="place"></td>
+	</tr>
+	<tr>
+	  <th scope="row">Учителя</th>
+	  <td data-name="teachers"></td>
+	</tr>
+	<tr>
+	  <th scope="row">Участников</th>
+	  <td data-name="people"></td>
+	</tr>
+      </tbody>
+    </table>
   </dialog>
   <h1>Курсы «Искусства Жизни» в Иркутске</h1>
   <nav>
@@ -40,7 +46,6 @@
     </ul>
   </nav>
   <section id="cal-2025" aria-labelledby="tab-1">
-  
       <h2>Январь 2025</h2>
   <div class="calendar" data-month="1" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -50,7 +55,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">30</div>
     <div class="day week1 weekday2 off-month">31</div>
     <div class="day week1 weekday3">1</div>
@@ -58,7 +62,6 @@
     <div class="day week1 weekday5">3</div>
     <div class="day week1 weekday6">4</div>
     <div class="day week1 weekday7">5</div>
-    
     <div class="day week2 weekday1">6</div>
     <div class="day week2 weekday2">7</div>
     <div class="day week2 weekday3">8</div>
@@ -66,7 +69,6 @@
     <div class="day week2 weekday5">10</div>
     <div class="day week2 weekday6">11</div>
     <div class="day week2 weekday7">12</div>
-    
     <div class="day week3 weekday1">13</div>
     <div class="day week3 weekday2">14</div>
     <div class="day week3 weekday3">15</div>
@@ -74,7 +76,6 @@
     <div class="day week3 weekday5">17</div>
     <div class="day week3 weekday6">18</div>
     <div class="day week3 weekday7">19</div>
-    
     <div class="day week4 weekday1">20</div>
     <div class="day week4 weekday2">21</div>
     <div class="day week4 weekday3">22</div>
@@ -82,7 +83,6 @@
     <div class="day week4 weekday5">24</div>
     <div class="day week4 weekday6">25</div>
     <div class="day week4 weekday7">26</div>
-    
     <div class="day week5 weekday1">27</div>
     <div class="day week5 weekday2">28</div>
     <div class="day week5 weekday3">29</div>
@@ -90,7 +90,6 @@
     <div class="day week5 weekday5">31</div>
     <div class="day week5 weekday6 off-month">1</div>
     <div class="day week5 weekday7 off-month">2</div>
-    
     <button class="event line-clamp yes event-num-1"
 	    style="grid-row: 2; grid-column: 5 / 8"
 	    data-name="YES!"
@@ -101,7 +100,6 @@
 	    >
       YES! (Дианова)
     </button>
-    
     <button class="event line-clamp art_excel event-num-2"
 	    style="grid-row: 2; grid-column: 5 / 8"
 	    data-name="ART Excel"
@@ -112,7 +110,6 @@
 	    >
       ART Excel (Шпикалова)
     </button>
-    
     <button class="event line-clamp happiness event-num-3"
 	    style="grid-row: 2; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -123,7 +120,6 @@
 	    >
       Счастье (Маслов + Демиденко)
     </button>
-    
     <button class="event line-clamp happiness event-num-4"
 	    style="grid-row: 2; grid-column: 6 / 8"
 	    data-name="Счастье"
@@ -134,7 +130,6 @@
 	    >
       Счастье (Леонович + Портнягина + Костицина)
     </button>
-    
     <button class="event line-clamp happiness event-num-5"
 	    style="grid-row: 2; grid-column: 6 / 8"
 	    data-name="Счастье"
@@ -145,18 +140,6 @@
 	    >
       Счастье (Есина + Ширкин)
     </button>
-    
-    <button class="event line-clamp practices event-num-6"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="5 Января"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="4"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 3; grid-column: 1 / 3"
 	    data-name="Счастье"
@@ -167,7 +150,6 @@
 	    >
       Счастье (Леонович + Портнягина + Костицина)
     </button>
-    
     <button class="event line-clamp happiness event-num-2"
 	    style="grid-row: 3; grid-column: 1 / 2"
 	    data-name="Счастье"
@@ -178,7 +160,6 @@
 	    >
       Счастье (Есина + Ширкин)
     </button>
-    
     <button class="event line-clamp yes event-num-3"
 	    style="grid-row: 3; grid-column: 1 / 2"
 	    data-name="YES!"
@@ -189,7 +170,6 @@
 	    >
       YES! (Дианова)
     </button>
-    
     <button class="event line-clamp art_excel event-num-4"
 	    style="grid-row: 3; grid-column: 1 / 2"
 	    data-name="ART Excel"
@@ -200,7 +180,6 @@
 	    >
       ART Excel (Шпикалова)
     </button>
-    
     <button class="event line-clamp yes event-num-1"
 	    style="grid-row: 3; grid-column: 3 / 8"
 	    data-name="YES+"
@@ -211,18 +190,6 @@
 	    >
       YES+ (Григолайт + Рогозина)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="12 Января"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="8"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp unknown event-num-1"
 	    style="grid-row: 4; grid-column: 3 / 8"
 	    data-name="Саньям"
@@ -233,18 +200,6 @@
 	    >
       Саньям (Динеш)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="19 Января"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="4"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp unknown event-num-1"
 	    style="grid-row: 5; grid-column: 1 / 2"
 	    data-name="Саньям"
@@ -255,19 +210,7 @@
 	    >
       Саньям (Динеш)
     </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="26 Января"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="7"
-	    >
-      Поддерживающее занятие online
-    </button>
   </div>
-  
       <h2>Февраль 2025</h2>
   <div class="calendar" data-month="2" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -277,7 +220,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">27</div>
     <div class="day week1 weekday2 off-month">28</div>
     <div class="day week1 weekday3 off-month">29</div>
@@ -285,7 +227,6 @@
     <div class="day week1 weekday5 off-month">31</div>
     <div class="day week1 weekday6">1</div>
     <div class="day week1 weekday7">2</div>
-    
     <div class="day week2 weekday1">3</div>
     <div class="day week2 weekday2">4</div>
     <div class="day week2 weekday3">5</div>
@@ -293,7 +234,6 @@
     <div class="day week2 weekday5">7</div>
     <div class="day week2 weekday6">8</div>
     <div class="day week2 weekday7">9</div>
-    
     <div class="day week3 weekday1">10</div>
     <div class="day week3 weekday2">11</div>
     <div class="day week3 weekday3">12</div>
@@ -301,7 +241,6 @@
     <div class="day week3 weekday5">14</div>
     <div class="day week3 weekday6">15</div>
     <div class="day week3 weekday7">16</div>
-    
     <div class="day week4 weekday1">17</div>
     <div class="day week4 weekday2">18</div>
     <div class="day week4 weekday3">19</div>
@@ -309,7 +248,6 @@
     <div class="day week4 weekday5">21</div>
     <div class="day week4 weekday6">22</div>
     <div class="day week4 weekday7">23</div>
-    
     <div class="day week5 weekday1">24</div>
     <div class="day week5 weekday2">25</div>
     <div class="day week5 weekday3">26</div>
@@ -317,29 +255,6 @@
     <div class="day week5 weekday5">28</div>
     <div class="day week5 weekday6 off-month">1</div>
     <div class="day week5 weekday7 off-month">2</div>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="2 Февраля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="9"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="9 Февраля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp art_excel event-num-1"
 	    style="grid-row: 4; grid-column: 5 / 8"
 	    data-name="ART Excel"
@@ -350,18 +265,6 @@
 	    >
       ART Excel (Куликова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="16 Февраля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="8"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp art_excel event-num-1"
 	    style="grid-row: 5; grid-column: 1 / 2"
 	    data-name="ART Excel"
@@ -372,7 +275,6 @@
 	    >
       ART Excel (Куликова)
     </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 5; grid-column: 4 / 8"
 	    data-name="Счастье"
@@ -383,18 +285,6 @@
 	    >
       Счастье (Глебова + Федоров)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="23 Февраля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="4"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 6; grid-column: 1 / 3"
 	    data-name="Счастье"
@@ -405,7 +295,6 @@
 	    >
       Счастье (Глебова + Федоров)
     </button>
-    
     <button class="event line-clamp art_of_meditation event-num-1"
 	    style="grid-row: 6; grid-column: 5 / 8"
 	    data-name="Искусство медитации"
@@ -417,7 +306,6 @@
       Искусство медитации (Копанев)
     </button>
   </div>
-  
       <h2>Март 2025</h2>
   <div class="calendar" data-month="3" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -427,7 +315,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">24</div>
     <div class="day week1 weekday2 off-month">25</div>
     <div class="day week1 weekday3 off-month">26</div>
@@ -435,7 +322,6 @@
     <div class="day week1 weekday5 off-month">28</div>
     <div class="day week1 weekday6">1</div>
     <div class="day week1 weekday7">2</div>
-    
     <div class="day week2 weekday1">3</div>
     <div class="day week2 weekday2">4</div>
     <div class="day week2 weekday3">5</div>
@@ -443,7 +329,6 @@
     <div class="day week2 weekday5">7</div>
     <div class="day week2 weekday6">8</div>
     <div class="day week2 weekday7">9</div>
-    
     <div class="day week3 weekday1">10</div>
     <div class="day week3 weekday2">11</div>
     <div class="day week3 weekday3">12</div>
@@ -451,7 +336,6 @@
     <div class="day week3 weekday5">14</div>
     <div class="day week3 weekday6">15</div>
     <div class="day week3 weekday7">16</div>
-    
     <div class="day week4 weekday1">17</div>
     <div class="day week4 weekday2">18</div>
     <div class="day week4 weekday3">19</div>
@@ -459,7 +343,6 @@
     <div class="day week4 weekday5">21</div>
     <div class="day week4 weekday6">22</div>
     <div class="day week4 weekday7">23</div>
-    
     <div class="day week5 weekday1">24</div>
     <div class="day week5 weekday2">25</div>
     <div class="day week5 weekday3">26</div>
@@ -467,7 +350,6 @@
     <div class="day week5 weekday5">28</div>
     <div class="day week5 weekday6">29</div>
     <div class="day week5 weekday7">30</div>
-    
     <div class="day week6 weekday1">31</div>
     <div class="day week6 weekday2 off-month">1</div>
     <div class="day week6 weekday3 off-month">2</div>
@@ -475,40 +357,6 @@
     <div class="day week6 weekday5 off-month">4</div>
     <div class="day week6 weekday6 off-month">5</div>
     <div class="day week6 weekday7 off-month">6</div>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="2 Марта"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="7"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="9 Марта"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="6"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="9 Марта"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="0"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 4; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -519,29 +367,6 @@
 	    >
       Счастье (Ружьева + Девятайкина)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="16 Марта"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="4"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="23 Марта"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="6"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp yes event-num-1"
 	    style="grid-row: 6; grid-column: 4 / 8"
 	    data-name="YES!"
@@ -552,7 +377,6 @@
 	    >
       YES! (Дианова + Готовская)
     </button>
-    
     <button class="event line-clamp art_excel event-num-2"
 	    style="grid-row: 6; grid-column: 4 / 8"
 	    data-name="ART Excel"
@@ -563,19 +387,7 @@
 	    >
       ART Excel (Шпикалова)
     </button>
-    
-    <button class="event line-clamp practices event-num-3"
-	    style="grid-row: 6; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="30 Марта"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="6"
-	    >
-      Поддерживающее занятие online
-    </button>
   </div>
-  
       <h2>Апрель 2025</h2>
   <div class="calendar" data-month="4" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -585,7 +397,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">31</div>
     <div class="day week1 weekday2">1</div>
     <div class="day week1 weekday3">2</div>
@@ -593,7 +404,6 @@
     <div class="day week1 weekday5">4</div>
     <div class="day week1 weekday6">5</div>
     <div class="day week1 weekday7">6</div>
-    
     <div class="day week2 weekday1">7</div>
     <div class="day week2 weekday2">8</div>
     <div class="day week2 weekday3">9</div>
@@ -601,7 +411,6 @@
     <div class="day week2 weekday5">11</div>
     <div class="day week2 weekday6">12</div>
     <div class="day week2 weekday7">13</div>
-    
     <div class="day week3 weekday1">14</div>
     <div class="day week3 weekday2">15</div>
     <div class="day week3 weekday3">16</div>
@@ -609,7 +418,6 @@
     <div class="day week3 weekday5">18</div>
     <div class="day week3 weekday6">19</div>
     <div class="day week3 weekday7">20</div>
-    
     <div class="day week4 weekday1">21</div>
     <div class="day week4 weekday2">22</div>
     <div class="day week4 weekday3">23</div>
@@ -617,7 +425,6 @@
     <div class="day week4 weekday5">25</div>
     <div class="day week4 weekday6">26</div>
     <div class="day week4 weekday7">27</div>
-    
     <div class="day week5 weekday1">28</div>
     <div class="day week5 weekday2">29</div>
     <div class="day week5 weekday3">30</div>
@@ -625,7 +432,6 @@
     <div class="day week5 weekday5 off-month">2</div>
     <div class="day week5 weekday6 off-month">3</div>
     <div class="day week5 weekday7 off-month">4</div>
-    
     <button class="event line-clamp intuition event-num-1"
 	    style="grid-row: 2; grid-column: 6 / 8"
 	    data-name="Процесс интуиции"
@@ -636,18 +442,6 @@
 	    >
       Процесс интуиции (Павлова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="6 Апреля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="4"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp cooking event-num-1"
 	    style="grid-row: 3; grid-column: 5 / 8"
 	    data-name="Здоровое питание"
@@ -658,18 +452,6 @@
 	    >
       Здоровое питание (Пашевина + Анастасия)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="13 Апреля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 4; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -680,18 +462,6 @@
 	    >
       Счастье (Крылова + Цыкунова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="20 Апреля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="7"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp deep_sleep event-num-1"
 	    style="grid-row: 5; grid-column: 5 / 8"
 	    data-name="Глубокий сон и снятие тревожности"
@@ -702,18 +472,6 @@
 	    >
       Глубокий сон и снятие тревожности (Шумакова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="27 Апреля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="7"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp art_of_silence event-num-1"
 	    style="grid-row: 6; grid-column: 3 / 8"
 	    data-name="Искусство тишины"
@@ -725,7 +483,6 @@
       Искусство тишины (Копанев)
     </button>
   </div>
-  
       <h2>Май 2025</h2>
   <div class="calendar" data-month="5" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -735,7 +492,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">28</div>
     <div class="day week1 weekday2 off-month">29</div>
     <div class="day week1 weekday3 off-month">30</div>
@@ -743,7 +499,6 @@
     <div class="day week1 weekday5">2</div>
     <div class="day week1 weekday6">3</div>
     <div class="day week1 weekday7">4</div>
-    
     <div class="day week2 weekday1">5</div>
     <div class="day week2 weekday2">6</div>
     <div class="day week2 weekday3">7</div>
@@ -751,7 +506,6 @@
     <div class="day week2 weekday5">9</div>
     <div class="day week2 weekday6">10</div>
     <div class="day week2 weekday7">11</div>
-    
     <div class="day week3 weekday1">12</div>
     <div class="day week3 weekday2">13</div>
     <div class="day week3 weekday3">14</div>
@@ -759,7 +513,6 @@
     <div class="day week3 weekday5">16</div>
     <div class="day week3 weekday6">17</div>
     <div class="day week3 weekday7">18</div>
-    
     <div class="day week4 weekday1">19</div>
     <div class="day week4 weekday2">20</div>
     <div class="day week4 weekday3">21</div>
@@ -767,7 +520,6 @@
     <div class="day week4 weekday5">23</div>
     <div class="day week4 weekday6">24</div>
     <div class="day week4 weekday7">25</div>
-    
     <div class="day week5 weekday1">26</div>
     <div class="day week5 weekday2">27</div>
     <div class="day week5 weekday3">28</div>
@@ -775,7 +527,6 @@
     <div class="day week5 weekday5">30</div>
     <div class="day week5 weekday6">31</div>
     <div class="day week5 weekday7 off-month">1</div>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 2; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -786,29 +537,6 @@
 	    >
       Счастье (Портнягина + Костицина)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="4 Мая"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="6"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="11 Мая"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="10"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp give_up_smoking event-num-1"
 	    style="grid-row: 4; grid-column: 4 / 8"
 	    data-name="Победи зависимость"
@@ -819,18 +547,6 @@
 	    >
       Победи зависимость (Демиденко + Глуханько)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="18 Мая"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="2"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp give_up_smoking event-num-1"
 	    style="grid-row: 5; grid-column: 1 / 2"
 	    data-name="Победи зависимость"
@@ -841,18 +557,6 @@
 	    >
       Победи зависимость (Демиденко + Глуханько)
     </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="25 Мая"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp yes event-num-1"
 	    style="grid-row: 6; grid-column: 5 / 8"
 	    data-name="YES!"
@@ -864,7 +568,6 @@
       YES! (Куликова)
     </button>
   </div>
-  
       <h2>Июнь 2025</h2>
   <div class="calendar" data-month="6" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -874,7 +577,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">26</div>
     <div class="day week1 weekday2 off-month">27</div>
     <div class="day week1 weekday3 off-month">28</div>
@@ -882,7 +584,6 @@
     <div class="day week1 weekday5 off-month">30</div>
     <div class="day week1 weekday6 off-month">31</div>
     <div class="day week1 weekday7">1</div>
-    
     <div class="day week2 weekday1">2</div>
     <div class="day week2 weekday2">3</div>
     <div class="day week2 weekday3">4</div>
@@ -890,7 +591,6 @@
     <div class="day week2 weekday5">6</div>
     <div class="day week2 weekday6">7</div>
     <div class="day week2 weekday7">8</div>
-    
     <div class="day week3 weekday1">9</div>
     <div class="day week3 weekday2">10</div>
     <div class="day week3 weekday3">11</div>
@@ -898,7 +598,6 @@
     <div class="day week3 weekday5">13</div>
     <div class="day week3 weekday6">14</div>
     <div class="day week3 weekday7">15</div>
-    
     <div class="day week4 weekday1">16</div>
     <div class="day week4 weekday2">17</div>
     <div class="day week4 weekday3">18</div>
@@ -906,7 +605,6 @@
     <div class="day week4 weekday5">20</div>
     <div class="day week4 weekday6">21</div>
     <div class="day week4 weekday7">22</div>
-    
     <div class="day week5 weekday1">23</div>
     <div class="day week5 weekday2">24</div>
     <div class="day week5 weekday3">25</div>
@@ -914,7 +612,6 @@
     <div class="day week5 weekday5">27</div>
     <div class="day week5 weekday6">28</div>
     <div class="day week5 weekday7">29</div>
-    
     <div class="day week6 weekday1">30</div>
     <div class="day week6 weekday2 off-month">1</div>
     <div class="day week6 weekday3 off-month">2</div>
@@ -922,18 +619,6 @@
     <div class="day week6 weekday5 off-month">4</div>
     <div class="day week6 weekday6 off-month">5</div>
     <div class="day week6 weekday7 off-month">6</div>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="1 Июня"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="1"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp art_excel event-num-1"
 	    style="grid-row: 3; grid-column: 5 / 8"
 	    data-name="ART Excel"
@@ -944,18 +629,6 @@
 	    >
       ART Excel (Губерман + Куликова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="8 Июня"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="8"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp art_excel event-num-1"
 	    style="grid-row: 4; grid-column: 1 / 2"
 	    data-name="ART Excel"
@@ -966,7 +639,6 @@
 	    >
       ART Excel (Губерман + Куликова)
     </button>
-    
     <button class="event line-clamp art_excel event-num-1"
 	    style="grid-row: 4; grid-column: 4 / 8"
 	    data-name="ART Excel"
@@ -977,7 +649,6 @@
 	    >
       ART Excel (Дианова)
     </button>
-    
     <button class="event line-clamp happiness event-num-2"
 	    style="grid-row: 4; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -988,18 +659,6 @@
 	    >
       Счастье (Федоров)
     </button>
-    
-    <button class="event line-clamp practices event-num-3"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="15 Июня"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp ssy event-num-1"
 	    style="grid-row: 5; grid-column: 3 / 8"
 	    data-name="Шри Шри йога 2"
@@ -1010,30 +669,7 @@
 	    >
       Шри Шри йога 2 (Артиш)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="22 Июня"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="3"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 6; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="29 Июня"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
   </div>
-  
       <h2>Июль 2025</h2>
   <div class="calendar" data-month="7" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -1043,7 +679,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">30</div>
     <div class="day week1 weekday2">1</div>
     <div class="day week1 weekday3">2</div>
@@ -1051,7 +686,6 @@
     <div class="day week1 weekday5">4</div>
     <div class="day week1 weekday6">5</div>
     <div class="day week1 weekday7">6</div>
-    
     <div class="day week2 weekday1">7</div>
     <div class="day week2 weekday2">8</div>
     <div class="day week2 weekday3">9</div>
@@ -1059,7 +693,6 @@
     <div class="day week2 weekday5">11</div>
     <div class="day week2 weekday6">12</div>
     <div class="day week2 weekday7">13</div>
-    
     <div class="day week3 weekday1">14</div>
     <div class="day week3 weekday2">15</div>
     <div class="day week3 weekday3">16</div>
@@ -1067,7 +700,6 @@
     <div class="day week3 weekday5">18</div>
     <div class="day week3 weekday6">19</div>
     <div class="day week3 weekday7">20</div>
-    
     <div class="day week4 weekday1">21</div>
     <div class="day week4 weekday2">22</div>
     <div class="day week4 weekday3">23</div>
@@ -1075,7 +707,6 @@
     <div class="day week4 weekday5">25</div>
     <div class="day week4 weekday6">26</div>
     <div class="day week4 weekday7">27</div>
-    
     <div class="day week5 weekday1">28</div>
     <div class="day week5 weekday2">29</div>
     <div class="day week5 weekday3">30</div>
@@ -1083,7 +714,6 @@
     <div class="day week5 weekday5 off-month">1</div>
     <div class="day week5 weekday6 off-month">2</div>
     <div class="day week5 weekday7 off-month">3</div>
-    
     <button class="event line-clamp deep_sleep event-num-1"
 	    style="grid-row: 2; grid-column: 5 / 8"
 	    data-name="Глубокий сон и снятие тревожности"
@@ -1094,29 +724,6 @@
 	    >
       Глубокий сон и снятие тревожности (Шумакова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="6 Июля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="13 Июля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="3"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 4; grid-column: 1 / 5"
 	    data-name="Счастье"
@@ -1127,7 +734,6 @@
 	    >
       Счастье (Крылова + Гурулева)
     </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 4; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -1138,7 +744,6 @@
 	    >
       Счастье (Копанев)
     </button>
-    
     <button class="event line-clamp art_of_meditation event-num-2"
 	    style="grid-row: 4; grid-column: 5 / 8"
 	    data-name="Искусство медитации"
@@ -1149,18 +754,6 @@
 	    >
       Искусство медитации (Копанев)
     </button>
-    
-    <button class="event line-clamp practices event-num-3"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="20 Июля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="0"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 5; grid-column: 4 / 8"
 	    data-name="Счастье"
@@ -1171,18 +764,6 @@
 	    >
       Счастье (Глебова + Федорова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="27 Июля"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 6; grid-column: 1 / 3"
 	    data-name="Счастье"
@@ -1194,7 +775,6 @@
       Счастье (Глебова + Федорова)
     </button>
   </div>
-  
       <h2>Август 2025</h2>
   <div class="calendar" data-month="8" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -1204,7 +784,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">28</div>
     <div class="day week1 weekday2 off-month">29</div>
     <div class="day week1 weekday3 off-month">30</div>
@@ -1212,7 +791,6 @@
     <div class="day week1 weekday5">1</div>
     <div class="day week1 weekday6">2</div>
     <div class="day week1 weekday7">3</div>
-    
     <div class="day week2 weekday1">4</div>
     <div class="day week2 weekday2">5</div>
     <div class="day week2 weekday3">6</div>
@@ -1220,7 +798,6 @@
     <div class="day week2 weekday5">8</div>
     <div class="day week2 weekday6">9</div>
     <div class="day week2 weekday7">10</div>
-    
     <div class="day week3 weekday1">11</div>
     <div class="day week3 weekday2">12</div>
     <div class="day week3 weekday3">13</div>
@@ -1228,7 +805,6 @@
     <div class="day week3 weekday5">15</div>
     <div class="day week3 weekday6">16</div>
     <div class="day week3 weekday7">17</div>
-    
     <div class="day week4 weekday1">18</div>
     <div class="day week4 weekday2">19</div>
     <div class="day week4 weekday3">20</div>
@@ -1236,7 +812,6 @@
     <div class="day week4 weekday5">22</div>
     <div class="day week4 weekday6">23</div>
     <div class="day week4 weekday7">24</div>
-    
     <div class="day week5 weekday1">25</div>
     <div class="day week5 weekday2">26</div>
     <div class="day week5 weekday3">27</div>
@@ -1244,29 +819,6 @@
     <div class="day week5 weekday5">29</div>
     <div class="day week5 weekday6">30</div>
     <div class="day week5 weekday7">31</div>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="3 Августа"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="7"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="10 Августа"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="8"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp art_of_silence event-num-1"
 	    style="grid-row: 4; grid-column: 1 / 8"
 	    data-name="Искусство тишины"
@@ -1277,18 +829,6 @@
 	    >
       Искусство тишины (Шумакова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="17 Августа"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="8"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp yes event-num-1"
 	    style="grid-row: 5; grid-column: 4 / 8"
 	    data-name="YES!"
@@ -1299,7 +839,6 @@
 	    >
       YES! (Дианова)
     </button>
-    
     <button class="event line-clamp art_excel event-num-2"
 	    style="grid-row: 5; grid-column: 6 / 8"
 	    data-name="ART Excel"
@@ -1310,7 +849,6 @@
 	    >
       ART Excel (Готовцева)
     </button>
-    
     <button class="event line-clamp happiness event-num-3"
 	    style="grid-row: 5; grid-column: 6 / 8"
 	    data-name="Счастье"
@@ -1321,18 +859,6 @@
 	    >
       Счастье (Кузьминич + Рогозина)
     </button>
-    
-    <button class="event line-clamp practices event-num-4"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="24 Августа"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="6"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp art_excel event-num-1"
 	    style="grid-row: 6; grid-column: 1 / 5"
 	    data-name="ART Excel"
@@ -1343,7 +869,6 @@
 	    >
       ART Excel (Готовцева)
     </button>
-    
     <button class="event line-clamp happiness event-num-2"
 	    style="grid-row: 6; grid-column: 1 / 5"
 	    data-name="Счастье"
@@ -1354,19 +879,7 @@
 	    >
       Счастье (Кузьминич + Рогозина)
     </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 6; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="31 Августа"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="7"
-	    >
-      Поддерживающее занятие online
-    </button>
   </div>
-  
       <h2>Сентябрь 2025</h2>
   <div class="calendar" data-month="9" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -1376,7 +889,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1">1</div>
     <div class="day week1 weekday2">2</div>
     <div class="day week1 weekday3">3</div>
@@ -1384,7 +896,6 @@
     <div class="day week1 weekday5">5</div>
     <div class="day week1 weekday6">6</div>
     <div class="day week1 weekday7">7</div>
-    
     <div class="day week2 weekday1">8</div>
     <div class="day week2 weekday2">9</div>
     <div class="day week2 weekday3">10</div>
@@ -1392,7 +903,6 @@
     <div class="day week2 weekday5">12</div>
     <div class="day week2 weekday6">13</div>
     <div class="day week2 weekday7">14</div>
-    
     <div class="day week3 weekday1">15</div>
     <div class="day week3 weekday2">16</div>
     <div class="day week3 weekday3">17</div>
@@ -1400,7 +910,6 @@
     <div class="day week3 weekday5">19</div>
     <div class="day week3 weekday6">20</div>
     <div class="day week3 weekday7">21</div>
-    
     <div class="day week4 weekday1">22</div>
     <div class="day week4 weekday2">23</div>
     <div class="day week4 weekday3">24</div>
@@ -1408,7 +917,6 @@
     <div class="day week4 weekday5">26</div>
     <div class="day week4 weekday6">27</div>
     <div class="day week4 weekday7">28</div>
-    
     <div class="day week5 weekday1">29</div>
     <div class="day week5 weekday2">30</div>
     <div class="day week5 weekday3 off-month">1</div>
@@ -1416,7 +924,6 @@
     <div class="day week5 weekday5 off-month">3</div>
     <div class="day week5 weekday6 off-month">4</div>
     <div class="day week5 weekday7 off-month">5</div>
-    
     <button class="event line-clamp unknown event-num-1"
 	    style="grid-row: 2; grid-column: 2 / 3"
 	    data-name="Процесс вечности"
@@ -1427,18 +934,6 @@
 	    >
       Процесс вечности (Портнягина)
     </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="7 Сентября"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 3; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -1449,29 +944,6 @@
 	    >
       Счастье (Федоров + Федорова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="14 Сентября"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="2"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="21 Сентября"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="8"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp art_of_silence event-num-1"
 	    style="grid-row: 5; grid-column: 3 / 8"
 	    data-name="Искусство тишины"
@@ -1482,7 +954,6 @@
 	    >
       Искусство тишины (Синигур)
     </button>
-    
     <button class="event line-clamp happiness event-num-2"
 	    style="grid-row: 5; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -1493,19 +964,7 @@
 	    >
       Счастье (Крылова + Кузнецова + Костицина)
     </button>
-    
-    <button class="event line-clamp practices event-num-3"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="28 Сентября"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="6"
-	    >
-      Поддерживающее занятие online
-    </button>
   </div>
-  
       <h2>Октябрь 2025</h2>
   <div class="calendar" data-month="10" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -1515,7 +974,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">29</div>
     <div class="day week1 weekday2 off-month">30</div>
     <div class="day week1 weekday3">1</div>
@@ -1523,7 +981,6 @@
     <div class="day week1 weekday5">3</div>
     <div class="day week1 weekday6">4</div>
     <div class="day week1 weekday7">5</div>
-    
     <div class="day week2 weekday1">6</div>
     <div class="day week2 weekday2">7</div>
     <div class="day week2 weekday3">8</div>
@@ -1531,7 +988,6 @@
     <div class="day week2 weekday5">10</div>
     <div class="day week2 weekday6">11</div>
     <div class="day week2 weekday7">12</div>
-    
     <div class="day week3 weekday1">13</div>
     <div class="day week3 weekday2">14</div>
     <div class="day week3 weekday3">15</div>
@@ -1539,7 +995,6 @@
     <div class="day week3 weekday5">17</div>
     <div class="day week3 weekday6">18</div>
     <div class="day week3 weekday7">19</div>
-    
     <div class="day week4 weekday1">20</div>
     <div class="day week4 weekday2">21</div>
     <div class="day week4 weekday3">22</div>
@@ -1547,7 +1002,6 @@
     <div class="day week4 weekday5">24</div>
     <div class="day week4 weekday6">25</div>
     <div class="day week4 weekday7">26</div>
-    
     <div class="day week5 weekday1">27</div>
     <div class="day week5 weekday2">28</div>
     <div class="day week5 weekday3">29</div>
@@ -1555,18 +1009,6 @@
     <div class="day week5 weekday5">31</div>
     <div class="day week5 weekday6 off-month">1</div>
     <div class="day week5 weekday7 off-month">2</div>
-    
-    <button class="event line-clamp practices event-num-1"
-	    style="grid-row: 2; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="5 Октября"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp deep_sleep event-num-1"
 	    style="grid-row: 3; grid-column: 5 / 8"
 	    data-name="Глубокий сон и снятие тревожности"
@@ -1577,18 +1019,6 @@
 	    >
       Глубокий сон и снятие тревожности (Шумакова)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 3; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="12 Октября"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="5"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 4; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -1599,18 +1029,6 @@
 	    >
       Счастье (Артиш + Кузьминич)
     </button>
-    
-    <button class="event line-clamp practices event-num-2"
-	    style="grid-row: 4; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="19 Октября"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="9"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 5; grid-column: 5 / 8"
 	    data-name="Счастье"
@@ -1621,7 +1039,6 @@
 	    >
       Счастье (Ширкин + Костицина)
     </button>
-    
     <button class="event line-clamp yes event-num-2"
 	    style="grid-row: 5; grid-column: 6 / 8"
 	    data-name="YES!"
@@ -1632,7 +1049,6 @@
 	    >
       YES! (Дианова + Шпикалова)
     </button>
-    
     <button class="event line-clamp intuition event-num-3"
 	    style="grid-row: 5; grid-column: 6 / 8"
 	    data-name="Процесс интуиции 5-8 лет"
@@ -1643,7 +1059,6 @@
 	    >
       Процесс интуиции 5-8 лет (Иванова)
     </button>
-    
     <button class="event line-clamp art_excel event-num-4"
 	    style="grid-row: 5; grid-column: 6 / 8"
 	    data-name="ART Excel"
@@ -1654,18 +1069,6 @@
 	    >
       ART Excel (Верхозина + Куликова)
     </button>
-    
-    <button class="event line-clamp practices event-num-5"
-	    style="grid-row: 5; grid-column: 7 / 8"
-	    data-name="Поддерживающее занятие online"
-	    data-dates="26 Октября"
-	    data-place="Онлайн, время МСК+5"
-	    data-teachers=""
-	    data-people="0"
-	    >
-      Поддерживающее занятие online
-    </button>
-    
     <button class="event line-clamp yes event-num-1"
 	    style="grid-row: 6; grid-column: 1 / 3"
 	    data-name="YES!"
@@ -1676,7 +1079,6 @@
 	    >
       YES! (Дианова + Шпикалова)
     </button>
-    
     <button class="event line-clamp intuition event-num-2"
 	    style="grid-row: 6; grid-column: 1 / 8"
 	    data-name="Процесс интуиции 5-8 лет"
@@ -1687,7 +1089,6 @@
 	    >
       Процесс интуиции 5-8 лет (Иванова)
     </button>
-    
     <button class="event line-clamp art_excel event-num-3"
 	    style="grid-row: 6; grid-column: 1 / 3"
 	    data-name="ART Excel"
@@ -1698,7 +1099,6 @@
 	    >
       ART Excel (Верхозина + Куликова)
     </button>
-    
     <button class="event line-clamp blessing event-num-1"
 	    style="grid-row: 6; grid-column: 5 / 8"
 	    data-name="Блессинг"
@@ -1710,7 +1110,6 @@
       Блессинг (Шумакова)
     </button>
   </div>
-  
       <h2>Ноябрь 2025</h2>
   <div class="calendar" data-month="11" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -1720,7 +1119,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1 off-month">27</div>
     <div class="day week1 weekday2 off-month">28</div>
     <div class="day week1 weekday3 off-month">29</div>
@@ -1728,7 +1126,6 @@
     <div class="day week1 weekday5 off-month">31</div>
     <div class="day week1 weekday6">1</div>
     <div class="day week1 weekday7">2</div>
-    
     <div class="day week2 weekday1">3</div>
     <div class="day week2 weekday2">4</div>
     <div class="day week2 weekday3">5</div>
@@ -1736,7 +1133,6 @@
     <div class="day week2 weekday5">7</div>
     <div class="day week2 weekday6">8</div>
     <div class="day week2 weekday7">9</div>
-    
     <div class="day week3 weekday1">10</div>
     <div class="day week3 weekday2">11</div>
     <div class="day week3 weekday3">12</div>
@@ -1744,7 +1140,6 @@
     <div class="day week3 weekday5">14</div>
     <div class="day week3 weekday6">15</div>
     <div class="day week3 weekday7">16</div>
-    
     <div class="day week4 weekday1">17</div>
     <div class="day week4 weekday2">18</div>
     <div class="day week4 weekday3">19</div>
@@ -1752,7 +1147,6 @@
     <div class="day week4 weekday5">21</div>
     <div class="day week4 weekday6">22</div>
     <div class="day week4 weekday7">23</div>
-    
     <div class="day week5 weekday1">24</div>
     <div class="day week5 weekday2">25</div>
     <div class="day week5 weekday3">26</div>
@@ -1760,7 +1154,6 @@
     <div class="day week5 weekday5">28</div>
     <div class="day week5 weekday6">29</div>
     <div class="day week5 weekday7">30</div>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 2; grid-column: 7 / 8"
 	    data-name="Счастье"
@@ -1771,7 +1164,6 @@
 	    >
       Счастье (Леонович + Цыкунова)
     </button>
-    
     <button class="event line-clamp happiness event-num-1"
 	    style="grid-row: 3; grid-column: 1 / 3"
 	    data-name="Счастье"
@@ -1783,7 +1175,6 @@
       Счастье (Леонович + Цыкунова)
     </button>
   </div>
-  
       <h2>Декабрь 2025</h2>
   <div class="calendar" data-month="12" data-year="2025">
     <div class="day-of-week">пн</div>
@@ -1793,7 +1184,6 @@
     <div class="day-of-week">пт</div>
     <div class="day-of-week">сб</div>
     <div class="day-of-week">вс</div>
-    
     <div class="day week1 weekday1">1</div>
     <div class="day week1 weekday2">2</div>
     <div class="day week1 weekday3">3</div>
@@ -1801,7 +1191,6 @@
     <div class="day week1 weekday5">5</div>
     <div class="day week1 weekday6">6</div>
     <div class="day week1 weekday7">7</div>
-    
     <div class="day week2 weekday1">8</div>
     <div class="day week2 weekday2">9</div>
     <div class="day week2 weekday3">10</div>
@@ -1809,7 +1198,6 @@
     <div class="day week2 weekday5">12</div>
     <div class="day week2 weekday6">13</div>
     <div class="day week2 weekday7">14</div>
-    
     <div class="day week3 weekday1">15</div>
     <div class="day week3 weekday2">16</div>
     <div class="day week3 weekday3">17</div>
@@ -1817,7 +1205,6 @@
     <div class="day week3 weekday5">19</div>
     <div class="day week3 weekday6">20</div>
     <div class="day week3 weekday7">21</div>
-    
     <div class="day week4 weekday1">22</div>
     <div class="day week4 weekday2">23</div>
     <div class="day week4 weekday3">24</div>
@@ -1825,7 +1212,6 @@
     <div class="day week4 weekday5">26</div>
     <div class="day week4 weekday6">27</div>
     <div class="day week4 weekday7">28</div>
-    
     <div class="day week5 weekday1">29</div>
     <div class="day week5 weekday2">30</div>
     <div class="day week5 weekday3">31</div>
@@ -1833,11 +1219,770 @@
     <div class="day week5 weekday5 off-month">2</div>
     <div class="day week5 weekday6 off-month">3</div>
     <div class="day week5 weekday7 off-month">4</div>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 2; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="5–7 Декабря"
+	    data-place="Театральная, 17"
+	    data-teachers="Анна Ружьева, Елена Девятайкина"
+	    data-people="0"
+	    >
+      Счастье (Ружьева + Девятайкина)
+    </button>
+    <button class="event line-clamp art_of_silence event-num-1"
+	    style="grid-row: 3; grid-column: 4 / 8"
+	    data-name="Искусство тишины online"
+	    data-dates="11-14 декабря"
+	    data-place="online"
+	    data-teachers="Ольга Шумакова, Елена Сенченко"
+	    data-people="0"
+	    >
+      Искусство тишины online (Шумакова + Сенченко)
+    </button>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 4; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="19–21 Декабря"
+	    data-place="Театральная, 17"
+	    data-teachers="Олег Федоров, Елена Федорова"
+	    data-people="0"
+	    >
+      Счастье (Федоров + Федорова)
+    </button>
   </div>
-  
   </section>
   <section id="cal-2026" aria-labelledby="tab-2">
-    <p>Тут у нас будет 2026 г.</p>
+      <h2>Январь 2026</h2>
+  <div class="calendar" data-month="1" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">29</div>
+    <div class="day week1 weekday2 off-month">30</div>
+    <div class="day week1 weekday3 off-month">31</div>
+    <div class="day week1 weekday4">1</div>
+    <div class="day week1 weekday5">2</div>
+    <div class="day week1 weekday6">3</div>
+    <div class="day week1 weekday7">4</div>
+    <div class="day week2 weekday1">5</div>
+    <div class="day week2 weekday2">6</div>
+    <div class="day week2 weekday3">7</div>
+    <div class="day week2 weekday4">8</div>
+    <div class="day week2 weekday5">9</div>
+    <div class="day week2 weekday6">10</div>
+    <div class="day week2 weekday7">11</div>
+    <div class="day week3 weekday1">12</div>
+    <div class="day week3 weekday2">13</div>
+    <div class="day week3 weekday3">14</div>
+    <div class="day week3 weekday4">15</div>
+    <div class="day week3 weekday5">16</div>
+    <div class="day week3 weekday6">17</div>
+    <div class="day week3 weekday7">18</div>
+    <div class="day week4 weekday1">19</div>
+    <div class="day week4 weekday2">20</div>
+    <div class="day week4 weekday3">21</div>
+    <div class="day week4 weekday4">22</div>
+    <div class="day week4 weekday5">23</div>
+    <div class="day week4 weekday6">24</div>
+    <div class="day week4 weekday7">25</div>
+    <div class="day week5 weekday1">26</div>
+    <div class="day week5 weekday2">27</div>
+    <div class="day week5 weekday3">28</div>
+    <div class="day week5 weekday4">29</div>
+    <div class="day week5 weekday5">30</div>
+    <div class="day week5 weekday6">31</div>
+    <div class="day week5 weekday7 off-month">1</div>
+    <button class="event line-clamp intuition event-num-1"
+	    style="grid-row: 2; grid-column: 5 / 8"
+	    data-name="Процесс интуиции 8-18 лет"
+	    data-dates="2-18 января"
+	    data-place="Театральная, 17"
+	    data-teachers="Оксана Павлова"
+	    data-people="0"
+	    >
+      Процесс интуиции 8-18 лет (Павлова)
+    </button>
+    <button class="event line-clamp intuition event-num-1"
+	    style="grid-row: 3; grid-column: 1 / 8"
+	    data-name="Процесс интуиции 8-18 лет"
+	    data-dates="2-18 января"
+	    data-place="Театральная, 17"
+	    data-teachers="Оксана Павлова"
+	    data-people="0"
+	    >
+      Процесс интуиции 8-18 лет (Павлова)
+    </button>
+    <button class="event line-clamp intuition event-num-1"
+	    style="grid-row: 4; grid-column: 1 / 8"
+	    data-name="Процесс интуиции 8-18 лет"
+	    data-dates="2-18 января"
+	    data-place="Театральная, 17"
+	    data-teachers="Оксана Павлова"
+	    data-people="0"
+	    >
+      Процесс интуиции 8-18 лет (Павлова)
+    </button>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 6; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="30 января-1 февраля"
+	    data-place="Театральная, 17"
+	    data-teachers=""
+	    data-people="0"
+	    >
+      Счастье
+    </button>
+  </div>
+      <h2>Февраль 2026</h2>
+  <div class="calendar" data-month="2" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">26</div>
+    <div class="day week1 weekday2 off-month">27</div>
+    <div class="day week1 weekday3 off-month">28</div>
+    <div class="day week1 weekday4 off-month">29</div>
+    <div class="day week1 weekday5 off-month">30</div>
+    <div class="day week1 weekday6 off-month">31</div>
+    <div class="day week1 weekday7">1</div>
+    <div class="day week2 weekday1">2</div>
+    <div class="day week2 weekday2">3</div>
+    <div class="day week2 weekday3">4</div>
+    <div class="day week2 weekday4">5</div>
+    <div class="day week2 weekday5">6</div>
+    <div class="day week2 weekday6">7</div>
+    <div class="day week2 weekday7">8</div>
+    <div class="day week3 weekday1">9</div>
+    <div class="day week3 weekday2">10</div>
+    <div class="day week3 weekday3">11</div>
+    <div class="day week3 weekday4">12</div>
+    <div class="day week3 weekday5">13</div>
+    <div class="day week3 weekday6">14</div>
+    <div class="day week3 weekday7">15</div>
+    <div class="day week4 weekday1">16</div>
+    <div class="day week4 weekday2">17</div>
+    <div class="day week4 weekday3">18</div>
+    <div class="day week4 weekday4">19</div>
+    <div class="day week4 weekday5">20</div>
+    <div class="day week4 weekday6">21</div>
+    <div class="day week4 weekday7">22</div>
+    <div class="day week5 weekday1">23</div>
+    <div class="day week5 weekday2">24</div>
+    <div class="day week5 weekday3">25</div>
+    <div class="day week5 weekday4">26</div>
+    <div class="day week5 weekday5">27</div>
+    <div class="day week5 weekday6">28</div>
+    <div class="day week5 weekday7 off-month">1</div>
+    <button class="event line-clamp art_of_silence event-num-1"
+	    style="grid-row: 3; grid-column: 5 / 8"
+	    data-name="Искусство тишины"
+	    data-dates="6-8 февраля"
+	    data-place="Театральная, 17"
+	    data-teachers="Ольга Шумакова"
+	    data-people="0"
+	    >
+      Искусство тишины (Шумакова)
+    </button>
+    <button class="event line-clamp art_of_silence event-num-1"
+	    style="grid-row: 6; grid-column: 4 / 8"
+	    data-name="Искусство тишины online"
+	    data-dates="26 февраля-1 марта"
+	    data-place="online"
+	    data-teachers="Ольга Шумакова, Елена Сенченко"
+	    data-people="0"
+	    >
+      Искусство тишины online (Шумакова + Сенченко)
+    </button>
+    <button class="event line-clamp happiness event-num-2"
+	    style="grid-row: 6; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="27 февраля-1 марта"
+	    data-place="Театральная, 17"
+	    data-teachers=""
+	    data-people="0"
+	    >
+      Счастье
+    </button>
+  </div>
+      <h2>Март 2026</h2>
+  <div class="calendar" data-month="3" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">23</div>
+    <div class="day week1 weekday2 off-month">24</div>
+    <div class="day week1 weekday3 off-month">25</div>
+    <div class="day week1 weekday4 off-month">26</div>
+    <div class="day week1 weekday5 off-month">27</div>
+    <div class="day week1 weekday6 off-month">28</div>
+    <div class="day week1 weekday7">1</div>
+    <div class="day week2 weekday1">2</div>
+    <div class="day week2 weekday2">3</div>
+    <div class="day week2 weekday3">4</div>
+    <div class="day week2 weekday4">5</div>
+    <div class="day week2 weekday5">6</div>
+    <div class="day week2 weekday6">7</div>
+    <div class="day week2 weekday7">8</div>
+    <div class="day week3 weekday1">9</div>
+    <div class="day week3 weekday2">10</div>
+    <div class="day week3 weekday3">11</div>
+    <div class="day week3 weekday4">12</div>
+    <div class="day week3 weekday5">13</div>
+    <div class="day week3 weekday6">14</div>
+    <div class="day week3 weekday7">15</div>
+    <div class="day week4 weekday1">16</div>
+    <div class="day week4 weekday2">17</div>
+    <div class="day week4 weekday3">18</div>
+    <div class="day week4 weekday4">19</div>
+    <div class="day week4 weekday5">20</div>
+    <div class="day week4 weekday6">21</div>
+    <div class="day week4 weekday7">22</div>
+    <div class="day week5 weekday1">23</div>
+    <div class="day week5 weekday2">24</div>
+    <div class="day week5 weekday3">25</div>
+    <div class="day week5 weekday4">26</div>
+    <div class="day week5 weekday5">27</div>
+    <div class="day week5 weekday6">28</div>
+    <div class="day week5 weekday7">29</div>
+    <div class="day week6 weekday1">30</div>
+    <div class="day week6 weekday2">31</div>
+    <div class="day week6 weekday3 off-month">1</div>
+    <div class="day week6 weekday4 off-month">2</div>
+    <div class="day week6 weekday5 off-month">3</div>
+    <div class="day week6 weekday6 off-month">4</div>
+    <div class="day week6 weekday7 off-month">5</div>
+    <button class="event line-clamp deep_sleep event-num-1"
+	    style="grid-row: 4; grid-column: 4 / 7"
+	    data-name="Глубокий сон и снятие тревожности"
+	    data-dates="12-14 марта"
+	    data-place="Театральная, 17"
+	    data-teachers="Ольга Усова"
+	    data-people="0"
+	    >
+      Глубокий сон и снятие тревожности (Усова)
+    </button>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 6; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="27-29 марта"
+	    data-place="Театральная, 17"
+	    data-teachers=""
+	    data-people="0"
+	    >
+      Счастье
+    </button>
+  </div>
+      <h2>Апрель 2026</h2>
+  <div class="calendar" data-month="4" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">30</div>
+    <div class="day week1 weekday2 off-month">31</div>
+    <div class="day week1 weekday3">1</div>
+    <div class="day week1 weekday4">2</div>
+    <div class="day week1 weekday5">3</div>
+    <div class="day week1 weekday6">4</div>
+    <div class="day week1 weekday7">5</div>
+    <div class="day week2 weekday1">6</div>
+    <div class="day week2 weekday2">7</div>
+    <div class="day week2 weekday3">8</div>
+    <div class="day week2 weekday4">9</div>
+    <div class="day week2 weekday5">10</div>
+    <div class="day week2 weekday6">11</div>
+    <div class="day week2 weekday7">12</div>
+    <div class="day week3 weekday1">13</div>
+    <div class="day week3 weekday2">14</div>
+    <div class="day week3 weekday3">15</div>
+    <div class="day week3 weekday4">16</div>
+    <div class="day week3 weekday5">17</div>
+    <div class="day week3 weekday6">18</div>
+    <div class="day week3 weekday7">19</div>
+    <div class="day week4 weekday1">20</div>
+    <div class="day week4 weekday2">21</div>
+    <div class="day week4 weekday3">22</div>
+    <div class="day week4 weekday4">23</div>
+    <div class="day week4 weekday5">24</div>
+    <div class="day week4 weekday6">25</div>
+    <div class="day week4 weekday7">26</div>
+    <div class="day week5 weekday1">27</div>
+    <div class="day week5 weekday2">28</div>
+    <div class="day week5 weekday3">29</div>
+    <div class="day week5 weekday4">30</div>
+    <div class="day week5 weekday5 off-month">1</div>
+    <div class="day week5 weekday6 off-month">2</div>
+    <div class="day week5 weekday7 off-month">3</div>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 5; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="24-26 апреля"
+	    data-place="Театральная, 17"
+	    data-teachers=""
+	    data-people="0"
+	    >
+      Счастье
+    </button>
+    <button class="event line-clamp art_of_silence event-num-1"
+	    style="grid-row: 6; grid-column: 3 / 8"
+	    data-name="Искусство тишины"
+	    data-dates="29 апреля-3 мая"
+	    data-place="Уточняется"
+	    data-teachers="Ирина Войтюк"
+	    data-people="0"
+	    >
+      Искусство тишины (Войтюк)
+    </button>
+  </div>
+      <h2>Май 2026</h2>
+  <div class="calendar" data-month="5" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">27</div>
+    <div class="day week1 weekday2 off-month">28</div>
+    <div class="day week1 weekday3 off-month">29</div>
+    <div class="day week1 weekday4 off-month">30</div>
+    <div class="day week1 weekday5">1</div>
+    <div class="day week1 weekday6">2</div>
+    <div class="day week1 weekday7">3</div>
+    <div class="day week2 weekday1">4</div>
+    <div class="day week2 weekday2">5</div>
+    <div class="day week2 weekday3">6</div>
+    <div class="day week2 weekday4">7</div>
+    <div class="day week2 weekday5">8</div>
+    <div class="day week2 weekday6">9</div>
+    <div class="day week2 weekday7">10</div>
+    <div class="day week3 weekday1">11</div>
+    <div class="day week3 weekday2">12</div>
+    <div class="day week3 weekday3">13</div>
+    <div class="day week3 weekday4">14</div>
+    <div class="day week3 weekday5">15</div>
+    <div class="day week3 weekday6">16</div>
+    <div class="day week3 weekday7">17</div>
+    <div class="day week4 weekday1">18</div>
+    <div class="day week4 weekday2">19</div>
+    <div class="day week4 weekday3">20</div>
+    <div class="day week4 weekday4">21</div>
+    <div class="day week4 weekday5">22</div>
+    <div class="day week4 weekday6">23</div>
+    <div class="day week4 weekday7">24</div>
+    <div class="day week5 weekday1">25</div>
+    <div class="day week5 weekday2">26</div>
+    <div class="day week5 weekday3">27</div>
+    <div class="day week5 weekday4">28</div>
+    <div class="day week5 weekday5">29</div>
+    <div class="day week5 weekday6">30</div>
+    <div class="day week5 weekday7">31</div>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 5; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="22-24 мая"
+	    data-place="Театральная, 17"
+	    data-teachers=""
+	    data-people="0"
+	    >
+      Счастье
+    </button>
+  </div>
+      <h2>Июнь 2026</h2>
+  <div class="calendar" data-month="6" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1">1</div>
+    <div class="day week1 weekday2">2</div>
+    <div class="day week1 weekday3">3</div>
+    <div class="day week1 weekday4">4</div>
+    <div class="day week1 weekday5">5</div>
+    <div class="day week1 weekday6">6</div>
+    <div class="day week1 weekday7">7</div>
+    <div class="day week2 weekday1">8</div>
+    <div class="day week2 weekday2">9</div>
+    <div class="day week2 weekday3">10</div>
+    <div class="day week2 weekday4">11</div>
+    <div class="day week2 weekday5">12</div>
+    <div class="day week2 weekday6">13</div>
+    <div class="day week2 weekday7">14</div>
+    <div class="day week3 weekday1">15</div>
+    <div class="day week3 weekday2">16</div>
+    <div class="day week3 weekday3">17</div>
+    <div class="day week3 weekday4">18</div>
+    <div class="day week3 weekday5">19</div>
+    <div class="day week3 weekday6">20</div>
+    <div class="day week3 weekday7">21</div>
+    <div class="day week4 weekday1">22</div>
+    <div class="day week4 weekday2">23</div>
+    <div class="day week4 weekday3">24</div>
+    <div class="day week4 weekday4">25</div>
+    <div class="day week4 weekday5">26</div>
+    <div class="day week4 weekday6">27</div>
+    <div class="day week4 weekday7">28</div>
+    <div class="day week5 weekday1">29</div>
+    <div class="day week5 weekday2">30</div>
+    <div class="day week5 weekday3 off-month">1</div>
+    <div class="day week5 weekday4 off-month">2</div>
+    <div class="day week5 weekday5 off-month">3</div>
+    <div class="day week5 weekday6 off-month">4</div>
+    <div class="day week5 weekday7 off-month">5</div>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 4; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="19-21 июня"
+	    data-place="Театральная, 17"
+	    data-teachers=""
+	    data-people="0"
+	    >
+      Счастье
+    </button>
+  </div>
+      <h2>Июль 2026</h2>
+  <div class="calendar" data-month="7" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">29</div>
+    <div class="day week1 weekday2 off-month">30</div>
+    <div class="day week1 weekday3">1</div>
+    <div class="day week1 weekday4">2</div>
+    <div class="day week1 weekday5">3</div>
+    <div class="day week1 weekday6">4</div>
+    <div class="day week1 weekday7">5</div>
+    <div class="day week2 weekday1">6</div>
+    <div class="day week2 weekday2">7</div>
+    <div class="day week2 weekday3">8</div>
+    <div class="day week2 weekday4">9</div>
+    <div class="day week2 weekday5">10</div>
+    <div class="day week2 weekday6">11</div>
+    <div class="day week2 weekday7">12</div>
+    <div class="day week3 weekday1">13</div>
+    <div class="day week3 weekday2">14</div>
+    <div class="day week3 weekday3">15</div>
+    <div class="day week3 weekday4">16</div>
+    <div class="day week3 weekday5">17</div>
+    <div class="day week3 weekday6">18</div>
+    <div class="day week3 weekday7">19</div>
+    <div class="day week4 weekday1">20</div>
+    <div class="day week4 weekday2">21</div>
+    <div class="day week4 weekday3">22</div>
+    <div class="day week4 weekday4">23</div>
+    <div class="day week4 weekday5">24</div>
+    <div class="day week4 weekday6">25</div>
+    <div class="day week4 weekday7">26</div>
+    <div class="day week5 weekday1">27</div>
+    <div class="day week5 weekday2">28</div>
+    <div class="day week5 weekday3">29</div>
+    <div class="day week5 weekday4">30</div>
+    <div class="day week5 weekday5">31</div>
+    <div class="day week5 weekday6 off-month">1</div>
+    <div class="day week5 weekday7 off-month">2</div>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 4; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="17-19 июля"
+	    data-place="Театральная, 17"
+	    data-teachers=""
+	    data-people="0"
+	    >
+      Счастье
+    </button>
+  </div>
+      <h2>Август 2026</h2>
+  <div class="calendar" data-month="8" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">27</div>
+    <div class="day week1 weekday2 off-month">28</div>
+    <div class="day week1 weekday3 off-month">29</div>
+    <div class="day week1 weekday4 off-month">30</div>
+    <div class="day week1 weekday5 off-month">31</div>
+    <div class="day week1 weekday6">1</div>
+    <div class="day week1 weekday7">2</div>
+    <div class="day week2 weekday1">3</div>
+    <div class="day week2 weekday2">4</div>
+    <div class="day week2 weekday3">5</div>
+    <div class="day week2 weekday4">6</div>
+    <div class="day week2 weekday5">7</div>
+    <div class="day week2 weekday6">8</div>
+    <div class="day week2 weekday7">9</div>
+    <div class="day week3 weekday1">10</div>
+    <div class="day week3 weekday2">11</div>
+    <div class="day week3 weekday3">12</div>
+    <div class="day week3 weekday4">13</div>
+    <div class="day week3 weekday5">14</div>
+    <div class="day week3 weekday6">15</div>
+    <div class="day week3 weekday7">16</div>
+    <div class="day week4 weekday1">17</div>
+    <div class="day week4 weekday2">18</div>
+    <div class="day week4 weekday3">19</div>
+    <div class="day week4 weekday4">20</div>
+    <div class="day week4 weekday5">21</div>
+    <div class="day week4 weekday6">22</div>
+    <div class="day week4 weekday7">23</div>
+    <div class="day week5 weekday1">24</div>
+    <div class="day week5 weekday2">25</div>
+    <div class="day week5 weekday3">26</div>
+    <div class="day week5 weekday4">27</div>
+    <div class="day week5 weekday5">28</div>
+    <div class="day week5 weekday6">29</div>
+    <div class="day week5 weekday7">30</div>
+    <div class="day week6 weekday1">31</div>
+    <div class="day week6 weekday2 off-month">1</div>
+    <div class="day week6 weekday3 off-month">2</div>
+    <div class="day week6 weekday4 off-month">3</div>
+    <div class="day week6 weekday5 off-month">4</div>
+    <div class="day week6 weekday6 off-month">5</div>
+    <div class="day week6 weekday7 off-month">6</div>
+    <button class="event line-clamp happiness event-num-1"
+	    style="grid-row: 4; grid-column: 5 / 8"
+	    data-name="Счастье"
+	    data-dates="14-16 августа"
+	    data-place="Театральная, 17"
+	    data-teachers=""
+	    data-people="0"
+	    >
+      Счастье
+    </button>
+    <button class="event line-clamp art_of_silence event-num-1"
+	    style="grid-row: 5; grid-column: 1 / 8"
+	    data-name="Искусство тишины"
+	    data-dates="17-23 августа"
+	    data-place="Байкал"
+	    data-teachers="Ольга Шумакова"
+	    data-people="0"
+	    >
+      Искусство тишины (Шумакова)
+    </button>
+  </div>
+      <h2>Сентябрь 2026</h2>
+  <div class="calendar" data-month="9" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">31</div>
+    <div class="day week1 weekday2">1</div>
+    <div class="day week1 weekday3">2</div>
+    <div class="day week1 weekday4">3</div>
+    <div class="day week1 weekday5">4</div>
+    <div class="day week1 weekday6">5</div>
+    <div class="day week1 weekday7">6</div>
+    <div class="day week2 weekday1">7</div>
+    <div class="day week2 weekday2">8</div>
+    <div class="day week2 weekday3">9</div>
+    <div class="day week2 weekday4">10</div>
+    <div class="day week2 weekday5">11</div>
+    <div class="day week2 weekday6">12</div>
+    <div class="day week2 weekday7">13</div>
+    <div class="day week3 weekday1">14</div>
+    <div class="day week3 weekday2">15</div>
+    <div class="day week3 weekday3">16</div>
+    <div class="day week3 weekday4">17</div>
+    <div class="day week3 weekday5">18</div>
+    <div class="day week3 weekday6">19</div>
+    <div class="day week3 weekday7">20</div>
+    <div class="day week4 weekday1">21</div>
+    <div class="day week4 weekday2">22</div>
+    <div class="day week4 weekday3">23</div>
+    <div class="day week4 weekday4">24</div>
+    <div class="day week4 weekday5">25</div>
+    <div class="day week4 weekday6">26</div>
+    <div class="day week4 weekday7">27</div>
+    <div class="day week5 weekday1">28</div>
+    <div class="day week5 weekday2">29</div>
+    <div class="day week5 weekday3">30</div>
+    <div class="day week5 weekday4 off-month">1</div>
+    <div class="day week5 weekday5 off-month">2</div>
+    <div class="day week5 weekday6 off-month">3</div>
+    <div class="day week5 weekday7 off-month">4</div>
+  </div>
+      <h2>Октябрь 2026</h2>
+  <div class="calendar" data-month="10" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">28</div>
+    <div class="day week1 weekday2 off-month">29</div>
+    <div class="day week1 weekday3 off-month">30</div>
+    <div class="day week1 weekday4">1</div>
+    <div class="day week1 weekday5">2</div>
+    <div class="day week1 weekday6">3</div>
+    <div class="day week1 weekday7">4</div>
+    <div class="day week2 weekday1">5</div>
+    <div class="day week2 weekday2">6</div>
+    <div class="day week2 weekday3">7</div>
+    <div class="day week2 weekday4">8</div>
+    <div class="day week2 weekday5">9</div>
+    <div class="day week2 weekday6">10</div>
+    <div class="day week2 weekday7">11</div>
+    <div class="day week3 weekday1">12</div>
+    <div class="day week3 weekday2">13</div>
+    <div class="day week3 weekday3">14</div>
+    <div class="day week3 weekday4">15</div>
+    <div class="day week3 weekday5">16</div>
+    <div class="day week3 weekday6">17</div>
+    <div class="day week3 weekday7">18</div>
+    <div class="day week4 weekday1">19</div>
+    <div class="day week4 weekday2">20</div>
+    <div class="day week4 weekday3">21</div>
+    <div class="day week4 weekday4">22</div>
+    <div class="day week4 weekday5">23</div>
+    <div class="day week4 weekday6">24</div>
+    <div class="day week4 weekday7">25</div>
+    <div class="day week5 weekday1">26</div>
+    <div class="day week5 weekday2">27</div>
+    <div class="day week5 weekday3">28</div>
+    <div class="day week5 weekday4">29</div>
+    <div class="day week5 weekday5">30</div>
+    <div class="day week5 weekday6">31</div>
+    <div class="day week5 weekday7 off-month">1</div>
+  </div>
+      <h2>Ноябрь 2026</h2>
+  <div class="calendar" data-month="11" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">26</div>
+    <div class="day week1 weekday2 off-month">27</div>
+    <div class="day week1 weekday3 off-month">28</div>
+    <div class="day week1 weekday4 off-month">29</div>
+    <div class="day week1 weekday5 off-month">30</div>
+    <div class="day week1 weekday6 off-month">31</div>
+    <div class="day week1 weekday7">1</div>
+    <div class="day week2 weekday1">2</div>
+    <div class="day week2 weekday2">3</div>
+    <div class="day week2 weekday3">4</div>
+    <div class="day week2 weekday4">5</div>
+    <div class="day week2 weekday5">6</div>
+    <div class="day week2 weekday6">7</div>
+    <div class="day week2 weekday7">8</div>
+    <div class="day week3 weekday1">9</div>
+    <div class="day week3 weekday2">10</div>
+    <div class="day week3 weekday3">11</div>
+    <div class="day week3 weekday4">12</div>
+    <div class="day week3 weekday5">13</div>
+    <div class="day week3 weekday6">14</div>
+    <div class="day week3 weekday7">15</div>
+    <div class="day week4 weekday1">16</div>
+    <div class="day week4 weekday2">17</div>
+    <div class="day week4 weekday3">18</div>
+    <div class="day week4 weekday4">19</div>
+    <div class="day week4 weekday5">20</div>
+    <div class="day week4 weekday6">21</div>
+    <div class="day week4 weekday7">22</div>
+    <div class="day week5 weekday1">23</div>
+    <div class="day week5 weekday2">24</div>
+    <div class="day week5 weekday3">25</div>
+    <div class="day week5 weekday4">26</div>
+    <div class="day week5 weekday5">27</div>
+    <div class="day week5 weekday6">28</div>
+    <div class="day week5 weekday7">29</div>
+    <div class="day week6 weekday1">30</div>
+    <div class="day week6 weekday2 off-month">1</div>
+    <div class="day week6 weekday3 off-month">2</div>
+    <div class="day week6 weekday4 off-month">3</div>
+    <div class="day week6 weekday5 off-month">4</div>
+    <div class="day week6 weekday6 off-month">5</div>
+    <div class="day week6 weekday7 off-month">6</div>
+    <button class="event line-clamp art_of_silence event-num-1"
+	    style="grid-row: 4; grid-column: 3 / 8"
+	    data-name="Искусство тишины интенсив"
+	    data-dates="11-15 ноября"
+	    data-place="Уточняется"
+	    data-teachers="Ольга Шумакова"
+	    data-people="0"
+	    >
+      Искусство тишины интенсив (Шумакова)
+    </button>
+  </div>
+      <h2>Декабрь 2026</h2>
+  <div class="calendar" data-month="12" data-year="2026">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    <div class="day week1 weekday1 off-month">30</div>
+    <div class="day week1 weekday2">1</div>
+    <div class="day week1 weekday3">2</div>
+    <div class="day week1 weekday4">3</div>
+    <div class="day week1 weekday5">4</div>
+    <div class="day week1 weekday6">5</div>
+    <div class="day week1 weekday7">6</div>
+    <div class="day week2 weekday1">7</div>
+    <div class="day week2 weekday2">8</div>
+    <div class="day week2 weekday3">9</div>
+    <div class="day week2 weekday4">10</div>
+    <div class="day week2 weekday5">11</div>
+    <div class="day week2 weekday6">12</div>
+    <div class="day week2 weekday7">13</div>
+    <div class="day week3 weekday1">14</div>
+    <div class="day week3 weekday2">15</div>
+    <div class="day week3 weekday3">16</div>
+    <div class="day week3 weekday4">17</div>
+    <div class="day week3 weekday5">18</div>
+    <div class="day week3 weekday6">19</div>
+    <div class="day week3 weekday7">20</div>
+    <div class="day week4 weekday1">21</div>
+    <div class="day week4 weekday2">22</div>
+    <div class="day week4 weekday3">23</div>
+    <div class="day week4 weekday4">24</div>
+    <div class="day week4 weekday5">25</div>
+    <div class="day week4 weekday6">26</div>
+    <div class="day week4 weekday7">27</div>
+    <div class="day week5 weekday1">28</div>
+    <div class="day week5 weekday2">29</div>
+    <div class="day week5 weekday3">30</div>
+    <div class="day week5 weekday4">31</div>
+    <div class="day week5 weekday5 off-month">1</div>
+    <div class="day week5 weekday6 off-month">2</div>
+    <div class="day week5 weekday7 off-month">3</div>
+  </div>
   </section>
 </body>
 </html>

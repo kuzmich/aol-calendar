@@ -122,9 +122,12 @@ class AdminCourses:
         'процесс интуиции': 'intuition',
         'процесс интуиции 5-8 лет': 'intuition',
         'процесс интуиции 8-18 лет': 'intuition',
+        'поддерживающее занятие': 'practices',
         'поддерживающее занятие online': 'practices',
         'глубокий сон и снятие тревожности': 'deep_sleep',
         'искусство тишины': 'art_of_silence',
+        'искусство тишины online': 'art_of_silence',
+        'искусство тишины интенсив': 'art_of_silence',
         'искусство медитации': 'art_of_meditation',
         'шри шри йога': 'ssy',
         'шри шри йога 2': 'ssy',
@@ -300,6 +303,7 @@ class AdminCourses:
 
         actual = (c for c in courses if not (c['status'] == "Не опубликован" and c['num_payments'] == 0))
         parsed = (e for e in parse(actual))
+        parsed = (e for e in parsed if e['type'] != 'practices')  # временно уберем поддерживающие занятия
         blocks = (e for e in make_cal_blocks(parsed))
         blocks = sorted(blocks, key=lambda e: (e['pos']['week'], e['pos']['start']))
         indexed = []
@@ -343,16 +347,19 @@ if __name__ == "__main__":
 
     adm = AdminCourses((email, password))
 
-    calendar_data = []
-    year = 2025
-    for month in range(1, 12+1):
-        calendar_data.append({
-            'dates': get_month_dates(year, month),
-            'events': adm.get(year, month),
-            'month': month,
-            'month_name': month_names[month - 1].title(),
-            'year': year
-        })
+    calendar_data = {}
+
+    for year in [2025, 2026]:
+        calendar_data[year] = []
+
+        for month in range(1, 12+1):
+            calendar_data[year].append({
+                'dates': get_month_dates(year, month),
+                'events': adm.get(year, month),
+                'month': month,
+                'month_name': month_names[month - 1].title(),
+                'year': year
+            })
 
     output = render_calendar(
         {'calendar_data': calendar_data},

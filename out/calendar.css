@@ -276,9 +276,9 @@ h2:first-of-type {
     width: 100%;
 }
 
-/* Табы годов */
+/* Навигация по годам */
 
-[role="tablist"] {
+nav ul {
     display: flex;
     justify-content: center;
     gap: 1.5ch;
@@ -286,13 +286,13 @@ h2:first-of-type {
     padding: 0;
     list-style: none;
 }
-[role="tab"] {
+nav a {
     display: block;
     font-size: 1.4rem;
     text-decoration: none;
     color: var(--grey-black-c);
 }
-[aria-selected="true"] {
+[aria-current="page"] {
     text-decoration: underline;
     text-decoration-thickness: 0.25em;
     text-underline-offset: 0.5em;

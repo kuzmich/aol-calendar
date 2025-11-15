@@ -233,5 +233,5 @@ def events():
         print(form.data)
     else:
         print(form.errors)
-    
+
     return str(form.data)

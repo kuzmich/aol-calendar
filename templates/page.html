@@ -3,126 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Расписание курсов и мероприятий ИЖ в Иркутске</title>
-    <link rel="stylesheet" href="calendar.css?ver=2025-11-14T22:20:00+08:00">
-    <script src="calendar.js?ver=2025-11-13T16:35:00+08:00" defer></script>
+    <title>Календарь курсов и мероприятий «Искусства Жизни» в Иркутске на {{ current_year }} год</title>
+    <link rel="stylesheet" href="calendar.css?ver=2025-11-15T10:35:00+08:00">
+    <script src="calendar.js?ver=2025-11-15T10:35:00+08:00" defer></script>
 </head>
 <body>
-  <dialog class="event-details">
-    <header>
-      <h3>О событии</h3>
-      <button class="close">X</button>
-    </header>
-    <table>
-      <tbody>
-	<tr>
-	  <th scope="row">Мероприятие</th>
-	  <td data-name="name"></td>
-	</tr>
-	<tr>
-	  <th scope="row">Даты</th>
-	  <td data-name="dates"></td>
-	</tr>
-	<tr>
-	  <th scope="row">Время</th>
-	  <td data-name="time"></td>
-	</tr>
-	<tr>
-	  <th scope="row">Место</th>
-	  <td data-name="place"></td>
-	</tr>
-	<tr>
-	  <th scope="row">Учителя</th>
-	  <td data-name="teachers"></td>
-	</tr>
-	<tr>
-	  <th scope="row">Участников</th>
-	  <td data-name="people"></td>
-	</tr>
-      </tbody>
-    </table>
-  </dialog>
-  <dialog class="event-details add-event">
-    <form method="post" action="http://127.0.0.1:5000/events/">
-      <div class="form-group">
-	<label for="event-type">Мероприятие</label>
-	<select id="event-type" name="type" required>
-	  <option value="">Не выбрано</option>
-	  <option value="first_step">Первый шаг</option>
-	  <option value="happiness">Счастье</option>
-	  <option value="art_of_meditation">Искусство медитации</option>
-	  <option value="ayurvedic_cooking">Здоровое питание</option>
-	  <option value="art_of_silence">Искусство тишины</option>
-	  <option value="dsn">DSN</option>
-	  <option value="practices">Поддерживающее занятие</option>
-	  <option value="practices_vtp">Поддерживающее занятие для VTP</option>
-	  <option value="yoga">Йога</option>
-	  <option value="yoga_spine">Йога для позвоночника</option>
-	  <option value="yoga_joints">Суставная йога</option>
-	  <option value="satsang">Песенный сатсанг</option>
-	</select>
-      </div>
-      <div class="form-group">
-	<label for="start-date">Дата начала</label>
-	<input type="date" name="start-date" id="start-date">
-      </div>
-      <div class="form-group">
-	<label for="end-date">Дата окончания</label>
-	<input type="date" name="end-date" id="end-date">
-      </div>
-      <div class="form-group">
-	<label>Расписание</label>
-	<div class="flex-line">
-	  <label><input type="checkbox" name="schedule" value="1"> пн</label>
-	  <label><input type="checkbox" name="schedule" value="2"> вт</label>
-	  <label><input type="checkbox" name="schedule" value="3"> ср</label>
-	  <label><input type="checkbox" name="schedule" value="4"> чт</label>
-	  <label><input type="checkbox" name="schedule" value="5"> пт</label>
-	  <label><input type="checkbox" name="schedule" value="6"> сб</label>
-	  <label><input type="checkbox" name="schedule" value="7"> вс</label>
-  	</div>
-      </div>
-      <div class="form-group">
-	<label for="start-time">Время начала</label>
-	<input type="time" name="start-time" id="start-time">
-      </div>
-      <div class="form-group">
-	<label for="place">Место</label>
-	<input id="place" type="text" name="place" required>
-      </div>
-      <div class="form-group">
-	<label for="teachers">Учителя</label>
-	<select id="teachers" name="teachers" multiple>
-	  <option>Артиш Анжелика</option>
-	  <option>Кузьминич Алексей</option>
-	  <option>Крылова Зинаида</option>
-	  <option>Пашевина Евгения</option>
-	  <option>Федорова Елена</option>
-	  <option>Федоров Олег</option>
-	  <option>Шумакова Ольга</option>
-	  <option>Яскевич Мира</option>
-	</select>
-      </div>
-      <div class="form-group">
-	<button type="submit">Добавить</button>
-      </div>
-    </form>
-  </dialog>
-  <h1>Курсы «Искусства Жизни» в Иркутске</h1>
+  {% include "info-box.html" %}
+  {% if can_edit %}
+    {% include "add-event-form.html" %}
+  {% endif %}
+  <h1>Курсы и мероприятия «Искусства Жизни» в Иркутске на {{ current_year }} год</h1>
   <nav>
     <ul>
-      {%- for year in calendar_data %}
-      <li><a id="tab-{{ loop.index }}" href="#cal-{{ year }}">{{ year }}</a></li>
+      {%- for year in years %}
+      <li><a href="{{ year }}.html"{% if year == current_year %} aria-current="page"{% endif %}>{{ year }}</a></li>
       {%- endfor %}
     </ul>
   </nav>
-  {%- for year in calendar_data %}
-  <section id="cal-{{ year }}" aria-labelledby="tab-{{ loop.index }}">
-  {%- for data in calendar_data[year] %}
+  {%- for data in calendar_data %}
     {% include 'calendar.html' %}
   {%- endfor %}
-  </section>
-  {%- endfor %}
-  <button type="button" class="add-event-btn">+</button>
+  {% if can_edit%}<button type="button" class="add-event-btn">+</button>{% endif %}
 </body>
 </html>

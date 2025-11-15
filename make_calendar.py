@@ -353,7 +353,7 @@ if __name__ == "__main__":
     logging.basicConfig(level='DEBUG')
 
     template_file = 'page.html'
-    output_file = 'out/calendar.html'
+    output_dir = 'out/'
 
     email = '***REMOVED***'
     password = '***REMOVED***'
@@ -365,13 +365,13 @@ if __name__ == "__main__":
 
     adm = AdminCourses((email, password))
 
-    calendar_data = {}
+    years = [2025, 2026]
 
-    for year in [2025, 2026]:
-        calendar_data[year] = []
+    for year in years:
+        calendar_data = []
 
         for month in range(1, 12+1):
-            calendar_data[year].append({
+            calendar_data.append({
                 'dates': get_month_dates(year, month),
                 'events': adm.get(year, month),
                 'month': month,
@@ -379,8 +379,10 @@ if __name__ == "__main__":
                 'year': year
             })
 
-    output = render_calendar(
-        {'calendar_data': calendar_data},
-        template_file
-    )
-    write_to_file(output, output_file)
+        output = render_calendar(
+            {'calendar_data': calendar_data,
+             'years': years,
+             'current_year': year},
+            template_file
+        )
+        write_to_file(output, Path(output_dir) / f'{year}.html')

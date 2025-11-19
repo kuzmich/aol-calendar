@@ -1,14 +1,16 @@
 import calendar
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import enum
+from functools import cache
 import json
 from pathlib import Path
 
 from flask import Flask, request, redirect, url_for, render_template
+from pymongo import MongoClient
 from wtforms import Form, SelectField, SelectMultipleField, DateField, TimeField, StringField
 from wtforms.validators import DataRequired, Optional
 
-from make_calendar import get_month_dates, AdminCourses, read_config
+from cal_utils import prepare_events, get_month_dates, next_month_first_day, weekdays_in_month
 
 
 DATA_DIR = 'data'
@@ -107,23 +109,6 @@ class EventForm(Form):
     start_time = TimeField('Время начала', [Optional()], name="start-time")
     place = StringField('Место', [DataRequired()])
     teachers = SelectMultipleField('Учителя', [Optional()], choices=TEACHERS_CHOICES)
-
-
-def weekdays_in_month(year: int, month: int, weekday: int):
-    """Возвращает все даты определенного дня недели в месяце
-
-    Например, все среды в апреле 2026:
-
-    >>> weekdays_in_month(2026, 4, calendar.WEDNESDAY)
-    [date(2026, 4, 1), date(2026, 4, 8), date(2026, 4, 15), date(2026, 4, 22), date(2026, 4, 29)]
-    """
-    cal = calendar.Calendar()
-    return [
-        date(year, month, day)
-        for week in cal.monthdayscalendar(year, month)
-        for day in [week[weekday]]
-        if day != 0
-    ]
 
 
 def human_dates(start_date, end_date):
@@ -226,6 +211,34 @@ def add_events(events, year, month):
         json.dump(month_events, f, ensure_ascii=False, indent=2)
 
 
+@cache
+def get_db(url='mongodb://127.0.0.1:27017/', dbname='aol_calendar'):
+    client = MongoClient(url)
+    return client[dbname]
+
+
+def get_events(year, month):
+    """Получаем события из базы за последний месяц"""
+    db = get_db()
+    events_col = db['events']
+    start_of_month = datetime(year, month, 1)
+    cursor = events_col.find(
+        {'start_date': {'$gte': start_of_month,
+                        '$lt': next_month_first_day(start_of_month)}}
+    )
+    return [e for e in cursor]
+
+
+@app.template_filter()
+def teacher_names(teachers):
+    names = []
+    for t in teachers:
+        last_name, first_name = t.split()
+        # names.append(f'{last_name} {first_name[0]}.')
+        names.append(f'{last_name}')
+    return ' + '.join(names)
+
+
 @app.route("/")
 def home_page():
     return redirect(url_for('calendar_page', year=datetime.now().year))
@@ -233,25 +246,20 @@ def home_page():
 
 @app.route("/<int:year>.html")
 def calendar_page(year):
-    config = read_config()
-    email = config['EMAIL']
-    password = config['PASSWORD']
-    adm = AdminCourses((email, password))
-
     years = [2025, 2026]
     calendar_data = []
 
     for month in range(1, 12+1):
         calendar_data.append({
             'dates': get_month_dates(year, month),
-            'events': adm.get(year, month),
+            'events': prepare_events(get_events(year, month)),
             'month': month,
             'month_name': MonthName(month).name.title(),
             'year': year
         })
 
     return render_template(
-        'page_flask.html',
+        'page.html',
         calendar_data=calendar_data,
         years=years,
         current_year=year,

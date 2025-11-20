@@ -2,10 +2,14 @@ from datetime import datetime
 import json
 from pathlib import Path
 from pprint import pprint
+import re
 
 from pymongo import MongoClient
 
 from parsing_utils import parse_dates, get_course_type
+
+
+data_file_name_re = re.compile(r'\d{4}_\d{1,2}.json')
 
 
 def get_db(url='mongodb://127.0.0.1:27017/', dbname='aol_calendar'):
@@ -19,25 +23,56 @@ def year_month(data_file):
 
 
 def get_data_files(data_dir):
-    """Возвращает все пути к дата-файлам из админки"""
+    """Возвращает все пути к дата-файлам из папки data_dir"""
+
     data_files = data_dir.glob('*.json')
+    data_files = filter(lambda p: data_file_name_re.match(p.name), data_files)
     sorted_files = sorted(data_files, key=year_month)
     return sorted_files
 
 
 def get_json_data(data_file):
+    with data_file.open() as f:
+        return json.load(f)
+
+
+def get_month_data(data_file):
     """Читает данные из дата-файла админки и дополняет информацией из файла ручного ввода
 
     Возвращает ((год, месяц), [все события за выбранный месяц])
     """
-    with data_file.open() as f:
-        month_data = json.load(f)
+    month_data = get_json_data(data_file)
 
     if (manual_file := (data_file.parent / 'manual' / data_file.name)).exists():
-        with manual_file.open() as f:
-            month_data.extend(json.load(f))
+        month_data.extend(get_json_data(manual_file))
 
     return (year_month(data_file), month_data)
+
+
+def get_events(data_dir):
+    """Возвращает список событий из папки с дата-файлами"""
+
+    # получам список файлов [Path('data/2026_1.json'), ...]
+    data_files = get_data_files(data_dir)
+
+    # получаем данные из дата-файлов [((year, month), month_data), ...]
+    month_data = list((year_month(df), get_json_data(df)) for df in data_files)
+
+    # разворачиваем в плоский список событий и дописываем год и месяц
+    return [event | {'year': ym[0], 'month': ym[1]} for ym, md in month_data for event in md]
+
+
+def get_all_events(data_dir):
+    """Возвращает объединенный список событий из обоих папок с дата-файлами"""
+
+    # получам список файлов [Path('data/2026_1.json'), ...]
+    data_files = get_data_files(data_dir)
+
+    # получаем данные из дата-файлов [((year, month), month_data), ...]
+    month_data = list(get_month_data(df) for df in data_files)
+
+    # разворачиваем в плоский список событий и дописываем год и месяц
+    return [event | {'year': ym[0], 'month': ym[1]} for ym, md in month_data for event in md]
 
 
 def swap_names(name):
@@ -64,6 +99,7 @@ def find_event(events, key=None, value=None, test_func=None):
         else:
             if event[key] == value:
                 yield event
+
 
 def get_teacher_ids(e, teacher_name_id):
     ids = []
@@ -105,12 +141,7 @@ if __name__ == '__main__':
     events_col = db['events']
     data_dir = Path('data')
 
-    # получам список файлов [Path('data/2026_1.json'), ...]
-    data_files = get_data_files(data_dir)
-    # получаем данные из дата-файлов [((year, month), month_data), ...]
-    month_data = list(get_json_data(df) for df in data_files)
-    # разворачиваем в плоский список событий и дописываем год и месяц
-    events = [event | {'year': ym[0], 'month': ym[1]} for ym, md in month_data for event in md]
+    events = get_all_events(data_dir)
     # отфильтровываем отмененные курсы
     events = [e for e in events if not (e.get('status') == 'Не опубликован' and e.get('num_payments') == 0)]
 
@@ -124,7 +155,7 @@ if __name__ == '__main__':
     # names = get_all_event_names(events)
     # event_types.insert_many([{'name': name} for name in names])
 
-    # записиваем местоположения курсов
+    # записываем местоположения курсов
     # locations = get_all_locations(events)
     # locations_col.insert_many([{'name': loc} for loc in locations])
 
@@ -141,7 +172,7 @@ if __name__ == '__main__':
     for e in events:
         dates = parse_dates(e['date'], e['year'])
 
-        # вот возможные ключи у события
+        # вот возможные ключи у события из дата-файлов
         # {'name', 'date', 'place', 'year', 'month', 'time', 'teachers', 'link', 'id', 'status', 'num_payments'}
         event = {
             'name': e['name'],
@@ -149,7 +180,7 @@ if __name__ == '__main__':
             'place': e['place'],
             'type': get_course_type(e['name']),  # TODO проверить, что курс опознан
             'start_date': datetime.combine(dates[0], datetime.min.time()),
-            'end_date': datetime.combine(dates[-1], datetime.max.time()),
+            'end_date': datetime.combine(dates[-1], datetime.min.time()),
         }
 
         if e.get('teachers'):

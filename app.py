@@ -22,7 +22,7 @@ class EventType(enum.StrEnum):
     first_step = "Первый шаг"
     happiness = "Счастье"
     art_of_meditation = "Искусство медитации"
-    ayurvedic_cooking = "Здоровое питание"
+    cooking = "Здоровое питание"
     art_of_silence = "Искусство тишины"
     dsn = "DSN"
     practices = "Поддерживающее занятие"
@@ -31,10 +31,14 @@ class EventType(enum.StrEnum):
     yoga_spine = "Йога для позвоночника"
     yoga_joints = "Суставная йога"
     satsang = "Песенный сатсанг"
+    premium = "Искусство жизни — Премиум"
 
     @classmethod
-    def choices(cls):
-        return [(et.name, et.value) for et in cls]
+    def choices(cls, sort=False):
+        event_types = [(et.name, et.value) for et in cls]
+        if sort:
+            event_types = sorted(event_types, key=lambda et: et[1])
+        return event_types
 
 
 class WeekDay(enum.IntEnum):
@@ -61,6 +65,7 @@ class WeekDay(enum.IntEnum):
 
 TEACHERS_CHOICES = [
     "Артиш Анжелика",
+    "Копанев Вадим",
     "Крылова Зинаида",
     "Кузьминич Алексей",
     "Пашевина Евгения",
@@ -133,46 +138,24 @@ def swap_name_and_last_name(full_name):
     return f'{name} {last_name}'
 
 
-def field_to_human(field, value):
-    """Форматирует значения формы добавления события в человеко-читаемый вид
+def make_event(form_data, **override):
+    """Подготавливает данные из формы добавления/редактирования для сохранения в базу"""
 
-    name:
-        'happiness' => 'Счастье'
-    date:
-        (date(2026, 4, 29), date(2026, 5, 3)) => '4 Апреля-5 Мая'
-    place:
-        'Театральная, 17' => 'Театральная, 17'
-    time:
-        time(9, 0) => '09:00'
-    teachers:
-        ['Артиш Анжелика', 'Кузьминич Алексей'] => 'Анжелика Артиш, Алексей Кузьминич'
-    """
-    match field:
-        case "name":
-            return EventType[value].value
-        case "date":
-            return human_dates(*value)
-        case "place":
-            return value
-        case "time":
-            return value.strftime('%H:%M')
-        case "teachers":
-            return ", ".join(map(swap_name_and_last_name, value))
-        case _:
-            return value
+    data = form_data | override
 
-
-def make_event(form_data):
     event_data = {
-        "name": field_to_human("name", form_data['event_type']),
-        "date": field_to_human("date", (form_data['start_date'], form_data['end_date'])),
-        "place": field_to_human("place", form_data['place']),
+        "name": EventType[data["event_type"]].value,
+        "type": data["event_type"],
+        "dates": human_dates(data["start_date"], data["end_date"]),
+        "place": data["place"],
+        "start_date": datetime.combine(data["start_date"], datetime.min.time()),
+        "end_date": datetime.combine(data["end_date"] or data["start_date"], datetime.min.time()),
     }
 
-    if form_data['teachers']:
-       event_data['teachers'] = field_to_human("teachers", form_data['teachers'])
-    if form_data['start_time']:
-       event_data["time"] = field_to_human("time", form_data['start_time'])
+    if data['teachers']:
+        event_data["teachers"] = data["teachers"]
+    if data['start_time']:
+        event_data["time"] = data["start_time"].strftime('%H:%M')
 
     return event_data
 
@@ -180,35 +163,19 @@ def make_event(form_data):
 def make_recurring_events(form_data):
     start_date = form_data['start_date']
     end_date = form_data['end_date']
-    year = start_date.year
-    month = start_date.month
-
-    base_fields = {
-        "name": field_to_human("name", form_data['event_type']),
-        "time": field_to_human("time", form_data['start_time']),
-        "place": field_to_human("place", form_data['place'])
-    }
 
     for weekday in form_data['schedule']:
-        for event_dt in weekdays_in_month(year, month, weekday - 1):
+        for event_dt in weekdays_in_month(start_date.year, start_date.month, weekday - 1):
             if event_dt >= start_date and (event_dt <= end_date if end_date else True):
-                add_fields = {'date': field_to_human("date", (event_dt, None))}
-                if form_data['teachers']:
-                    add_fields['teachers'] = field_to_human("teachers", form_data['teachers'])
-
-                yield base_fields | add_fields
+                yield make_event(form_data, start_date=event_dt, end_date=event_dt)
 
 
-def add_events(events, year, month):
-    data_file = Path(DATA_DIR) / 'manual' / f'{year}_{month}.json'
+def add_events(events):
+    db = get_db()
+    events_col = db['events']
 
-    with data_file.open() as f:
-        month_events = json.load(f)
-
-    month_events.extend(events)
-
-    with data_file.open('w') as f:
-        json.dump(month_events, f, ensure_ascii=False, indent=2)
+    for e in events:
+        events_col.insert_one(e)
 
 
 @cache
@@ -263,13 +230,16 @@ def calendar_page(year):
         calendar_data=calendar_data,
         years=years,
         current_year=year,
-        can_edit=True
+        can_edit=True,
+        event_types=EventType.choices(sort=True),
+        teachers=TEACHERS_CHOICES,
     )
 
 
 @app.route("/events/", methods=["POST"])
 def events():
     form = EventForm(request.form)
+    print(form.data)
 
     start_date = form.start_date.data
     year = start_date.year
@@ -283,11 +253,11 @@ def events():
             events = list(make_recurring_events(form.data))
             for event in events:
                 print(event)
-            add_events(events, year, month)
+            add_events(events)
         else:
             event = make_event(form.data)
             print(event)
-            add_events([event], year, month)
+            add_events([event])
 
         return redirect(url_for('calendar_page', year=year, _anchor=str(month)))
     else:

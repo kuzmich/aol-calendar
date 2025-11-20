@@ -5,10 +5,12 @@ import re
 COURSE_NAME_TYPE = {
     'art excel': 'art_excel',
     'dsn': 'dsn',
+    'дсн': 'dsn',
     'yes!': 'yes',
     'yes+': 'yes',
     'блессинг': 'blessing',
     'глубокий сон и снятие тревожности': 'deep_sleep',
+    'забота о спине и коррекция осанки': 'spine_care',
     'здоровое питание': 'cooking',
     'искусство медитации': 'art_of_meditation',
     'искусство тишины online': 'art_of_silence',
@@ -30,12 +32,17 @@ COURSE_NAME_TYPE = {
     'суставная йога': 'yoga',
     'счастье (благотворительный)': 'happiness',
     'счастье': 'happiness',
+    'счастье онлайн': 'happiness_online',
     'шри шри йога 2': 'ssy2',
     'шри шри йога': 'ssy',
 }
 
 
 def get_course_type(name, default='unknown'):
+    """Возвращает тип курса по имени
+
+    Используется при парсинге дата-файлов (JSON-файлов)/данных из админки
+    """
     return COURSE_NAME_TYPE.get(name.lower(), default)
 
 

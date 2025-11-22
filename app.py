@@ -5,6 +5,7 @@ from functools import cache
 import json
 from pathlib import Path
 
+from bson.objectid import ObjectId
 from flask import Flask, request, redirect, url_for, render_template
 from pymongo import MongoClient
 from wtforms import Form, SelectField, SelectMultipleField, DateField, TimeField, StringField
@@ -68,12 +69,18 @@ class WeekDay(enum.IntEnum):
 
 TEACHERS_CHOICES = [
     "Артиш Анжелика",
+    "Глебова Лариса",
+    "Девятайкина Елена",
+    "Демиденко Ольга",
     "Копанев Вадим",
     "Крылова Зинаида",
     "Кузьминич Алексей",
+    "Маслов Андрей",
     "Пашевина Евгения",
+    "Ружьева Анна",
     "Федорова Елена",
     "Федоров Олег",
+    "Цыкунова Галина",
     "Шумакова Ольга",
     "Яскевич Мира"
 ]
@@ -137,7 +144,7 @@ def human_dates(start_date, end_date):
     '29 апреля-3 мая'
     """
     month = start_date.month
-    if not end_date:
+    if not end_date or end_date == start_date:
         return f'{start_date.day} {Month(month).name}'
     else:
         month2 = end_date.month
@@ -210,6 +217,22 @@ def get_events(year, month):
     return [e for e in cursor]
 
 
+def get_event_by_id(event_id):
+    db = get_db()
+    events_col = db['events']
+    return events_col.find_one({'_id': ObjectId(event_id)})
+
+
+def save_event(event_id, form):
+    db = get_db()
+    events_col = db['events']
+
+    events_col.replace_one(
+        {'_id': ObjectId(event_id)},
+        make_event(form.data)
+    )
+
+
 @app.template_filter()
 def teacher_names(teachers):
     names = []
@@ -246,8 +269,6 @@ def calendar_page(year):
         years=years,
         current_year=year,
         can_edit=True,
-        event_types=EventType.choices(sort=True),
-        teachers=TEACHERS_CHOICES,
         form=form
     )
 
@@ -279,3 +300,29 @@ def events():
     else:
         return str(form.errors)
 
+
+@app.route("/events/<event_id>", methods=["POST"])
+def edit_event(event_id):
+    event = get_event_by_id(event_id)
+    form = EventForm(request.form, data=event)
+    start_date = event['start_date']
+
+    if form.validate():
+        save_event(event_id, form)
+        print(form.data)
+        return redirect(url_for('calendar_page', year=start_date.year, _anchor=str(start_date.month)))
+    else:
+        # return str(form.errors)
+        return render_template("event-form.html", form=form, edit=True, url=url_for('edit_event', event_id=event_id))
+
+
+@app.route("/event/form/<event_id>")
+def get_event_form(event_id):
+    event = get_event_by_id(event_id)
+    print(event)
+
+    start_time = None
+    if event.get('time'):
+        start_time = datetime.strptime(event['time'], "%H:%M")
+    form = EventForm(data=event, event_type=event['type'], start_time=start_time)
+    return render_template("event-form.html", form=form, edit=True, url=url_for('edit_event', event_id=event_id))

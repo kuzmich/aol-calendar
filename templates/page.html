@@ -13,11 +13,6 @@
     {% endif %}
 </head>
 <body>
-  {% if can_edit %}
-    {% include "add-event-form.html" %}
-  {% else %}
-    {% include "info-box.html" %}
-  {% endif %}
   <h1>Курсы и мероприятия «Искусства Жизни» в Иркутске на {{ current_year }} год</h1>
   <nav>
     <ul>
@@ -29,6 +24,16 @@
   {%- for data in calendar_data %}
     {% include 'calendar.html' %}
   {%- endfor %}
-  {% if can_edit%}<button type="button" class="add-event-btn">+</button>{% endif %}
+  {% if can_edit%}
+  <button type="button" class="add-event-btn">+</button>
+  {% endif %}
+  {% if can_edit %}
+  <dialog class="event-details add-event">
+    {% include "event-form.html" %}
+  </dialog>
+  <dialog class="event-details edit-event"></dialog>
+  {% else %}
+    {% include "info-box.html" %}
+  {% endif %}
 </body>
 </html>

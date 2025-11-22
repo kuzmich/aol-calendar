@@ -208,10 +208,14 @@ h2:first-of-type {
 /* Окно с информацией о событии/курсе */
 .event-details {
     --padding: 1.1rem;
+    max-width: 50ch;
     border-radius: 6px;
     border-width: 1px;
     border-color: hsl(208 10% 67%);
     padding: 0;
+}
+.event-details::backdrop {
+    background: rgb(0 0 0 / 0.4);
 }
 .event-details header {
     display: flex;
@@ -229,9 +233,9 @@ h2:first-of-type {
     align-self: baseline;
 }
 .event-details table {
-    width: calc(100% - 2rem);
-    max-width: 50ch;
-    margin: 1rem;
+    width: calc(100% - 2 * var(--padding, 1rem));
+    /* margin: 1rem; */
+    margin: var(--padding);
     border-collapse: collapse;
     text-align: left;
 }
@@ -261,10 +265,31 @@ h2:first-of-type {
     background-color: hsl(208 100% 85% / 1); /* darker aliceblue */
     font-size: 2rem;
 }
-.add-event form {
-    margin: 1.5rem;
+.add-event,
+.edit-event {
+    --space: 1.5rem;
+}
+.add-event header,
+.edit-event header {
+    align-items: baseline;
+    padding: var(--space);
+    padding-block-end: 0;
+    background-color: revert;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+.add-event button.close,
+.edit-event button.close {
+    padding: 0.28rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.add-event form,
+.edit-event form {
+    margin: var(--space);
     display: grid;
-    gap: 1.5rem;
+    gap: var(--space);
 }
 .form-group {
     display: grid;

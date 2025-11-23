@@ -1,6 +1,5 @@
 from datetime import datetime
 import enum
-from functools import lru_cache
 
 from bson.objectid import ObjectId
 from flask import Flask, request, redirect, url_for, render_template
@@ -8,7 +7,7 @@ from wtforms import Form, SelectField, SelectMultipleField, DateField, TimeField
 from wtforms.validators import DataRequired, Optional
 from wtforms.widgets import CheckboxInput, ListWidget
 
-from db_utils import get_db
+from db_utils import get_db, get_all_event_names_types, get_all_teachers, get_all_locations
 from cal_utils import prepare_events, get_month_dates, next_month_first_day, weekdays_in_month
 
 
@@ -16,38 +15,9 @@ DATA_DIR = 'data'
 
 app = Flask(__name__)
 
-
-class EventType(enum.StrEnum):
-    first_step = "Первый шаг"
-    happiness = "Счастье"
-    art_of_meditation = "Искусство медитации"
-    cooking = "Здоровое питание"
-    art_of_silence = "Искусство тишины"
-    dsn = "DSN"
-    practices = "Поддерживающее занятие"
-    practices_vtp = "Поддерживающее занятие для VTP"
-    yoga = "Йога"
-    yoga_spine = "Йога для позвоночника"
-    yoga_joints = "Суставная йога"
-    satsang = "Песенный сатсанг"
-    premium = "Искусство жизни — Премиум"
-
-    @classmethod
-    def choices(cls, sort=True, empty_option="Не выбрано"):
-        event_types = [(et.name, et.value) for et in cls]
-        if sort:
-            event_types = sorted(event_types, key=lambda et: et[1])
-        if empty_option:
-            event_types.insert(0, ("", empty_option))
-        return event_types
-
-
-@lru_cache(maxsize=1)
-def get_all_event_names_types():
-    db = get_db()
-    events_col = db['events']
-    name_type_list = [(event['type'], event['name']) for event in events_col.find({}, {'name': 1, 'type': 1})]
-    return sorted(set(name_type_list), key=lambda nt: nt[1])
+EVENTS = [("", "Не выбрано")] + get_all_event_names_types()
+TEACHERS = get_all_teachers()
+LOCATIONS = ["Не выбрано"] + get_all_locations()
 
 
 class WeekDay(enum.IntEnum):
@@ -70,57 +40,6 @@ class WeekDay(enum.IntEnum):
     @classmethod
     def choices(cls):
         return [(wd.value, wd.name) for wd in cls]
-
-
-TEACHERS_CHOICES = [
-    "Артиш Анжелика",
-    "Глебова Лариса",
-    "Девятайкина Елена",
-    "Демиденко Ольга",
-    "Копанев Вадим",
-    "Крылова Зинаида",
-    "Кузьминич Алексей",
-    "Маслов Андрей",
-    "Пашевина Евгения",
-    "Ружьева Анна",
-    "Федорова Елена",
-    "Федоров Олег",
-    "Цыкунова Галина",
-    "Шумакова Ольга",
-    "Яскевич Мира"
-]
-
-
-@lru_cache(maxsize=1)
-def get_all_teachers():
-    db = get_db()
-    events_col = db['events']
-    list_of_list_of_teachers = (event.get('teachers', []) for event in events_col.find({}, {'teachers': 1}))
-    teachers = (teacher for list_of_teachers in list_of_list_of_teachers for teacher in list_of_teachers)
-    return sorted(set(teachers))
-
-
-LOCATION_CHOICES = [
-    'Большая Речка, "Пирамида"',
-    'Большие Коты',
-    'Листвянка, гостиница Larus (ул. Октябрьская, 8д)',
-    'Луговое (ул. Изумрудная, 8)',
-    'Место уточняется',
-    'Ольхон, ретритный центр «Чаша Чингисхана»',
-    'Онлайн, время МСК+5',
-    'Театральная, 17',
-    'Театральная, 17 (малый зал)',
-    'г. Шелехов, 4-й микрорайон, 30в',
-    'д. Куркут, база отдыха «Байкал-вега»',
-    'парк-отель «Звездный»',
-]
-
-
-@lru_cache(maxsize=1)
-def get_all_locations():
-    db = get_db()
-    events_col = db['events']
-    return sorted(set(event['place'] for event in events_col.find({}, {'place': 1})))
 
 
 class Month(enum.Enum):
@@ -165,13 +84,13 @@ class MultiCheckboxField(SelectMultipleField):
 
 
 class EventForm(Form):
-    event_type = SelectField('Мероприятие', [DataRequired()], choices=get_all_event_names_types(), name="type")
+    event_type = SelectField('Мероприятие', [DataRequired()], choices=EVENTS, name="type")
     start_date = DateField('Дата начала', [DataRequired()], name="start-date")
     end_date = DateField('Дата окончания', [Optional()], name="end-date")
     schedule = MultiCheckboxField('Расписание', [Optional()], choices=WeekDay.choices(), coerce=int)
     start_time = TimeField('Время начала', [Optional()], name="start-time")
-    place = SelectField('Место', [DataRequired()], choices=get_all_locations())
-    teachers = SelectMultipleField('Учителя', [Optional()], choices=get_all_teachers())
+    place = SelectField('Место', [DataRequired()], choices=LOCATIONS)
+    teachers = SelectMultipleField('Учителя', [Optional()], choices=TEACHERS)
 
 
 def human_dates(start_date, end_date):
@@ -202,7 +121,7 @@ def make_event(form_data, **override):
     data = form_data | override
 
     event_data = {
-        "name": EventType[data["event_type"]].value,
+        "name": EVENTS[data["event_type"]].value,
         "type": data["event_type"],
         "dates": human_dates(data["start_date"], data["end_date"]),
         "place": data["place"],

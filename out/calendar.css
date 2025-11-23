@@ -157,7 +157,8 @@ label {
 .happiness {
     background-color: #ff8400;
 }
-.art_of_silence,
+.silence,
+.silence_online,
 .blessing {
     background-color: #35b3e1;
 }
@@ -169,13 +170,16 @@ label {
 .deep_sleep {
     background-color: #ff7b7c;
 }
-.yes {
+.yes,
+.yes_plus {
     background-color: #4bbf05;
 }
 .art_excel {
     background-color: #ffc001;
 }
-.intuition {
+.intuition,
+.intuition_5_8,
+.intuition_8_18 {
     background-color: var(--blue-c);
 }
 .cooking {

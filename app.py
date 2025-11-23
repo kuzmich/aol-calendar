@@ -1,29 +1,20 @@
-import calendar
-from datetime import date, datetime, timedelta
+from datetime import datetime
 import enum
-from functools import cache, lru_cache
-import json
-from pathlib import Path
+from functools import lru_cache
 
 from bson.objectid import ObjectId
 from flask import Flask, request, redirect, url_for, render_template
-from pymongo import MongoClient
-from wtforms import Form, SelectField, SelectMultipleField, DateField, TimeField, StringField
+from wtforms import Form, SelectField, SelectMultipleField, DateField, TimeField
 from wtforms.validators import DataRequired, Optional
 from wtforms.widgets import CheckboxInput, ListWidget
 
+from db_utils import get_db
 from cal_utils import prepare_events, get_month_dates, next_month_first_day, weekdays_in_month
 
 
 DATA_DIR = 'data'
 
 app = Flask(__name__)
-
-
-@cache
-def get_db(url='mongodb://127.0.0.1:27017/', dbname='aol_calendar'):
-    client = MongoClient(url)
-    return client[dbname]
 
 
 class EventType(enum.StrEnum):
@@ -49,6 +40,14 @@ class EventType(enum.StrEnum):
         if empty_option:
             event_types.insert(0, ("", empty_option))
         return event_types
+
+
+@lru_cache(maxsize=1)
+def get_all_event_names_types():
+    db = get_db()
+    events_col = db['events']
+    name_type_list = [(event['type'], event['name']) for event in events_col.find({}, {'name': 1, 'type': 1})]
+    return sorted(set(name_type_list), key=lambda nt: nt[1])
 
 
 class WeekDay(enum.IntEnum):
@@ -166,7 +165,7 @@ class MultiCheckboxField(SelectMultipleField):
 
 
 class EventForm(Form):
-    event_type = SelectField('Мероприятие', [DataRequired()], choices=EventType.choices(), name="type")
+    event_type = SelectField('Мероприятие', [DataRequired()], choices=get_all_event_names_types(), name="type")
     start_date = DateField('Дата начала', [DataRequired()], name="start-date")
     end_date = DateField('Дата окончания', [Optional()], name="end-date")
     schedule = MultiCheckboxField('Расписание', [Optional()], choices=WeekDay.choices(), coerce=int)

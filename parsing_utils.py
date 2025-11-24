@@ -12,7 +12,7 @@ COURSE_NAME_TYPE = {
     'глубокий сон и снятие тревожности': 'deep_sleep',
     'забота о спине и коррекция осанки': 'spine_care',
     'здоровое питание': 'cooking',
-    'искусство медитации': 'art_of_meditation',
+    'искусство медитации': 'meditation',
     'искусство тишины online': 'silence_online',
     # 'искусство тишины интенсив': 'silence_intense',
     'искусство тишины': 'silence',

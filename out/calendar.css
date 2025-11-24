@@ -5,8 +5,10 @@
 }
 :root {
     --off-month-c: hsl(0 0% 60%);
-    --grey-black-c: hsl(0 0% 30%);
-    --blue-c: #3f34f7;
+    --grey-black-c: hsl(0 0% 30%); /* для нечерного текста */
+    --blue-c: #3f34f7; /* [aria-current="page"] */
+    --default-event-c: cornflowerblue;
+    --page-bg-c: aliceblue;
 }
 html, body {
     height: 100%;
@@ -14,7 +16,7 @@ html, body {
 body {
     margin: 0;
     font-family: system-ui;
-    background-color: aliceblue;
+    background-color: var(--page-bg-c);
 }
 h1 {
     font-size: 1.4rem;
@@ -124,7 +126,7 @@ label {
     padding-block: 0;
     line-height: var(--line-height);
     border-radius: 4px;
-    background-color: cornflowerblue;
+    background-color: var(--default-event-c);
     color: white;
     /* fix for button element */
     text-align: left;
@@ -154,49 +156,76 @@ label {
 }
 
 /* типы событий */
+.event-colors {
+    background-color: cornflowerblue; /* .event */
+    background-color: #4692ff; /* site color */
+    background-color: hsl(129 62% 39%);
+    background-color: hsl(191 69% 37%);
+}
+
+.first_step {
+    background-color: #ffa3a3; /* site color */
+}
 .happiness {
-    background-color: #ff8400;
+    background-color: #ff8400; /* brand color, site color */
 }
+.meditation,
 .silence,
-.silence_online,
-.blessing {
-    background-color: #35b3e1;
+.silence_online {
+    background-color: #35b3e1; /* brand color, my choice */
 }
-.art_of_meditation {
-    background-color: #7b54bf;
+.deep_sleep,
+.eternity,
+.sanyam {
+    background-color: #3f34f7;  /* site color, #4048e0|#3f34f7, var(--blue-c) */
+}
+.cooking {
+    background-color: #f17645; /* brand color */
+}
+.dsn,
+.give_up_smoking,
+.vtp,
+.blessing {
+    background-color: brown; /* my color */
 }
 .ssy,
 .ssy2,
-.deep_sleep {
-    background-color: #ff7b7c;
+.spine_care {
+    background-color: #ff7b7c; /* brand color, site color, #ff7b7b */
 }
+.art_excel,
 .yes,
 .yes_plus {
-    background-color: #4bbf05;
-}
-.art_excel {
-    background-color: #ffc001;
+    background-color: #ffc001; /* brand color */
 }
 .intuition,
 .intuition_5_8,
 .intuition_8_18 {
-    background-color: var(--blue-c);
-}
-.cooking {
-    background-color: #f17645;
-}
-.give_up_smoking {
-    background-color: #4692ff;
+    background-color: #7b54bf; /* brand color */
 }
 .satsang {
-    background-color: brown; /*seagreen;*/
+    background-color: #f44331;  /* site color */
 }
 .premium {
     background-color: black;
 }
+.practices,
+.practices_online,
+.practices_vtp {
+    background-color: forestgreen;
+}
+.yoga,
+.yoga_spine,
+.yoga_joints {
+    background-color: #4bbf05; /* brand color */
+}
 .unknown {
     /* background-color: black; */
 }
+.satsang::before {
+    content: "🎸";
+}
+
 
 h2 {
     margin-block-start: 3.5rem;

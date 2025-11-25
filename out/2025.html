@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Календарь курсов и мероприятий «Искусства Жизни» в Иркутске на 2025 год</title>
-    <link rel="stylesheet" href="calendar.css?ver=2025-11-15T10:35:00+08:00">
-    <script src="calendar.js?ver=2025-11-15T10:35:00+08:00" defer></script>
+    <link rel="stylesheet" href="calendar.css?ver=2025-11-25T12:30:00+08:00">
+    <script src="calendar.js?ver=2025-11-25T12:30:00+08:00" defer></script>
 </head>
 <body>
   <h1>Курсы и мероприятия «Искусства Жизни» в Иркутске на 2025 год</h1>
@@ -21,9 +21,9 @@
 	<h2>Что показывать:</h2>
       </div>
       <div class="filters-list">
-	<label><input type="checkbox" data-target-types="practices,practices_online,practices_vtp" checked> Поддерживающие занятия</label>
-	<label><input type="checkbox" data-target-types="yoga,yoga_spine,yoga_joints" checked> Йогу</label>
-	<label><input type="checkbox" data-target-types="!practices,practices_online,practices_vtp,yoga,yoga_spine,yoga_joints" checked> Курсы</label>
+	<label><input type="checkbox" id="filter-courses" data-target-types="!practices,practices_online,practices_vtp,yoga,yoga_spine,yoga_joints" checked> Курсы</label>
+	<label><input type="checkbox" id="filter-practices" data-target-types="practices,practices_online,practices_vtp" checked> Поддерживающие занятия</label>
+	<label><input type="checkbox" id="filter-yoga" data-target-types="yoga,yoga_spine,yoga_joints" checked> Йогу</label>
       </div>
     </div>
   </header>

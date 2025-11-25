@@ -364,33 +364,27 @@ nav a {
 }
 
 /* Фильтры */
+
 .event-filters {
     padding: 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    display: grid;
+    gap: 0.5rem;
+    justify-content: center;
     align-items: baseline;
     background: var(--calendar-bg-c);
     margin-block-end: 4.0rem;
 }
-.filters-header {
-
-}
-.filters-header h2 {
+.event-filters h2 {
     margin: 0;
     padding: 0;
     font-size: 1.2rem;
+    text-align: left;
 }
-.filters-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
-}
-.filters-list input[type="checkbox"] {
+.event-filters input[type="checkbox"] {
     height: 1rem;
     aspect-ratio: 1;
     margin-inline-start: 0;
 }
-.filters-list label {
+.event-filters label {
     font-weight: normal;
 }

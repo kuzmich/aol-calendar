@@ -81,8 +81,7 @@ function saveFilterState(checkbox) {
 
 function loadFiltersState() {
     for (let checkbox of eventFilters) {
-	const key = checkbox.id;
-	const saved = localStorage.getItem(key);
+	const saved = localStorage.getItem(checkbox.id);
 	if (saved !== null) {
 	    checkbox.checked = saved === '1';
 	}

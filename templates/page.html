@@ -6,6 +6,7 @@
     <title>Календарь курсов и мероприятий «Искусства Жизни» в Иркутске на {{ current_year }} год</title>
     {%- if can_edit %}
     <link rel="stylesheet" href="{{ url_for('static', filename='calendar.css') }}">
+    <script src="{{ url_for('static', filename='calendar.js') }}" defer></script>
     <script src="{{ url_for('static', filename='admin.js') }}" defer></script>
     {%- else %}
     <link rel="stylesheet" href="calendar.css?ver=2025-11-15T10:35:00+08:00">
@@ -14,16 +15,30 @@
 </head>
 <body>
   <h1>Курсы и мероприятия «Искусства Жизни» в Иркутске на {{ current_year }} год</h1>
-  <nav>
-    <ul>
-      {%- for year in years %}
-      <li><a href="{{ year }}.html"{% if year == current_year %} aria-current="page"{% endif %}>{{ year }}</a></li>
-      {%- endfor %}
-    </ul>
-  </nav>
-  {%- for data in calendar_data %}
+  <header>
+    <nav>
+      <ul>
+	{%- for year in years %}
+	<li><a href="{{ year }}.html"{% if year == current_year %} aria-current="page"{% endif %}>{{ year }}</a></li>
+	{%- endfor %}
+      </ul>
+    </nav>
+    <div class="event-filters">
+      <div class="filters-header">
+	<h2>Что показывать:</h2>
+      </div>
+      <div class="filters-list">
+	<label><input type="checkbox" data-target-types="practices,practices_online,practices_vtp" checked> Поддерживающие занятия</label>
+	<label><input type="checkbox" data-target-types="yoga,yoga_spine,yoga_joints" checked> Йогу</label>
+	<label><input type="checkbox" data-target-types="!practices,practices_online,practices_vtp,yoga,yoga_spine,yoga_joints" checked> Курсы</label>
+      </div>
+    </div>
+  </header>
+  <main>
+    {%- for data in calendar_data %}
     {% include 'calendar.html' %}
-  {%- endfor %}
+    {%- endfor %}
+  </main>
   {% if can_edit%}
   <button type="button" class="add-event-btn">+</button>
   {% endif %}

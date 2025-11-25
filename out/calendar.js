@@ -7,6 +7,7 @@ const timeField = document.querySelector('[data-name="time"]');
 const placeField = document.querySelector('[data-name="place"]');
 const teachersField = document.querySelector('[data-name="teachers"]');
 const peopleField = document.querySelector('[data-name="people"]');
+const eventFilters = document.querySelectorAll('.event-filters input[type="checkbox"]');
 
 for (let event of events) {
     event.addEventListener("click", (e) => {
@@ -38,3 +39,25 @@ for (let event of events) {
 closeBtn.addEventListener("click", () => {
     infoBox.close();
 })
+
+
+// Фильтры по типам курсов
+for (let checkbox of eventFilters) {
+    checkbox.addEventListener("click", (e) => {
+	const checkbox = e.target;
+	const shouldShow = checkbox.checked;
+	const targetTypes = checkbox.dataset.targetTypes.split(',');
+	const allExcept = targetTypes[0].startsWith('!');
+
+	if (allExcept) {
+	    targetTypes[0] = targetTypes[0].slice(1);
+	}
+
+	for (let event of events) {
+	    let isTargetType = targetTypes.some(cls => event.classList.contains(cls));
+	    if (!allExcept ? isTargetType : !isTargetType) {
+		event.style.display = shouldShow ? '': 'none';
+	    }
+	}
+    })
+}

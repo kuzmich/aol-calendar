@@ -9,6 +9,8 @@
     --blue-c: #3f34f7; /* [aria-current="page"] */
     --default-event-c: cornflowerblue;
     --page-bg-c: aliceblue;
+    --calendar-bg-c: white;
+    --event-text-c: white;
 }
 html, body {
     height: 100%;
@@ -66,10 +68,10 @@ label {
 }
 /* квадратик календаря */
 .day {
-    min-height: 6rem;
+    min-height: 5rem;
     padding: 4px 4px 0 4px;
     font-size: 0.85rem;
-    background-color: white;
+    background-color: var(--calendar-bg-c);
 }
 /* дни не из текущего месяца */
 .off-month {
@@ -127,7 +129,7 @@ label {
     line-height: var(--line-height);
     border-radius: 4px;
     background-color: var(--default-event-c);
-    color: white;
+    color: var(--event-text-c);
     /* fix for button element */
     text-align: left;
     border: none;
@@ -359,4 +361,36 @@ nav a {
     text-decoration-thickness: 0.25em;
     text-underline-offset: 0.5em;
     color: var(--blue-c);
+}
+
+/* Фильтры */
+.event-filters {
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    align-items: baseline;
+    background: var(--calendar-bg-c);
+    margin-block-end: 4.0rem;
+}
+.filters-header {
+
+}
+.filters-header h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+}
+.filters-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+.filters-list input[type="checkbox"] {
+    height: 1rem;
+    aspect-ratio: 1;
+    margin-inline-start: 0;
+}
+.filters-list label {
+    font-weight: normal;
 }

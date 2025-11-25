@@ -45,19 +45,49 @@ closeBtn.addEventListener("click", () => {
 for (let checkbox of eventFilters) {
     checkbox.addEventListener("click", (e) => {
 	const checkbox = e.target;
-	const shouldShow = checkbox.checked;
-	const targetTypes = checkbox.dataset.targetTypes.split(',');
-	const allExcept = targetTypes[0].startsWith('!');
-
-	if (allExcept) {
-	    targetTypes[0] = targetTypes[0].slice(1);
-	}
-
-	for (let event of events) {
-	    let isTargetType = targetTypes.some(cls => event.classList.contains(cls));
-	    if (!allExcept ? isTargetType : !isTargetType) {
-		event.style.display = shouldShow ? '': 'none';
-	    }
-	}
+	applyFilter(checkbox);
+	saveFilterState(checkbox);
     })
 }
+
+function applyFilter(checkbox) {
+    const shouldShow = checkbox.checked;
+    const targetTypes = checkbox.dataset.targetTypes.split(',');
+    const allExcept = targetTypes[0].startsWith('!');
+
+    if (allExcept) {
+	targetTypes[0] = targetTypes[0].slice(1);
+    }
+
+    for (let event of events) {
+	let isTargetType = targetTypes.some(cls => event.classList.contains(cls));
+	if (!allExcept ? isTargetType : !isTargetType) {
+	    event.style.display = shouldShow ? '': 'none';
+	}
+    }
+}
+
+function applyAllFilters() {
+    for (let checkbox of eventFilters) {
+	if (!checkbox.checked) {
+	    applyFilter(checkbox);
+	}
+    }
+}
+
+function saveFilterState(checkbox) {
+    localStorage.setItem(checkbox.id, checkbox.checked ? '1' : '0');
+}
+
+function loadFiltersState() {
+    for (let checkbox of eventFilters) {
+	const key = checkbox.id;
+	const saved = localStorage.getItem(key);
+	if (saved !== null) {
+	    checkbox.checked = saved === '1';
+	}
+    }
+}
+
+loadFiltersState();
+applyAllFilters();

@@ -10,36 +10,37 @@ const peopleField = document.querySelector('[data-name="people"]');
 const eventFilters = document.querySelectorAll('.event-filters input[type="checkbox"]');
 
 for (let event of events) {
-    event.addEventListener("click", (e) => {
-	const btn = e.target;
-	nameField.innerText = btn.dataset.name;
-	datesField.innerText = btn.dataset.dates;
-	timeField.innerText = btn.dataset.time || "";
-	placeField.innerText = btn.dataset.place;
-	teachersField.innerText = btn.dataset.teachers;
-	peopleField.innerText = btn.dataset.people;
-
-	infoBox.querySelectorAll("tr").forEach((tr) => {
-	    tr.removeAttribute("hidden");
-	})
-	if (!btn.dataset.teachers) {
-	    teachersField.closest("tr").setAttribute("hidden", true);
-	}
-	if (!btn.dataset.people) {
-	    peopleField.closest("tr").setAttribute("hidden", true);
-	}
-	if (!btn.dataset.time) {
-	    timeField.closest("tr").setAttribute("hidden", true);
-	}
-
-	infoBox.showModal();
-    })
+    event.addEventListener("click", showInfoBox);
 }
 
 closeBtn.addEventListener("click", () => {
     infoBox.close();
 })
 
+function showInfoBox(e) {
+    const btn = e.target;
+    nameField.innerText = btn.dataset.name;
+    datesField.innerText = btn.dataset.dates;
+    timeField.innerText = btn.dataset.time || "";
+    placeField.innerText = btn.dataset.place;
+    teachersField.innerText = btn.dataset.teachers;
+    peopleField.innerText = btn.dataset.people;
+
+    infoBox.querySelectorAll("tr").forEach((tr) => {
+	tr.removeAttribute("hidden");
+    })
+    if (!btn.dataset.teachers) {
+	teachersField.closest("tr").setAttribute("hidden", true);
+    }
+    if (!btn.dataset.people) {
+	peopleField.closest("tr").setAttribute("hidden", true);
+    }
+    if (!btn.dataset.time) {
+	timeField.closest("tr").setAttribute("hidden", true);
+    }
+
+    infoBox.showModal();
+}
 
 // Фильтры по типам курсов
 for (let checkbox of eventFilters) {

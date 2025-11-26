@@ -2,7 +2,7 @@ from datetime import datetime
 import enum
 
 from bson.objectid import ObjectId
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, abort
 from wtforms import Form, SelectField, SelectMultipleField, DateField, TimeField
 from wtforms.validators import DataRequired, Optional
 from wtforms.widgets import CheckboxInput, ListWidget
@@ -15,7 +15,7 @@ DATA_DIR = 'data'
 
 app = Flask(__name__)
 
-EVENTS = [("", "Не выбрано")] + get_all_event_names_types()
+EVENTS = dict([("", "Не выбрано")] + get_all_event_names_types())
 TEACHERS = get_all_teachers()
 LOCATIONS = ["Не выбрано"] + get_all_locations()
 
@@ -84,7 +84,7 @@ class MultiCheckboxField(SelectMultipleField):
 
 
 class EventForm(Form):
-    event_type = SelectField('Мероприятие', [DataRequired()], choices=EVENTS, name="type")
+    event_type = SelectField('Мероприятие', [DataRequired()], choices=list(EVENTS.items()), name="type")
     start_date = DateField('Дата начала', [DataRequired()], name="start-date")
     end_date = DateField('Дата окончания', [Optional()], name="end-date")
     schedule = MultiCheckboxField('Расписание', [Optional()], choices=WeekDay.choices(), coerce=int)
@@ -121,7 +121,7 @@ def make_event(form_data, **override):
     data = form_data | override
 
     event_data = {
-        "name": EVENTS[data["event_type"]].value,
+        "name": EVENTS[data["event_type"]],
         "type": data["event_type"],
         "dates": human_dates(data["start_date"], data["end_date"]),
         "place": data["place"],
@@ -169,18 +169,24 @@ def get_events(year, month):
 
 def get_event_by_id(event_id):
     db = get_db()
-    events_col = db['events']
-    return events_col.find_one({'_id': ObjectId(event_id)})
+    col = db['events']
+    return col.find_one({'_id': ObjectId(event_id)})
 
 
 def save_event(event_id, form):
     db = get_db()
-    events_col = db['events']
+    col = db['events']
 
-    events_col.replace_one(
+    col.replace_one(
         {'_id': ObjectId(event_id)},
         make_event(form.data)
     )
+
+
+def delete_event(event_id):
+    db = get_db()
+    col = db['events']
+    col.delete_one({'_id': ObjectId(event_id)})
 
 
 @app.template_filter()
@@ -217,17 +223,19 @@ def calendar_page(year):
         calendar_data=calendar_data,
         years=years,
         current_year=year,
+        # флаг админского интерфейса - добавление/редактирование событий
         can_edit=True,
-        form=form
+        # переменные формы добавления события
+        form_url=url_for('add_event'),
+        form=form,
     )
 
 
 @app.route("/events/", methods=["POST"])
-def events():
+def add_event():
     """Добавление события"""
 
     form = EventForm(request.form)
-    print(form.data)
 
     start_date = form.start_date.data
     year = start_date.year
@@ -249,38 +257,45 @@ def events():
 
         return redirect(url_for('calendar_page', year=year, _anchor=str(month)))
     else:
-        return str(form.errors)
+        return render_template(
+            "event-form.html",
+            form_url=url_for('add_event'),
+            form=form,
+            edit=False,
+        )
 
 
-@app.route("/events/<event_id>", methods=["POST"])
+@app.route("/events/<event_id>", methods=["GET", "POST"])
 def edit_event(event_id):
-    """Редактирования события"""
+    """Редактирование события"""
 
     event = get_event_by_id(event_id)
-    form = EventForm(request.form, data=event)
-    start_date = event['start_date']
+    if not event:
+        abort(404)
 
-    if form.validate():
-        save_event(event_id, form)
-        print(form.data)
-        return redirect(url_for('calendar_page', year=start_date.year, _anchor=str(start_date.month)))
+    if request.method == "GET":
+        # покажем форму редактирования события
+        start_time = None
+        if event.get('time'):
+            start_time = datetime.strptime(event['time'], "%H:%M")
+        form = EventForm(data=event, event_type=event['type'], start_time=start_time)
     else:
-        # return str(form.errors)
-        return render_template("event-form.html", form=form, edit=True, url=url_for('edit_event', event_id=event_id))
+        if request.form.get('event-action') == 'delete':
+            # удалим событие
+            delete_event(event_id)
+            start_date = event['start_date']
+            return redirect(url_for('calendar_page', year=start_date.year, _anchor=str(start_date.month)))
 
+        # сохраним изменения или покажем форму редактирования с ошибками
+        form = EventForm(request.form, data=event)
+        if form.validate():
+            save_event(event_id, form)
+            start_date = event['start_date']
+            return redirect(url_for('calendar_page', year=start_date.year, _anchor=str(start_date.month)))
 
-@app.route("/event/form/<event_id>")
-def get_event_form(event_id):
-    event = get_event_by_id(event_id)
-    print(event)
-
-    start_time = None
-    if event.get('time'):
-        start_time = datetime.strptime(event['time'], "%H:%M")
-    form = EventForm(data=event, event_type=event['type'], start_time=start_time)
     return render_template(
         "event-form.html",
+        form_url=url_for('edit_event', event_id=event_id),
         form=form,
         edit=True,
-        url=url_for('edit_event', event_id=event_id),
     )

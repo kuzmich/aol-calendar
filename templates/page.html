@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Календарь курсов и мероприятий «Искусства Жизни» в Иркутске на {{ current_year }} год</title>
-    {%- if can_edit %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Календарь курсов и мероприятий «Искусства Жизни» в Иркутске на {{ current_year }} год</title>
+  {%- if can_edit %}
+    <script>
+      function getEditEventUrl(eventId) {
+        return `{{ url_for('edit_event', event_id='') }}${eventId}`;
+      }
+    </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='calendar.css') }}">
     <script src="{{ url_for('static', filename='calendar.js') }}" defer></script>
     <script src="{{ url_for('static', filename='admin.js') }}" defer></script>
-    {%- else %}
+  {%- else %}
     <link rel="stylesheet" href="calendar.css?ver=2025-11-25T12:30:00+08:00">
     <script src="calendar.js?ver=2025-11-25T12:30:00+08:00" defer></script>
-    {%- endif %}
+  {%- endif %}
 </head>
 <body>
   <h1>Курсы и мероприятия «Искусства Жизни» в Иркутске на {{ current_year }} год</h1>
@@ -35,14 +40,13 @@
     {% include 'calendar.html' %}
     {%- endfor %}
   </main>
-  {% if can_edit%}
-  <button type="button" class="add-event-btn">+</button>
-  {% endif %}
   {%- if can_edit %}
-  <dialog class="event-details add-event">
-    {% include "event-form.html" %}
-  </dialog>
-  <dialog class="event-details edit-event"></dialog>
+    <button type="button" class="add-event-btn">+</button>
+    {% set add_form=True %}
+    {% include "event-dialog.html" %}
+    {% set add_form=False %}
+    {% include "event-dialog.html" %}
+    {% include "info-box.html" %}
   {%- else %}
     {% include "info-box.html" %}
   {%- endif %}

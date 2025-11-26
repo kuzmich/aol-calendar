@@ -289,6 +289,7 @@ h2:first-of-type {
 }
 
 /* Кнопка и форма добавления события */
+
 .add-event-btn {
     position: fixed;
     right: 3rem;
@@ -330,6 +331,9 @@ h2:first-of-type {
     display: grid;
     gap: 0.5cap;
 }
+.form-group:last-of-type {
+    gap: 0.5rem;
+}
 .flex-line {
     display: flex;
     flex-wrap: wrap;
@@ -338,6 +342,19 @@ h2:first-of-type {
 
 .form-group select {
     width: 100%;
+}
+
+.delete-button {
+    background-color: hsl(354 70% 54%);
+    color: white;
+    border: 1px solid hsl(354 70% 30%);
+    border-radius: 3px;
+}
+.delete-button:hover {
+    background-color: hsl(354 70% 45%);
+}
+.delete-button:active {
+    background-color: hsl(354 70% 60%);
 }
 
 /* Навигация по годам */

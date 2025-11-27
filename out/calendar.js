@@ -9,6 +9,7 @@ const timeField = document.querySelector('[data-name="time"]');
 const placeField = document.querySelector('[data-name="place"]');
 const teachersField = document.querySelector('[data-name="teachers"]');
 const peopleField = document.querySelector('[data-name="people"]');
+const linkField = infoBox.querySelector('a.reg-info');
 
 const eventFilters = document.querySelectorAll('.event-filters input[type="checkbox"]');
 
@@ -30,19 +31,12 @@ function showInfoBox(e) {
     placeField.innerText = btn.dataset.place;
     teachersField.innerText = btn.dataset.teachers;
     peopleField.innerText = btn.dataset.people;
+    linkField.href = btn.dataset.link;
 
-    infoBox.querySelectorAll("tr").forEach((tr) => {
-	tr.removeAttribute("hidden");
-    })
-    if (!btn.dataset.teachers) {
-	teachersField.closest("tr").setAttribute("hidden", true);
-    }
-    if (!btn.dataset.people) {
-	peopleField.closest("tr").setAttribute("hidden", true);
-    }
-    if (!btn.dataset.time) {
-	timeField.closest("tr").setAttribute("hidden", true);
-    }
+    timeField.closest("tr").hidden = !btn.dataset.time;
+    teachersField.closest("tr").hidden = !btn.dataset.teachers;
+    peopleField.closest("tr").hidden = !btn.dataset.people;
+    linkField.style.display = !btn.dataset.link ? 'none': 'block';
 
     infoBox.showModal();
 }

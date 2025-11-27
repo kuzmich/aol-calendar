@@ -1,6 +1,7 @@
 const addBox = document.querySelector(".add-event");
 const editBox = document.querySelector(".edit-event");
 const addBtn = document.querySelector(".add-event-btn");
+let pressTimer;
 
 
 addBox.querySelector("form").addEventListener("submit", submitDialogForm);
@@ -12,8 +13,21 @@ addBtn.addEventListener("click", (e) => {
 for (let event of events) {
     event.removeEventListener("click", showInfoBox);
     event.addEventListener("click", chooseWhichBoxToShow);
+
+    event.addEventListener('touchstart', longPressStart);
+    event.addEventListener('touchend', longPressEnd);
 }
 
+function longPressStart(e) {
+    pressTimer = setTimeout(
+	() => showInfoBox(e),
+	500
+    );
+}
+
+function longPressEnd(e) {
+    clearTimeout(pressTimer);
+}
 
 function chooseWhichBoxToShow(e) {
     if (e.altKey) {

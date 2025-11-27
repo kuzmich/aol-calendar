@@ -18,11 +18,12 @@
 	    style="grid-row: {{ event.pos.week + 1}}; grid-column: {{ event.pos.start }} / {{ event.pos.end + 1 }}"
 	    data-id="{{ event._id }}"
 	    data-name="{{ event.name }}"
-	    data-dates="{{ event.dates }}"{% if event.time %} data-time="{{ event.time }}"{% endif %}
+	    data-dates="{{ event.dates }}"
+	    {%- if event.time %} data-time="{{ event.time }}"{%- endif %}
 	    data-place="{{ event.place }}"
-	    data-teachers="{{ event.teachers|join(', ') }}"
-	    data-people="{% if event.num_payments %}{{ event.num_payments }}{% endif %}"
-	    >
+	    {%- if event.teachers %} data-teachers="{{ event.teachers|join(', ') }}"{%- endif %}
+	    {%- if event.num_payments %} data-people="{{ event.num_payments }}"{%- endif %}
+	    {%- if event.public_link %} data-link="{{ event.public_link }}"{%- endif %}>
       {{ event.name }}{% if event.teachers %} ({{ event.teachers|teacher_names }}){% endif %}
     </button>
     {%- endfor %}

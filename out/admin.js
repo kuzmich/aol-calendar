@@ -11,7 +11,16 @@ addBtn.addEventListener("click", (e) => {
 
 for (let event of events) {
     event.removeEventListener("click", showInfoBox);
-    event.addEventListener("click", loadEditEventForm)
+    event.addEventListener("click", chooseWhichBoxToShow);
+}
+
+
+function chooseWhichBoxToShow(e) {
+    if (e.altKey) {
+	showInfoBox(e);
+    } else {
+	loadEditEventForm(e);
+    }
 }
 
 
@@ -76,6 +85,7 @@ async function submitDialogForm(e) {
 	// и обновляем календарь
 	let month = parseInt(form.querySelector('[name="start-date"]').value.split('-')[1]);
 	let newUrl = response.url + `#${month}`;
+	// обновляем страницу, даже если остаемся в том же месте календаря
 	if (window.location.href === newUrl) {
 	    window.location.reload()
 	} else {

@@ -1,13 +1,17 @@
-const infoBox = document.querySelector('.event-details');
-const closeBtn = document.querySelector('button.close');
+const infoBox = document.querySelector('[class="event-details"]');
+const closeBtn = document.querySelector('[class="event-details"] button.close');
+
 const events = document.querySelectorAll('.event');
+
 const nameField = document.querySelector('[data-name="name"]');
 const datesField = document.querySelector('[data-name="dates"]');
 const timeField = document.querySelector('[data-name="time"]');
 const placeField = document.querySelector('[data-name="place"]');
 const teachersField = document.querySelector('[data-name="teachers"]');
 const peopleField = document.querySelector('[data-name="people"]');
+
 const eventFilters = document.querySelectorAll('.event-filters input[type="checkbox"]');
+
 
 for (let event of events) {
     event.addEventListener("click", showInfoBox);
@@ -19,6 +23,7 @@ closeBtn.addEventListener("click", () => {
 
 function showInfoBox(e) {
     const btn = e.target;
+
     nameField.innerText = btn.dataset.name;
     datesField.innerText = btn.dataset.dates;
     timeField.innerText = btn.dataset.time || "";
@@ -41,6 +46,7 @@ function showInfoBox(e) {
 
     infoBox.showModal();
 }
+
 
 // Фильтры по типам курсов
 for (let checkbox of eventFilters) {

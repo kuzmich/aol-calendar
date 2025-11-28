@@ -7,7 +7,7 @@
   {%- if can_edit %}
     <script>
       function getEditEventUrl(eventId) {
-        return `{{ url_for('edit_event', event_id='') }}${eventId}`;
+        return `{{ url_for('cal.edit_event', event_id='') }}${eventId}`;
       }
     </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='calendar.css') }}">

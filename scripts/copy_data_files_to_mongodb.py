@@ -1,4 +1,3 @@
-from datetime import datetime
 import json
 from pathlib import Path
 from pprint import pprint
@@ -6,7 +5,7 @@ import re
 
 from pymongo import MongoClient
 
-from parsing_utils import parse_dates, get_course_type
+from aol_calendar.utils.parsing import parse_admin_event, swap_names
 
 
 data_file_name_re = re.compile(r'\d{4}_\d{1,2}.json')
@@ -73,15 +72,6 @@ def get_all_events(data_dir):
 
     # разворачиваем в плоский список событий и дописываем год и месяц
     return [event | {'year': ym[0], 'month': ym[1]} for ym, md in month_data for event in md]
-
-
-def swap_names(name):
-    """Меняет 'имя фамилия' на 'фамилия имя' или наоборот"""
-    name_parts = name.split()
-    if len(name_parts) == 2:
-        first, last = name_parts
-        return f'{last} {first}'
-    return name_parts
 
 
 def find_event(events, key=None, value=None, test_func=None):
@@ -170,37 +160,7 @@ if __name__ == '__main__':
 
     counter = 0
     for e in events:
-        dates = parse_dates(e['date'], e['year'])
-
-        # вот возможные ключи у события из дата-файлов
-        # {'name', 'date', 'place', 'year', 'month', 'time', 'teachers', 'link', 'id', 'status', 'num_payments'}
-        event = {
-            'name': e['name'],
-            'dates': e['date'].lower(),
-            'place': e['place'],
-            'type': get_course_type(e['name']),  # TODO проверить, что курс опознан
-            'start_date': datetime.combine(dates[0], datetime.min.time()),
-            'end_date': datetime.combine(dates[-1], datetime.min.time()),
-        }
-
-        if e.get('teachers'):
-            teachers = [t.strip() for t in e['teachers'].split(',')]
-            teachers = [swap_names(t) if t not in ['Коробоко Анастасия', 'Кашикар Динеш'] else t for t in teachers]
-            event['teachers'] = teachers
-
-        if 'time' in e:
-            event['time'] = e['time']
-
-        if 'num_payments' in e:
-            event['num_payments'] = e['num_payments']
-
-        if 'status' in e:
-            event['status'] = e['status']
-
-        if 'link' in e:
-            event['admin_link'] = e['link']
-            event['admin_id'] = e['id']
-
+        event = parse_admin_event(e, e['year'])
         events_col.insert_one(event)
         counter += 1
         # pprint(event, sort_dicts=False)

@@ -1,6 +1,73 @@
 import enum
 
 
+PUBLIC_LINK_TEMPLATE = 'https://artofliving.ru/{event_path}?streamId={event_id}#offerBlock'
+
+
+COURSE_NAME_TYPE = {
+    'art excel': 'art_excel',
+    'dsn': 'dsn',
+    # 'дсн': 'dsn',
+    'yes!': 'yes',
+    'yes+': 'yes_plus',
+    'блессинг': 'blessing',
+    'глубокий сон и снятие тревожности': 'deep_sleep',
+    'забота о спине и коррекция осанки': 'spine_care',
+    'здоровое питание': 'cooking',
+    'искусство медитации': 'meditation',
+    'искусство тишины': 'silence',
+    'искусство тишины online': 'silence_online',
+    # 'искусство тишины интенсив': 'silence_intense',
+    'йога': 'yoga',
+    'йога для позвоночника': 'yoga_spine',
+    'первый шаг': 'first_step',
+    'песенный сатсанг': 'satsang',  # 🎸
+    'победи зависимость': 'give_up_smoking',
+    'поддерживающее занятие': 'practices',
+    'поддерживающее занятие online': 'practices_online',
+    'поддерживающее занятие для vtp': 'practices_vtp',
+    'процесс вечности': 'eternity',
+    'процесс интуиции': 'intuition',
+    'процесс интуиции 5-8 лет': 'intuition_5_8',
+    'процесс интуиции 8-18 лет': 'intuition_8_18',
+    'саньям': 'sanyam',
+    'суставная йога': 'yoga_joints',
+    'счастье': 'happiness',
+    'счастье онлайн': 'happiness_online',
+    # 'счастье (благотворительный)': 'happiness',
+    'шри шри йога': 'ssy',
+    'шри шри йога 2': 'ssy2',
+}
+
+
+# PATH - это path публичной ссылки на сайте
+# TYPE - это тип курса из COURSE_NAME_TYPE
+EVENT_TYPE_PATH = {
+    'art_excel': "artexcel",
+    'blessing': "blessing",
+    'cooking': "cookie",
+    'deep_sleep': "deep-sleep",
+    'dsn': "dns",
+    'eternity': 'process_vechnosti',
+    'first_step': "firststep",
+    'give_up_smoking': "give-up-smoking",
+    'happiness': "happiness",
+    'intuition': "intuition-process-8-18",
+    'intuition_5_8': "intuition-process-5-7",
+    'intuition_8_18': "intuition-process-8-18",
+    'meditation': "meditation",
+    'practices_online': "practice-online",
+    'premium': "premium",
+    'sanyam': 'sanyam',
+    'silence': "art-of-silence",
+    'silence_online': "art-of-silence_online",
+    'ssy': "yoga",
+    'ssy2': "srisriyoga2",
+    'yes': "yes",
+    'yes_plus': "yesplus",
+}
+
+
 class WeekDay(enum.IntEnum):
     пн = 1
     вт = 2

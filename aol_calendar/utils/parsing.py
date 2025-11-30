@@ -1,49 +1,28 @@
-from datetime import date
+from datetime import datetime, date
+import logging
 import re
 
+from ..const import Month, COURSE_NAME_TYPE, EVENT_TYPE_PATH, PUBLIC_LINK_TEMPLATE
 
-COURSE_NAME_TYPE = {
-    'art excel': 'art_excel',
-    'dsn': 'dsn',
-    # 'дсн': 'dsn',
-    'yes!': 'yes',
-    'yes+': 'yes_plus',
-    'блессинг': 'blessing',
-    'глубокий сон и снятие тревожности': 'deep_sleep',
-    'забота о спине и коррекция осанки': 'spine_care',
-    'здоровое питание': 'cooking',
-    'искусство медитации': 'meditation',
-    'искусство тишины online': 'silence_online',
-    # 'искусство тишины интенсив': 'silence_intense',
-    'искусство тишины': 'silence',
-    'йога для позвоночника': 'yoga_spine',
-    'йога': 'yoga',
-    'первый шаг': 'first_step',
-    'песенный сатсанг': 'satsang',  # 🎸
-    'победи зависимость': 'give_up_smoking',
-    'поддерживающее занятие online': 'practices_online',
-    'поддерживающее занятие для vtp': 'practices_vtp',
-    'поддерживающее занятие': 'practices',
-    'процесс вечности': 'eternity',
-    'процесс интуиции 5-8 лет': 'intuition_5_8',
-    'процесс интуиции 8-18 лет': 'intuition_8_18',
-    'процесс интуиции': 'intuition',
-    'саньям': 'sanyam',
-    'суставная йога': 'yoga_joints',
-    # 'счастье (благотворительный)': 'happiness',
-    'счастье': 'happiness',
-    'счастье онлайн': 'happiness_online',
-    'шри шри йога 2': 'ssy2',
-    'шри шри йога': 'ssy',
-}
+
+logger = logging.getLogger(__name__)
 
 
 def get_course_type(name, default='unknown'):
     """Возвращает тип курса по имени
 
-    Используется при парсинге дата-файлов (JSON-файлов)/данных из админки
+    Используется при парсинге данных из админки и дата-файлов (JSON-файлов)
+
+    >>> get_course_type('Счастье')
+    happiness
     """
-    return COURSE_NAME_TYPE.get(name.lower(), default)
+    course_type = COURSE_NAME_TYPE.get(name.lower(), None)
+
+    if course_type is None:
+        logger.warning("Can't parse event name '%s'", name)
+        return default
+    else:
+        return course_type
 
 
 def parse_dates(date_str, year):
@@ -58,13 +37,6 @@ def parse_dates(date_str, year):
         list: Список объектов datetime.date.
         Например: [datetime.date(2025, 10, 31), datetime.date(2025, 11, 2)]
     """
-
-    # Словарик для перевода названий месяцев
-    month_map = {
-        'января': 1, 'февраля': 2, 'марта': 3, 'апреля': 4,
-        'мая': 5, 'июня': 6, 'июля': 7, 'августа': 8,
-        'сентября': 9, 'октября': 10, 'ноября': 11, 'декабря': 12
-    }
 
     # Регулярные выражения для разных форматов
     # 1. '31 Октября-2 Ноября'
@@ -82,8 +54,8 @@ def parse_dates(date_str, year):
     # Обработка совпадений
     if match_full_range:
         day1_str, month1_str, day2_str, month2_str = match_full_range.groups()
-        month1 = month_map[month1_str.lower()]
-        month2 = month_map[month2_str.lower()]
+        month1 = Month[month1_str.lower()].value
+        month2 = Month[month2_str.lower()].value
 
         date1 = date(year, month1, int(day1_str))
         date2 = date(year, month2, int(day2_str))
@@ -91,7 +63,7 @@ def parse_dates(date_str, year):
 
     elif match_month_range:
         day1_str, day2_str, month_str = match_month_range.groups()
-        month = month_map[month_str.lower()]
+        month = Month[month_str.lower()].value
 
         date1 = date(year, month, int(day1_str))
         date2 = date(year, month, int(day2_str))
@@ -99,10 +71,68 @@ def parse_dates(date_str, year):
 
     elif match_single_date:
         day_str, month_str = match_single_date.groups()
-        month = month_map[month_str.lower()]
+        month = Month[month_str.lower()].value
 
         single_date = date(year, month, int(day_str))
         return [single_date]
 
     else:
         raise ValueError(f"Неизвестный формат строки: '{date_str}'")
+
+
+def parse_admin_event(admin_event, year):
+    dates = parse_dates(admin_event['date'], year)
+
+    # вот возможные ключи у события из дата-файлов
+    # {'name', 'date', 'place', 'year', 'month', 'time', 'teachers', 'link', 'id', 'status', 'num_payments'}
+    event = {
+        'name': admin_event['name'],
+        'dates': admin_event['date'].lower(),
+        'place': admin_event['place'],
+        'type': get_course_type(admin_event['name']),
+        'start_date': datetime.combine(dates[0], datetime.min.time()),
+        'end_date': datetime.combine(dates[-1], datetime.min.time()),
+    }
+
+    if admin_event.get('teachers'):
+        teachers = [t.strip() for t in admin_event['teachers'].split(',')]
+        teachers = [swap_names(t) if t not in ['Коробко Анастасия', 'Кашикар Динеш'] else t for t in teachers]
+        event['teachers'] = teachers
+
+    if 'time' in admin_event:
+        event['time'] = admin_event['time']
+
+    if 'num_payments' in admin_event:
+        event['num_payments'] = admin_event['num_payments']
+
+    if 'status' in admin_event:
+        event['status'] = admin_event['status']
+
+    if 'link' in admin_event:
+        event['admin_link'] = admin_event['link']
+        event['admin_id'] = admin_event['id']
+
+        if (public_link := get_public_link(event['type'], event['admin_id'])):
+            event['public_link'] = public_link
+
+    return event
+
+
+def swap_names(name):
+    """Меняет 'имя фамилия' на 'фамилия имя' или наоборот"""
+    name_parts = name.split()
+    if len(name_parts) == 2:
+        first, last = name_parts
+        return f'{last} {first}'
+    return name
+
+
+def get_public_link(event_type, event_id):
+    """Возвращает публичную ссылку на событие на сайте artofliving.ru"""
+    if event_type in EVENT_TYPE_PATH:
+        return PUBLIC_LINK_TEMPLATE.format(event_path=EVENT_TYPE_PATH[event_type],
+                                           event_id=event_id)
+    else:
+        logger.warning("Can't make public_link for event type %s and admin_id %s",
+                       event_type, event_id)
+

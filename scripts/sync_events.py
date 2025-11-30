@@ -1,100 +1,81 @@
-"""Получает курсы из админки и объединяет их с курсами в базе.
+"""Получает курсы из админки и объединяет их с курсами в базе"""
+import logging
+import dotenv
 
-Нужно время от времени получать курсы их админки, чтобы данные в календаре были
-актуальными.  При этом у нас есть 2 типа курсов в базе: полученные из админки и введенные
-через форму. Также курсы из админки могут быть скорректированы через форму. Т.е. нельзя
-просто взять и удалить все админские курсы из базы и получить их заново - их нужно
-объединять.
-"""
-from db_utils import get_db
+from aol_calendar.utils.db import get_db, add_events, save_event
+from aol_calendar.utils.admin import AdminCourses
+from aol_calendar.utils.parsing import parse_admin_event
 
 
-def update_type(col, name, new_type):
-    result = col.update_many({'name': name}, {'$set': {'type': new_type}})
-    return result
+logger = logging.getLogger('sync_events')
 
 
-def make_event_types_unique():
-    """Делает так, чтобы у все событий был свой уникальный тип курса
+def read_config():
+    return dotenv.dotenv_values()
 
-    Например, есть 3 курса интуиции: Процесс интуиции, Процесс интуиции 5-8 лет и Процесс
-    интуиции 8-18 лет. У них у всех тип курса intuition. Функция исправит типы на
-    intuition, intuition_5_8, intuition_8_18.
-    """
+
+def merge_admin_event(db_event, admin_event):
+    de, ae = db_event, admin_event
+    logger.debug(f'Merging event id {de["_id"]} {de["name"]} ({de["dates"]}, {de["place"]})')
+
+    common_keys = set(ae.keys()).intersection(de.keys())
+    for key in common_keys:
+        if ae[key] != de[key]:
+            # даты могут отличаться тире: '28–30 ноября' и '28-30 ноября' (admin, db)
+            if key == 'dates' and len(ae[key]) == len(de[key]):
+                continue
+            logger.debug(f'Updating {key}: {de[key]} => {ae[key]}')
+            de[key] = ae[key]
+
+    admin_only_keys = set(ae.keys()).difference(de.keys())
+    for key in admin_only_keys:
+        logger.debug(f'Setting {key} = {ae[key]}')
+        de[key] = ae[key]
+
+    db_only_keys = set(de.keys()).difference(ae.keys())
+    # _id и public_link есть только в базе
+    db_only_keys = db_only_keys.difference({'_id'})  # , 'public_link'
+    if db_only_keys:
+        logger.debug('DB only values: %s', ', '.join(f'{key}: {de[key]}' for key in db_only_keys))
+
+    return db_event
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level='DEBUG')
+    logging.getLogger('pymongo').setLevel('INFO')
+    logging.getLogger('urllib3').setLevel('INFO')
+
+    config = read_config()
+    email = config['EMAIL']
+    password = config['PASSWORD']
+
+    year = 2026
+    month = 12
+
+    adm = AdminCourses((email, password))
+    courses = adm.get_courses(year, month)
+    events = list(map(lambda c: parse_admin_event(c, year), courses))
+    events = [e for e in events if not (e.get('status') == 'Не опубликован' and e.get('num_payments') == 0)]
+
     db = get_db()
     col = db['events']
 
-    rename_pairs = [
-        ('YES+', 'yes_plus'),
-        ('Искусство тишины', 'silence'),
-        ('Искусство тишины online', 'silence_online'),
-        ('Искусство медитации', 'meditation'),
-        ('Йога для позвоночника', 'yoga_spine'),
-        ('Поддерживающее занятие online', 'practices_online'),
-        ('Поддерживающее занятие для VTP', 'practices_vtp'),
-        ('Процесс интуиции 5-8 лет', 'intuition_5_8'),
-        ('Процесс интуиции 8-18 лет', 'intuition_8_18'),
-        ('Суставная йога', 'yoga_joints'),
-    ]
-    results = [update_type(col, name, new_type) for name, new_type in rename_pairs]
-    for rn_pair, res in zip(rename_pairs, results):
-        print(f'{rn_pair[0]}: {res.matched_count}/{res.modified_count} (matched/modified)')
+    for event in events:
+        db_event = col.find_one(
+            {'type': event['type'],
+             'start_date': event['start_date'],
+             'end_date': event['end_date']}
+        )
 
+        if not db_event and 'admin_id' in event:
+            db_event = col.find_one({'admin_id': event['admin_id']})
+            if db_event:
+                logger.debug('Event found by admin_id %s', event['admin_id'])
 
-def get_public_link(event_type, event_id):
-    public_link = 'https://artofliving.ru/{event_path}?streamId={event_id}#offerBlock'
-
-    EVENT_TYPE_PATH = {
-        'art_excel': "artexcel",
-        'dsn': "dns",
-        'yes': "yes",
-        'yes_plus': "yesplus",
-        'blessing': "blessing",
-        'deep_sleep': "deep-sleep",
-        'cooking': "cookie",
-        'premium': "premium",
-        'meditation': "meditation",
-        'silence': "art-of-silence",
-        'silence_online': "art-of-silence_online",
-        'first_step': "firststep",
-        'give_up_smoking': "give-up-smoking",
-        'intuition_5_8': "intuition-process-5-7",
-        'intuition_8_18': "intuition-process-8-18",
-        'sanyam': 'sanyam',
-        'happiness': "happiness",
-        'ssy': "yoga",
-        'ssy2': "srisriyoga2",
-        'practices_online': "practice-online",
-        # '': "",
-        # '': "",
-        # '': "",
-        # '': "",
-        # '': "",
-        # '': "",
-    }
-
-    if event_type in EVENT_TYPE_PATH:
-        return public_link.format(event_path=EVENT_TYPE_PATH[event_type],
-                                  event_id=event_id)
-
-
-def add_public_link():
-    db = get_db()
-    col = db['events']
-
-    for event in col.find({'admin_link': {'$exists': True}}):
-        public_link = get_public_link(event['type'], event['admin_id'])
-        if not public_link:
-            print(event['type'])
+        if not db_event:
+            logger.debug('Inserting new event: %s', f"{event['name']} | {event['dates']} | {event['place']}")
+            add_events([event])
         else:
-            result = col.update_one(
-                {'_id': event['_id']},
-                {'$set': {'public_link': public_link}}
-            )
-            if result.modified_count != 1:
-                print(result, event['_id'])
-
-
-if __name__ == '__main__':
-    # make_event_types_unique()
-    add_public_link()
+            db_event = merge_admin_event(db_event, event)
+            save_event(str(db_event['_id']), db_event)

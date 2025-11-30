@@ -1,8 +1,11 @@
 [project]
-name = "calendar"
+name = "aol-calendar"
 version = "0.1.0"
-description = "Add your description here"
+description = "Календарь курсов и мероприятий ИЖ в Иркутске"
 readme = "README.md"
+authors = [
+    { name = "Alexey Kuzminich", email = "akuzminich@gmail.com" }
+]
 requires-python = ">=3.12"
 dependencies = [
     "aa",
@@ -20,3 +23,7 @@ dev = [
 
 [tool.uv.sources]
 aa = { path = "../automation", editable = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

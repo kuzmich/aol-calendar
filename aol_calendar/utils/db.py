@@ -10,7 +10,7 @@ from pymongo.database import Database
 from .cal import next_month_first_day
 
 
-mongo_db: Database
+mongo_db: Database = None
 
 
 @cache

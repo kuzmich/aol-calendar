@@ -2,7 +2,7 @@
 import logging
 
 from aol_calendar.utils import get_config
-from aol_calendar.utils.db import get_db, set_db_var, mongo_db, add_events, save_event
+from aol_calendar.utils.db import get_db, set_db_var, add_events, save_event
 from aol_calendar.utils.admin import AdminCourses
 from aol_calendar.utils.parsing import parse_admin_event
 
@@ -46,17 +46,17 @@ if __name__ == "__main__":
     email = config.EMAIL
     password = config.PASSWORD
 
-    set_db_var(get_db(config.DB_URL, config.DB_NAME))
+    db = get_db(config.DB_URL, config.DB_NAME)
+    set_db_var(db)
 
     year = 2026
-    month = 12
+    month = 1
 
     adm = AdminCourses((email, password))
     courses = adm.get_courses(year, month)
     events = list(map(lambda c: parse_admin_event(c, year), courses))
     events = [e for e in events if not (e.get('status') == 'Не опубликован' and e.get('num_payments') == 0)]
 
-    db = mongo_db
     col = db['events']
 
     for event in events:

@@ -1,4 +1,5 @@
-from aol_calendar.utils.db import get_db
+from aol_calendar.utils import get_config
+from aol_calendar.utils.db import get_db, set_db_var, mongo_db
 from aol_calendar.utils.parsing import get_public_link
 
 
@@ -14,7 +15,7 @@ def make_event_types_unique():
     интуиции 8-18 лет. У них у всех тип курса intuition. Функция исправит типы на
     intuition, intuition_5_8, intuition_8_18.
     """
-    db = get_db()
+    db = mongo_db
     col = db['events']
 
     rename_pairs = [
@@ -35,7 +36,7 @@ def make_event_types_unique():
 
 
 def add_public_link():
-    db = get_db()
+    db = mongo_db
     col = db['events']
 
     for event in col.find({'admin_link': {'$exists': True}}):
@@ -52,5 +53,8 @@ def add_public_link():
 
 
 if __name__ == '__main__':
+    config = get_config()
+    set_db_var(get_db(config.DB_URL, config.DB_NAME))
+
     # make_event_types_unique()
     add_public_link()

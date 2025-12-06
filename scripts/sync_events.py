@@ -1,17 +1,13 @@
 """Получает курсы из админки и объединяет их с курсами в базе"""
 import logging
-import dotenv
 
-from aol_calendar.utils.db import get_db, add_events, save_event
+from aol_calendar.utils import get_config
+from aol_calendar.utils.db import get_db, set_db_var, mongo_db, add_events, save_event
 from aol_calendar.utils.admin import AdminCourses
 from aol_calendar.utils.parsing import parse_admin_event
 
 
 logger = logging.getLogger('sync_events')
-
-
-def read_config():
-    return dotenv.dotenv_values()
 
 
 def merge_admin_event(db_event, admin_event):
@@ -46,9 +42,11 @@ if __name__ == "__main__":
     logging.getLogger('pymongo').setLevel('INFO')
     logging.getLogger('urllib3').setLevel('INFO')
 
-    config = read_config()
-    email = config['EMAIL']
-    password = config['PASSWORD']
+    config = get_config()
+    email = config.EMAIL
+    password = config.PASSWORD
+
+    set_db_var(get_db(config.DB_URL, config.DB_NAME))
 
     year = 2026
     month = 12
@@ -58,7 +56,7 @@ if __name__ == "__main__":
     events = list(map(lambda c: parse_admin_event(c, year), courses))
     events = [e for e in events if not (e.get('status') == 'Не опубликован' and e.get('num_payments') == 0)]
 
-    db = get_db()
+    db = mongo_db
     col = db['events']
 
     for event in events:

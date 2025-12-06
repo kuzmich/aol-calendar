@@ -3,17 +3,12 @@ from pathlib import Path
 from pprint import pprint
 import re
 
-from pymongo import MongoClient
-
+from aol_calendar.utils import get_config
+from aol_calendar.utils.db import get_db, set_db_var, mongo_db
 from aol_calendar.utils.parsing import parse_admin_event, swap_names
 
 
 data_file_name_re = re.compile(r'\d{4}_\d{1,2}.json')
-
-
-def get_db(url='mongodb://127.0.0.1:27017/', dbname='aol_calendar'):
-    client = MongoClient(url)
-    return client[dbname]
 
 
 def year_month(data_file):
@@ -127,7 +122,10 @@ def get_all_teachers(events):
 
 
 if __name__ == '__main__':
-    db = get_db()
+    config = get_config()
+    set_db_var(get_db(config.DB_URL, config.DB_NAME))
+
+    db = mongo_db
     events_col = db['events']
     data_dir = Path('data')
 

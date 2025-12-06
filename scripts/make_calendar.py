@@ -5,8 +5,9 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from aol_calendar.const import MonthName
 from aol_calendar.filters import teacher_names
+from aol_calendar.utils import get_config
 from aol_calendar.utils.cal import prepare_events, get_month_dates
-from aol_calendar.utils.db import get_events
+from aol_calendar.utils.db import get_db, set_db_var, get_events
 
 
 logger = logging.getLogger(__name__)
@@ -37,6 +38,9 @@ if __name__ == "__main__":
     output_dir = 'out/'
 
     years = [2025, 2026]
+
+    config = get_config()
+    set_db_var(get_db(config.DB_URL, config.DB_NAME))
 
     for year in years:
         calendar_data = []

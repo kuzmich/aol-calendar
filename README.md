@@ -21,8 +21,8 @@
 другом с помощью `margin`.
 
 ## Запуск сайта и статического генератора
-Сайт запускается комндой `uv run flask --app aol_calendar run --debug`.  Статический
-генератор (`uv run scripts/make_calendar.py`) делает html файлы в папке `out`
+Сайт запускается комндой `uv run --env-file .env flask --app aol_calendar run --debug`.  Статический
+генератор (`uv run --env-file .env scripts/make_calendar.py`) делает html файлы в папке `out`
 (`out/2025.html`, `out/2026.html`). Статические страницы публикуются в интернете с помощью
 обычного `git push` - Github Action берет файлы из папки `out` и публикует их в Github
 Pages.

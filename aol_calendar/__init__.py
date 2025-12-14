@@ -27,6 +27,7 @@ def create_app(test_config=None):
 
     from . import cal, filters, admin
     app.register_blueprint(cal.bp)
+    app.register_blueprint(admin.bp)
     app.jinja_env.filters['teacher_names'] = filters.teacher_names
 
     return app

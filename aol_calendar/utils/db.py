@@ -61,14 +61,14 @@ def delete_event(event_id):
     col.delete_one({'_id': ObjectId(event_id)})
 
 
-@lru_cache(maxsize=1)
+# @lru_cache(maxsize=1)
 def get_all_event_names_types():
     col = mongo_db['events']
     name_type_list = [(event['type'], event['name']) for event in col.find({}, {'name': 1, 'type': 1})]
     return sorted(set(name_type_list), key=lambda nt: nt[1])
 
 
-@lru_cache(maxsize=1)
+# @lru_cache(maxsize=1)
 def get_all_teachers():
     col = mongo_db['events']
     list_of_list_of_teachers = (event.get('teachers', []) for event in col.find({}, {'teachers': 1}))
@@ -76,7 +76,7 @@ def get_all_teachers():
     return sorted(set(teachers))
 
 
-@lru_cache(maxsize=1)
+# @lru_cache(maxsize=1)
 def get_all_locations():
     col = mongo_db['events']
     return sorted(

@@ -1,0 +1,21 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+  <table>
+    <thead>
+      <tr>
+	<th scope="column">Название</th>
+	<th scope="column">Дата начала</th>
+	<th scope="column">Место</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+	<tr>
+	  <td>{{ event.name }}</td>
+	  <td>{{ "{:%d.%m.%Y}".format(event.start_date) }}</td>
+	  <td>{{ event.place }}</td>
+	</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,4 +1,5 @@
 """Получает курсы из админки и объединяет их с курсами в базе"""
+import argparse
 import logging
 
 from aol_calendar.utils import get_config
@@ -37,10 +38,21 @@ def merge_admin_event(db_event, admin_event):
     return db_event
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Получает данные о курсах из админки и объединяет их с данными в базе'
+    )
+    parser.add_argument('year', type=int)
+    parser.add_argument('month', type=int)
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
     logging.basicConfig(level='DEBUG')
     logging.getLogger('pymongo').setLevel('INFO')
     logging.getLogger('urllib3').setLevel('INFO')
+
+    args = parse_args()
 
     config = get_config()
     email = config.EMAIL
@@ -49,8 +61,8 @@ if __name__ == "__main__":
     db = get_db(config.DB_URL, config.DB_NAME)
     set_db_var(db)
 
-    year = 2026
-    month = 1
+    year = args.year
+    month = args.month
 
     adm = AdminCourses((email, password))
     courses = adm.get_courses(year, month)
@@ -69,7 +81,7 @@ if __name__ == "__main__":
         if not db_event and 'admin_id' in event:
             db_event = col.find_one({'admin_id': event['admin_id']})
             if db_event:
-                logger.debug('Event found by admin_id %s', event['admin_id'])
+                logger.debug('Event %s found by admin_id %s', event['name'], event['admin_id'])
 
         if not db_event:
             logger.debug('Inserting new event: %s', f"{event['name']} | {event['dates']} | {event['place']}")

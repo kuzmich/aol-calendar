@@ -101,7 +101,7 @@ async function submitDialogForm(e) {
 	let newUrl = response.url + `#${month}`;
 	// обновляем страницу, даже если остаемся в том же месте календаря
 	if (window.location.href === newUrl) {
-	    window.location.reload()
+	    window.location.reload();
 	} else {
 	    window.location.href = newUrl;
 	}

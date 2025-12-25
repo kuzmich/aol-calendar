@@ -8,6 +8,7 @@ COURSE_NAME_TYPE = {
     'art excel': 'art_excel',
     'dsn': 'dsn',
     # 'дсн': 'dsn',
+    'vtp online': 'vtp_online',
     'yes!': 'yes',
     'yes+': 'yes_plus',
     'блессинг': 'blessing',
@@ -64,6 +65,7 @@ EVENT_TYPE_PATH = {
     'silence_online': "art-of-silence_online",
     'ssy': "yoga",
     'ssy2': "srisriyoga2",
+    'vtp_online': "vtp_online",
     'yes': "yes",
     'yes_plus': "yesplus",
 }

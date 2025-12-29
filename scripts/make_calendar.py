@@ -48,7 +48,7 @@ if __name__ == "__main__":
         for month in range(1, 12+1):
             calendar_data.append({
                 'dates': get_month_dates(year, month),
-                'events': prepare_events(get_events(year, month)),
+                'events': prepare_events(get_events(year, month), year, month),
                 'month': month,
                 'month_name': MonthName(month).name.title(),
                 'year': year

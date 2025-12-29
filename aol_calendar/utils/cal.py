@@ -83,7 +83,7 @@ def _month_week():
 month_week = _month_week()
 
 
-def get_cal_blocks(start_date, end_date):
+def get_cal_blocks(start_date : date, end_date : date, month : int|None = None, year : int|None = None):
     """Возвращает блоки дней для каждой недели события, не выходящие за рамки месяца"""
 
     # (datetime.date(2025, 10, 25), datetime.date(2025, 10, 28)) ->
@@ -91,27 +91,31 @@ def get_cal_blocks(start_date, end_date):
     #  {'week': 5, 'start': 1, 'end': 2}]
     # Т.е. для события с 25 по 28 октября 2025 вернется два блока:
     # сб, вс на 4 неделе и пн, вт для 5 недели
-    month = start_date.month
-    start_week = month_week(start_date, month)
 
+    if month is None:
+        month = start_date.month
+    if year is None:
+        year = start_date.year
+
+    month_dates = calendar.Calendar().monthdatescalendar(year, month)
     # последняя дата в месяце (может быть из следующего месяца)
-    last_date = calendar.Calendar().monthdatescalendar(start_date.year, month)[-1][-1]
+    last_date = month_dates[-1][-1]
+    # а первая из предыдущего
+    first_date = month_dates[0][0]
 
     dates = [
         dt
         for i in range((end_date - start_date).days + 1)
         # не выходим за границы календаря текущего месяца
-        if (dt := start_date + timedelta(days=i)) <= last_date
+        if (dt := start_date + timedelta(days=i)) <= last_date\
+        and dt >= first_date
     ]
     for week, group in groupby(dates, lambda d: month_week(d, month)):
-        # если переходим в другой месяц, то заканчиваем
-        if week < start_week:
-            break
         block_dates = list(group)
         yield {'week': week, 'start': block_dates[0].isoweekday(), 'end': block_dates[-1].isoweekday()}
 
 
-def make_cal_blocks(events):
+def make_cal_blocks(events, year, month):
     """Добавляет к событиям дополнительную информацию для отображения в календаре
 
     В какой день на неделе событие начинается и заканчивается.
@@ -129,8 +133,7 @@ def make_cal_blocks(events):
     #      'pos': {'week': 5, 'start': 1, 'end': 2, 'index': 1}},
     # ]
     for e in events:
-        # for i, block in enumerate(get_cal_blocks(e['dates'][0], e['dates'][-1]), 1):
-        for i, block in enumerate(get_cal_blocks(e['start_date'].date(), e['end_date'].date()), 1):
+        for i, block in enumerate(get_cal_blocks(e['start_date'].date(), e['end_date'].date(), month, year), 1):
             block['index'] = i
             yield e | {'pos': block}
 
@@ -161,10 +164,10 @@ def assign_levels(events):
     return events
 
 
-def prepare_events(events):
+def prepare_events(events, year, month):
     """Подготавливает события для отображения в календаре"""
 
-    blocks = (e for e in make_cal_blocks(events))
+    blocks = (e for e in make_cal_blocks(events, year, month))
     blocks = sorted(blocks, key=lambda e: (e['pos']['week'], e['pos']['start']))
     indexed = []
     for _, group in groupby(blocks, lambda e: e['pos']['week']):

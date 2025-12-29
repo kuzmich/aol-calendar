@@ -35,9 +35,16 @@ def get_events(year, month):
     """Получаем события из базы за последний месяц"""
     col = mongo_db['events']
     start_of_month = datetime(year, month, 1)
+    start_of_next_month = next_month_first_day(start_of_month)
+    # начало события может быть в предыдущем месяце, а конец - в следующем, поэтому ищем
+    # события, у которых дата начала или окончания приходится на текущий месяц
     cursor = col.find(
-        {'start_date': {'$gte': start_of_month,
-                        '$lt': next_month_first_day(start_of_month)}}
+        {'$or': [
+            {'start_date': {'$gte': start_of_month,
+                            '$lt': start_of_next_month}},
+            {'end_date': {'$gte': start_of_month,
+                          '$lt': start_of_next_month}}
+        ]}
     )
     return [e for e in cursor]
 

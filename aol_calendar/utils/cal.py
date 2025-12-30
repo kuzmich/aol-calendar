@@ -64,10 +64,9 @@ def _month_week():
     day_week_map = {
     }
 
-    def month_week(d, month):
+    def month_week(d, year, month):
         """Возвращает для даты номер недели внутри месяца"""
 
-        year, month = d.year, month
         if (year, month) not in day_week_map:
             cal = calendar.Calendar()
             # для каждой даты календарного месяца посчитаем, какая это неделя
@@ -83,7 +82,7 @@ def _month_week():
 month_week = _month_week()
 
 
-def get_cal_blocks(start_date : date, end_date : date, month : int|None = None, year : int|None = None):
+def get_cal_blocks(start_date : date, end_date : date, year : int|None = None, month : int|None = None):
     """Возвращает блоки дней для каждой недели события, не выходящие за рамки месяца"""
 
     # (datetime.date(2025, 10, 25), datetime.date(2025, 10, 28)) ->
@@ -110,7 +109,7 @@ def get_cal_blocks(start_date : date, end_date : date, month : int|None = None, 
         if (dt := start_date + timedelta(days=i)) <= last_date\
         and dt >= first_date
     ]
-    for week, group in groupby(dates, lambda d: month_week(d, month)):
+    for week, group in groupby(dates, lambda d: month_week(d, year, month)):
         block_dates = list(group)
         yield {'week': week, 'start': block_dates[0].isoweekday(), 'end': block_dates[-1].isoweekday()}
 
@@ -133,7 +132,7 @@ def make_cal_blocks(events, year, month):
     #      'pos': {'week': 5, 'start': 1, 'end': 2, 'index': 1}},
     # ]
     for e in events:
-        for i, block in enumerate(get_cal_blocks(e['start_date'].date(), e['end_date'].date(), month, year), 1):
+        for i, block in enumerate(get_cal_blocks(e['start_date'].date(), e['end_date'].date(), year, month), 1):
             block['index'] = i
             yield e | {'pos': block}
 

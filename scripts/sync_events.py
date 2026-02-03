@@ -65,7 +65,7 @@ if __name__ == "__main__":
     month = args.month
 
     adm = AdminCourses((email, password))
-    courses = adm.get_courses(year, month)
+    courses = adm.get_courses(year, month, include_free=True)
     events = list(map(lambda c: parse_admin_event(c, year), courses))
     events = [e for e in events if not (e.get('status') == 'Не опубликован' and e.get('num_payments') == 0)]
 

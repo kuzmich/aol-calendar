@@ -41,7 +41,7 @@ class AdminCourses:
             self._sess = log_in(*self.credentials)
         return self._sess
 
-    def get_courses(self, year, month):
+    def get_courses(self, year, month, include_free=False):
         # [{'name': 'Блессинг',
         #   'date': '31 Октября-2 Ноября',
         #   'place': 'Театральная, 17',
@@ -54,7 +54,7 @@ class AdminCourses:
         #   'teachers': 'Галина Дианова, Татьяна Шпикалова', 'num_payments': 9, 'status': 'Идет'}
         #  {'name': 'Поддерживающее занятие online', 'date': '19 Октября', 'place': 'Онлайн, время МСК+5',
         #   'num_payments': 9, 'status': 'Завершён'},
-        return find_courses(self.session, month=date(year, month, 1))
+        return find_courses(self.session, month=date(year, month, 1), include_free=include_free)
 
     def parse(self, courses):
         # [

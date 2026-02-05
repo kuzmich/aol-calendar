@@ -391,20 +391,34 @@ nav a {
 
 /* Фильтры */
 
-.event-filters {
-    padding: 1.5rem;
-    display: grid;
-    gap: 0.5rem;
-    justify-content: center;
-    align-items: baseline;
-    background: var(--calendar-bg-c);
-    margin-block-end: 4.0rem;
-}
-.event-filters h2 {
+h2:has(+ .filters-wrapper) {
     margin: 0;
     padding: 0;
     font-size: 1.2rem;
-    text-align: left;
+}
+.filters-wrapper {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    margin-block-end: 4.0rem;
+    background: var(--page-bg-c);
+}
+.event-filters {
+    --fade-left: 0px;
+    --fade-right: 4ch;
+
+    display: flex;
+    gap: 0.5rem 1.5ch;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+    mask-image: linear-gradient(
+	to right,
+	transparent 0,
+	black var(--fade-left),
+	black calc(100% - var(--fade-right)),
+	transparent 100%
+    );
 }
 .event-filters input[type="checkbox"] {
     height: 1rem;
@@ -412,5 +426,9 @@ nav a {
     margin-inline-start: 0;
 }
 .event-filters label {
+    display: flex;
+    align-items: center;
+    gap: 0.35ch;
     font-weight: normal;
+    min-width: fit-content;
 }

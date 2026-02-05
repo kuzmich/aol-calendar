@@ -28,14 +28,16 @@
 	{%- endfor %}
       </ul>
     </nav>
-    <div class="event-filters">
-      <h2>Что показывать:</h2>
-      <label><input type="checkbox" id="filter-courses" data-target-types="!practices,practices_online,practices_vtp,yoga,yoga_spine,yoga_joints" checked> Курсы</label>
-      <label><input type="checkbox" id="filter-practices" data-target-types="practices,practices_online,practices_vtp" checked> Поддерживающие занятия</label>
-      <label><input type="checkbox" id="filter-yoga" data-target-types="yoga,yoga_spine,yoga_joints" checked> Йогу</label>
-    </div>
   </header>
   <main>
+    <h2>Что показывать:</h2>
+    <div class="filters-wrapper">
+      <div class="event-filters">
+	<label><input type="checkbox" id="filter-courses" data-target-types="!practices,practices_online,practices_vtp,yoga,yoga_spine,yoga_joints" checked> Курсы</label>
+	<label><input type="checkbox" id="filter-practices" data-target-types="practices,practices_online,practices_vtp" checked> Поддерживающие занятия</label>
+	<label><input type="checkbox" id="filter-yoga" data-target-types="yoga,yoga_spine,yoga_joints" checked> Йога</label>
+      </div>
+    </div>
     {%- for data in calendar_data %}
     {% include 'calendar.html' %}
     {%- endfor %}

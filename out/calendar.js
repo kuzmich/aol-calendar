@@ -11,6 +11,7 @@ const teachersField = document.querySelector('[data-name="teachers"]');
 const peopleField = document.querySelector('[data-name="people"]');
 const linkField = infoBox.querySelector('a.reg-info');
 
+const filtersMenu = document.querySelector('.event-filters');
 const eventFilters = document.querySelectorAll('.event-filters input[type="checkbox"]');
 
 
@@ -89,5 +90,25 @@ function loadFiltersState() {
     }
 }
 
+function updateMask() {
+  const { scrollLeft, scrollWidth, clientWidth } = filtersMenu;
+  const maxScroll = scrollWidth - clientWidth;
+  const fade = '4ch';
+
+  filtersMenu.style.setProperty(
+    '--fade-left',
+    scrollLeft > 0 ? `${fade}` : '0px'
+  );
+
+  filtersMenu.style.setProperty(
+    '--fade-right',
+    scrollLeft < maxScroll - 1 ? `${fade}` : '0px'
+  );
+}
+
 loadFiltersState();
 applyAllFilters();
+
+filtersMenu.addEventListener('scroll', updateMask);
+window.addEventListener('resize', updateMask);
+updateMask();

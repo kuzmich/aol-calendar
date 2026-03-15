@@ -72,20 +72,35 @@ if __name__ == "__main__":
     col = db['events']
 
     for event in events:
-        db_event = col.find_one(
-            {'type': event['type'],
-             'start_date': event['start_date'],
-             'end_date': event['end_date']}
-        )
-
-        if not db_event and 'admin_id' in event:
-            db_event = col.find_one({'admin_id': event['admin_id']})
-            if db_event:
-                logger.debug('Event %s found by admin_id %s', event['name'], event['admin_id'])
-
-        if not db_event:
-            logger.debug('Inserting new event: %s', f"{event['name']} | {event['dates']} | {event['place']}")
-            add_events([event])
-        else:
+        # Сначала ищем в базе курс по admin_id - если он есть, мержим поля
+        if (db_event := col.find_one({'admin_id': event['admin_id']})):
             db_event = merge_admin_event(db_event, event)
             save_event(str(db_event['_id']), db_event)
+        # Если курса в базе нет, ищем, есть ли курсы на те же даты
+        else:
+            db_events = [e for e in col.find(
+                {'type': event['type'],
+                 'start_date': event['start_date'],
+                 'end_date': event['end_date']}
+            )]
+            # Если таких курсов в базе несколько, спрашиваем, с каким мержить
+            # (также даем вариант вставить или пропустить)
+            if len(db_events) > 1:
+                logger.info(f"There're {len(db_events)} events in the db similar to {event['name']} {event['dates']}, "
+                            f"{event['place']}, {event['teachers']}, admin_id={event['admin_id']}")
+                for i, db_event in enumerate(db_events):
+                    de = db_event
+                    logger.info(f'{i}. {de["_id"]} {de["place"]}, {de["teachers"]}, admin_id={de.get("admin_id", '')}')
+
+                event_num = int(input("Type number to choose which event to merge with? > "))
+                db_event = merge_admin_event(db_events[event_num], event)
+                save_event(str(db_event['_id']), db_event)
+            # Если такой курс есть и он один, мержим поля
+            elif len(db_events) == 1:
+                db_event = merge_admin_event(db_events[0], event)
+                save_event(str(db_event['_id']), db_event)
+            # Если в базе нет похожих курсов, вставляем
+            else:
+                logger.debug('Inserting new event: %s', f"{event['name']} | {event['dates']} | {event['place']}")
+                add_events([event])
+

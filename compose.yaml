@@ -7,6 +7,8 @@ services:
       - mongodb_data:/data/db
     ports:
       - "127.0.0.1:27017:27017"
+    environment:
+      - GLIBC_TUNABLES=glibc.pthread.rseq=1  # Or remove the variable if it was set to 0 elsewhere
 
 volumes:
   mongodb_data:

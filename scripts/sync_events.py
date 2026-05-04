@@ -76,12 +76,13 @@ if __name__ == "__main__":
         if (db_event := col.find_one({'admin_id': event['admin_id']})):
             db_event = merge_admin_event(db_event, event)
             save_event(str(db_event['_id']), db_event)
-        # Если курса в базе нет, ищем, есть ли курсы на те же даты
+        # Если курса в базе нет, ищем, есть ли курсы на те же даты (у которых нет admin_id)
         else:
             db_events = [e for e in col.find(
                 {'type': event['type'],
                  'start_date': event['start_date'],
-                 'end_date': event['end_date']}
+                 'end_date': event['end_date'],
+                 'admin_id': {'$exists': False}}
             )]
             # Если таких курсов в базе несколько, спрашиваем, с каким мержить
             # (также даем вариант вставить или пропустить)
@@ -91,10 +92,26 @@ if __name__ == "__main__":
                 for i, db_event in enumerate(db_events):
                     de = db_event
                     logger.info(f'{i}. {de["_id"]} {de["place"]}, {de["teachers"]}, admin_id={de.get("admin_id", '')}')
+                    logger.info('i. Insert')
+                    logger.info('c. Continue')
 
-                event_num = int(input("Type number to choose which event to merge with? > "))
-                db_event = merge_admin_event(db_events[event_num], event)
-                save_event(str(db_event['_id']), db_event)
+                while True:
+                    choice = input("Type number to choose which event to merge with? "
+                                   "Or type s to skip, i to insert new event > ").strip().lower()
+                    match choice:
+                        case 's':
+                            break
+                        case 'i':
+                            logger.debug('Inserting new event: %s', f"{event['name']} | {event['dates']} | {event['place']}")
+                            add_events([event])
+                            break
+                        case x if x.isdigit() and int(x) < len(db_events):
+                            event_num = int(x)
+                            db_event = merge_admin_event(db_events[event_num], event)
+                            save_event(str(db_event['_id']), db_event)
+                            break
+                        case _:
+                            print("Incorrect choice. Try again and type either number or s or i.")
             # Если такой курс есть и он один, мержим поля
             elif len(db_events) == 1:
                 db_event = merge_admin_event(db_events[0], event)

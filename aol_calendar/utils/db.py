@@ -31,7 +31,21 @@ def add_events(events):
         col.insert_one(e)
 
 
-def get_events(year, month):
+def keep_event(e):
+    # Персональные курсы медитации для 1 человека не будем отображать
+    if e.get('admin_id') in ['492126', '492127', '492128']:
+        return False
+    # Если курс завершился, но участников не было, не показываем его
+    # if e.get('status', '') == 'Завершён' and e.get('num_payments', 0) == 0:
+    #     return False
+    return True
+
+
+def keep_all(e):
+    return True
+
+
+def get_events(year, month, filter_func=keep_event):
     """Получаем события из базы за последний месяц"""
     col = mongo_db['events']
     start_of_month = datetime(year, month, 1)
@@ -46,7 +60,7 @@ def get_events(year, month):
                           '$lt': start_of_next_month}}
         ]}
     )
-    return [e for e in cursor]
+    return [e for e in cursor if filter_func(e)]
 
 
 def get_event_by_id(event_id):

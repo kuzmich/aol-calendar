@@ -7,7 +7,7 @@ PUBLIC_LINK_TEMPLATE = 'https://artofliving.ru/{event_path}?streamId={event_id}#
 COURSE_NAME_TYPE = {
     'art excel': 'art_excel',
     'dsn': 'dsn',
-    # 'дсн': 'dsn',
+    'дсн': 'dsn',
     'vtp online': 'vtp_online',
     'yes!': 'yes',
     'yes+': 'yes_plus',
@@ -51,7 +51,7 @@ EVENT_TYPE_PATH = {
     'blessing': "blessing",
     'cooking': "cookie",
     'deep_sleep': "deep-sleep",
-    'dsn': "dns",
+    'dsn': "dsn",
     'eternity': 'process_vechnosti',
     'first_step': "firststep",
     'give_up_smoking': "give-up-smoking",

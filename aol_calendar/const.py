@@ -8,6 +8,7 @@ COURSE_NAME_TYPE = {
     'art excel': 'art_excel',
     'dsn': 'dsn',
     'дсн': 'dsn',
+    'лидерский курс (dsn)': 'dsn',
     'vtp online': 'vtp_online',
     'yes!': 'yes',
     'yes+': 'yes_plus',

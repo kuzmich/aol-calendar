@@ -52,7 +52,7 @@ def home_page():
 
 @bp.route("/<int:year>.html")
 def calendar_page(year):
-    years = [2025, 2026]
+    years = [2026, 2027]
     calendar_data = []
     form = EventForm()
 

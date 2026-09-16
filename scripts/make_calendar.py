@@ -37,7 +37,7 @@ if __name__ == "__main__":
     template_file = 'page.html'
     output_dir = 'out/'
 
-    years = [2025, 2026]
+    years = [2026, 2027]
 
     config = get_config()
     set_db_var(get_db(config.DB_URL, config.DB_NAME))

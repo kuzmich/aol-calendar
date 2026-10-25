@@ -9,14 +9,17 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "aa",
+    "django>=6.1,<6.2",
     "flask>=3.1.2",
     "jinja2>=3.1.6",
+    "psycopg[binary]>=3.2",
     "pymongo>=4.15.4",
     "wtforms>=3.2.1",
 ]
 
 [dependency-groups]
 dev = [
+    "django-stubs>=6.1.2",
     "ipython>=9.6.0",
     "pytest>=9.0.2",
 ]

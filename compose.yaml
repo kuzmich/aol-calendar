@@ -10,5 +10,18 @@ services:
     environment:
       - GLIBC_TUNABLES=glibc.pthread.rseq=1  # Or remove the variable if it was set to 0 elsewhere
 
+  postgres:
+    image: postgres:18
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    ports:
+      # 5432 на хосте занят другими проектами
+      - "127.0.0.1:5433:5432"
+    environment:
+      - POSTGRES_DB=aol_calendar
+      - POSTGRES_USER=aol_calendar
+      - POSTGRES_PASSWORD=aol_calendar
+
 volumes:
   mongodb_data:
+  postgres_data:

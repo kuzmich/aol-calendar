@@ -6,11 +6,13 @@ PUBLIC_LINK_TEMPLATE = 'https://artofliving.ru/{event_path}?streamId={event_id}#
 
 COURSE_NAME_TYPE = {
     'art excel': 'art_excel',
+    'детский курс (art excel)': 'art_excel',
     'dsn': 'dsn',
     'дсн': 'dsn',
     'лидерский курс (dsn)': 'dsn',
     'vtp online': 'vtp_online',
     'yes!': 'yes',
+    'подростковый курс (yes!)': 'yes',
     'yes+': 'yes_plus',
     'блессинг': 'blessing',
     'глубокий сон и снятие тревожности': 'deep_sleep',

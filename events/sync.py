@@ -5,14 +5,13 @@
 еще нет, по типу курса, датам и месту.
 """
 from datetime import date, datetime
-import enum
 import logging
 import re
 
 from django.conf import settings
 from django.db.models import Q
 
-from aol_calendar.utils import human_dates
+from .dates import Month, human_dates
 from .models import Event, EventType, Place, Status, Teacher
 
 
@@ -94,21 +93,6 @@ EVENT_TYPE_PATH = {
     'yes': "yes",
     'yes_plus': "yesplus",
 }
-
-
-class Month(enum.Enum):
-    января = 1
-    февраля = 2
-    марта = 3
-    апреля = 4
-    мая = 5
-    июня = 6
-    июля = 7
-    августа = 8
-    сентября = 9
-    октября = 10
-    ноября = 11
-    декабря = 12
 
 
 # написание имени → (фамилия, имя), если имя нельзя просто разделить по первому пробелу

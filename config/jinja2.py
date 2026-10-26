@@ -2,7 +2,7 @@ from django.templatetags.static import static
 from django.urls import reverse
 from jinja2 import Environment
 
-from aol_calendar.filters import teacher_names
+from events.filters import teacher_names
 
 
 def url(viewname, *args, **kwargs):

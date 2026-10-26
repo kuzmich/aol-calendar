@@ -10,8 +10,8 @@ from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import path, reverse
 
-from aol_calendar.const import MonthName
 from . import sync
+from .dates import MonthName
 from .models import Event, EventDay, EventType, Place, Status, Teacher
 
 

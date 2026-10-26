@@ -4,9 +4,8 @@ from datetime import date
 
 from django.urls import reverse
 
-from aol_calendar.const import MonthName
-from aol_calendar.utils import human_dates
-from aol_calendar.utils.cal import get_month_dates, prepare_events
+from .dates import MonthName, human_dates
+from .grid import get_month_dates, prepare_events
 from .models import Event, EventDay
 
 

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from aol_calendar.utils import human_dates
+from .dates import human_dates
 
 if TYPE_CHECKING:
     from django.db.models.fields.related_descriptors import RelatedManager
@@ -80,7 +80,7 @@ class Event(models.Model):
     admin_link = models.URLField('Ссылка в админке', blank=True)
     public_link = models.URLField('Ссылка на сайте', blank=True)
 
-    # _id документа в MongoDB, по нему повторный импорт обновляет событие
+    # _id документа в MongoDB, из которой перенесены события (дамп: dump/mongo-2026-10-26.archive.gz)
     mongo_id = models.CharField(max_length=24, unique=True, null=True, blank=True, editable=False)
 
     if TYPE_CHECKING:

@@ -6,6 +6,7 @@ from django.test import SimpleTestCase, TestCase
 
 from . import sync
 from .calendar import calendar_context
+from .grid import get_cal_blocks
 from .models import Event, EventDay, EventType, Place, Status, Teacher
 
 
@@ -273,3 +274,50 @@ class FetchAdminCoursesTest(SimpleTestCase):
             courses = sync.fetch_admin_courses(2026, 2)
 
         self.assertEqual([c['admin_id'] for c in courses], ['500001'])
+
+
+class GetCalBlocksTest(SimpleTestCase):
+    """Разбиение события на полоски по неделям месяца"""
+
+    def blocks(self, *args, **kwargs):
+        return list(get_cal_blocks(*args, **kwargs))
+
+    def test_same_month_dates(self):
+        self.assertEqual(self.blocks(date(2025, 10, 25), date(2025, 10, 28)), [
+            {'week': 4, 'start': 6, 'end': 7},
+            {'week': 5, 'start': 1, 'end': 2},
+        ])
+
+    def test_start_date_in_cur_or_prev_month(self):
+        self.assertEqual(self.blocks(date(2026, 10, 30), date(2026, 11, 15), month=10), [
+            {'week': 5, 'start': 5, 'end': 7},
+        ])
+        self.assertEqual(self.blocks(date(2026, 10, 30), date(2026, 11, 15), month=11), [
+            {'week': 1, 'start': 5, 'end': 7},
+            {'week': 2, 'start': 1, 'end': 7},
+            {'week': 3, 'start': 1, 'end': 7},
+        ])
+
+    def test_start_date_in_prev_year(self):
+        self.assertEqual(self.blocks(date(2025, 12, 30), date(2026, 1, 2), 2026, 1), [
+            {'week': 1, 'start': 2, 'end': 5},
+        ])
+
+    def test_start_date_in_prev_year_2(self):
+        self.assertEqual(self.blocks(date(2025, 12, 29), date(2026, 1, 5), 2025, 12), [
+            {'week': 5, 'start': 1, 'end': 7},
+        ])
+        self.assertEqual(self.blocks(date(2025, 12, 29), date(2026, 1, 5), 2026, 1), [
+            {'week': 1, 'start': 1, 'end': 7},
+            {'week': 2, 'start': 1, 'end': 1},
+        ])
+
+    def test_end_date_in_next_or_cur_month(self):
+        self.assertEqual(self.blocks(date(2025, 10, 25), date(2025, 11, 4), month=10), [
+            {'week': 4, 'start': 6, 'end': 7},
+            {'week': 5, 'start': 1, 'end': 7},
+        ])
+        self.assertEqual(self.blocks(date(2025, 10, 25), date(2025, 11, 4), month=11), [
+            {'week': 1, 'start': 1, 'end': 7},
+            {'week': 2, 'start': 1, 'end': 2},
+        ])

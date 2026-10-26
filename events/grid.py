@@ -1,32 +1,7 @@
-"""Разные утилиты для работы с календарем"""
+"""Сетка календаря: недели месяца и полоски событий в них"""
 import calendar
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from itertools import groupby
-
-
-def next_month_first_day(d):
-    """Возвращает первый день следующего месяца"""
-
-    _, last_day = calendar.monthrange(d.year, d.month)
-    # Переходим на последний день текущего месяца и добавляем 1 день
-    return datetime(d.year, d.month, last_day) + timedelta(days=1)
-
-
-def weekdays_in_month(year: int, month: int, weekday: int):
-    """Возвращает все даты определенного дня недели в месяце
-
-    Например, все среды в апреле 2026:
-
-    >>> weekdays_in_month(2026, 4, calendar.WEDNESDAY)
-    [date(2026, 4, 1), date(2026, 4, 8), date(2026, 4, 15), date(2026, 4, 22), date(2026, 4, 29)]
-    """
-    cal = calendar.Calendar()
-    return [
-        date(year, month, day)
-        for week in cal.monthdayscalendar(year, month)
-        for day in [week[weekday]]
-        if day != 0
-    ]
 
 
 def get_month_dates(year, month):
@@ -132,11 +107,7 @@ def make_cal_blocks(events, year, month):
     #      'pos': {'week': 5, 'start': 1, 'end': 2, 'index': 1}},
     # ]
     for e in events:
-        # из MongoDB приходят datetime, из Django - date
-        start_date, end_date = e['start_date'], e['end_date']
-        if isinstance(start_date, datetime):
-            start_date, end_date = start_date.date(), end_date.date()
-        for i, block in enumerate(get_cal_blocks(start_date, end_date, year, month), 1):
+        for i, block in enumerate(get_cal_blocks(e['start_date'], e['end_date'], year, month), 1):
             block['index'] = i
             yield e | {'pos': block}
 

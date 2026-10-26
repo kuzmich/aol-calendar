@@ -1,15 +1,6 @@
 name: aol-calendar
 
 services:
-  mongodb:
-    image: mongo:8.2
-    volumes:
-      - mongodb_data:/data/db
-    ports:
-      - "127.0.0.1:27017:27017"
-    environment:
-      - GLIBC_TUNABLES=glibc.pthread.rseq=1  # Or remove the variable if it was set to 0 elsewhere
-
   postgres:
     image: postgres:18
     volumes:
@@ -23,5 +14,4 @@ services:
       - POSTGRES_PASSWORD=aol_calendar
 
 volumes:
-  mongodb_data:
   postgres_data:

@@ -134,8 +134,6 @@ STATIC_URL = 'static/'
 AOL_ADMIN_EMAIL = os.environ.get('AOL_ADMIN_EMAIL', '')
 AOL_ADMIN_PASSWORD = os.environ.get('AOL_ADMIN_PASSWORD', '')
 
-# calendar.css и calendar.js общие с Flask-версией и out/
-STATICFILES_DIRS = [BASE_DIR / 'aol_calendar' / 'static']
 
 
 # Email

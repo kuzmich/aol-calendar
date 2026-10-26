@@ -3,6 +3,28 @@ from django.contrib import admin
 from .models import Event, EventDay, EventType, Place, Status, Teacher
 
 
+# короткие еженедельные занятия, из-за которых в списке не видно основных курсов
+REGULAR_EVENT_TYPES = ['practices', 'practices_online', 'practices_vtp', 'yoga', 'yoga_spine', 'yoga_joints']
+
+
+class EventKindFilter(admin.SimpleListFilter):
+    title = 'вид события'
+    parameter_name = 'kind'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('courses', 'Курсы'),
+            ('regular', 'Регулярные занятия'),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'courses':
+            return queryset.exclude(type__slug__in=REGULAR_EVENT_TYPES)
+        if self.value() == 'regular':
+            return queryset.filter(type__slug__in=REGULAR_EVENT_TYPES)
+        return queryset
+
+
 class EventDayInline(admin.TabularInline):
     model = EventDay
     extra = 0
@@ -11,7 +33,7 @@ class EventDayInline(admin.TabularInline):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ['type', 'start_date', 'end_date', 'place', 'status', 'num_payments', 'teacher_names']
-    list_filter = ['type', 'status', 'place']
+    list_filter = [EventKindFilter, 'type', 'status', 'place']
     list_select_related = ['type', 'place', 'status']
     date_hierarchy = 'start_date'
     search_fields = ['type__name', 'place__name', 'teachers__last_name', 'admin_id']

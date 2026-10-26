@@ -3,7 +3,7 @@ from datetime import date
 from django.http import Http404
 from django.shortcuts import redirect, render
 
-from .calendar import YEARS, calendar_context
+from .calendar import ARCHIVE_YEARS, YEARS, calendar_context
 
 
 def home(request):
@@ -11,7 +11,7 @@ def home(request):
 
 
 def calendar_page(request, year):
-    if year not in YEARS:
+    if year not in YEARS + ARCHIVE_YEARS:
         raise Http404
     context = calendar_context(year) | {'can_edit': request.user.is_staff}
     return render(request, 'events/page.html', context)

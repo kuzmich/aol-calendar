@@ -4,13 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Календарь курсов и мероприятий «Искусства Жизни» в Иркутске на {{ current_year }} год</title>
-  {%- if static_build %}
-    <link rel="stylesheet" href="calendar.css?ver=2026-02-05T20:45:00+08:00">
-    <script src="calendar.js?ver=2026-02-05T20:45:00+08:00" defer></script>
-  {%- else %}
-    <link rel="stylesheet" href="{{ static('calendar.css') }}">
-    <script src="{{ static('calendar.js') }}" defer></script>
-  {%- endif %}
+  <link rel="stylesheet" href="{{ static('calendar.css') }}">
+  <script src="{{ static('calendar.js') }}" defer></script>
   {%- if can_edit %}
     <link rel="stylesheet" href="{{ static('events/staff.css') }}">
     <script src="{{ static('events/staff.js') }}" defer></script>

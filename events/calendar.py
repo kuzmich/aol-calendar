@@ -10,7 +10,10 @@ from aol_calendar.utils.cal import get_month_dates, prepare_events
 from .models import Event, EventDay
 
 
+# годы в навигации
 YEARS = [2026, 2027]
+# открываются по прямой ссылке, но в навигации их нет
+ARCHIVE_YEARS = [2025]
 
 # персональные курсы медитации для 1 человека не показываем
 EXCLUDED_ADMIN_IDS = ['492126', '492127', '492128']

@@ -1,9 +1,6 @@
 from datetime import date, time
-from pathlib import Path
-import tempfile
 
 from django.contrib.auth.models import User
-from django.core.management import call_command
 from django.test import TestCase
 
 from .calendar import calendar_context
@@ -83,11 +80,11 @@ class CalendarPageTest(CalendarTestCase):
         self.assertContains(response, f'data-admin-url="/admin/events/event/{self.event.pk}/change/"')
         self.assertContains(response, 'href="/admin/events/event/add/"')
 
-    def test_build_static(self):
-        with tempfile.TemporaryDirectory() as output_dir:
-            call_command('build_static', output_dir=Path(output_dir), stdout=open('/dev/null', 'w'))
-            html = (Path(output_dir) / '2026.html').read_text()
+    def test_archive_year(self):
+        # 2025 открывается по прямой ссылке (на нее ведет редирект со старого сайта), но не в навигации
+        self.create_event(self.happiness, date(2025, 3, 7), date(2025, 3, 9))
+        response = self.client.get('/2025.html')
 
-        self.assertIn('href="calendar.css?ver=', html)
-        self.assertIn('grid-row: 3; grid-column: 5 / 8', html)
-        self.assertNotIn('/admin/', html)
+        self.assertContains(response, 'data-dates="7-9 марта"')
+        self.assertNotContains(response, 'href="2025.html"')
+        self.assertContains(response, 'href="2026.html"')

@@ -27,9 +27,11 @@
 {% block content %}
 <form method="post" class="sync-month">
   {% csrf_token %}
+  <input type="hidden" name="action" value="fetch">
   <div>{{ form.month.label_tag }} {{ form.month }}</div>
   <div>{{ form.year.label_tag }} {{ form.year }}</div>
-  <button type="submit" name="action" value="fetch" class="button">Загрузить из админки</button>
+  {# input, а не button: стили админки с нормальными отступами заданы для input[type="submit"] #}
+  <input type="submit" value="Загрузить из админки">
 </form>
 {{ form.non_field_errors }}{{ form.month.errors }}{{ form.year.errors }}
 
@@ -38,6 +40,7 @@
   {% if rows %}
   <form method="post">
     {% csrf_token %}
+    <input type="hidden" name="action" value="apply">
     <table class="sync-table">
       <thead>
         <tr><th>Курс в админке</th><th>Что сделать</th></tr>
@@ -86,7 +89,7 @@
       </tbody>
     </table>
     <div class="submit-row">
-      <button type="submit" name="action" value="apply" class="default">Применить</button>
+      <input type="submit" value="Применить" class="default">
     </div>
   </form>
   {% endif %}

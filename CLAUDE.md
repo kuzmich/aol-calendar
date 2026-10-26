@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Calendar of Art of Living courses and events in Irkutsk. Data lives in MongoDB; it is edited through a Flask app and published as static HTML on GitHub Pages. User-facing text, docstrings, comments and commit messages are in Russian.
 
-The project is migrating to Django + Postgres. For now the Django side (`manage.py`, `config/`, `events/`) only provides the Django admin over a Postgres copy of the data. Flask/MongoDB remain the working system until the calendar rendering is ported.
+The project is migrating to Django + Postgres. The Django side (`manage.py`, `config/`, `events/`) holds a Postgres copy of the data. It provides the Django admin, the calendar page and the static build. Flask/MongoDB/`make_calendar.py` still exist alongside it during the transition.
 
 ## Commands
 
@@ -12,7 +12,9 @@ The project is migrating to Django + Postgres. For now the Django side (`manage.
 docker compose up -d                                            # MongoDB 8.2 on 127.0.0.1:27017, Postgres 18 on 127.0.0.1:5433
 uv run --env-file .env manage.py migrate
 uv run --env-file .env manage.py import_mongo                   # copy Mongo events → Postgres (idempotent, by mongo_id)
-uv run --env-file .env manage.py runserver 8001                 # Django admin at /admin/ (port 8000 is taken locally)
+uv run --env-file .env manage.py runserver 8001                 # calendar at /<year>.html, admin at /admin/ (port 8000 is taken locally)
+uv run --env-file .env manage.py build_static                   # out/<year>.html from Postgres (--output-dir to write elsewhere)
+uv run --env-file .env manage.py test events                    # Django tests (pytest only covers tests/)
 uv run --env-file .env flask --app aol_calendar run --debug     # editing site (Flask)
 uv run --env-file .env scripts/make_calendar.py                 # regenerate out/<year>.html
 uv run --env-file .env scripts/sync_events.py <year> <month>    # pull courses from artofliving.ru admin, merge into DB
@@ -27,6 +29,8 @@ uv run pytest tests/test_cal_utils.py::TestGetCalBlocks::test_same_month_dates
 ## Architecture
 
 **Django schema** (`events/models.py`): `Event` has FKs to the lookup tables `EventType` (`slug` = the old Mongo `type`, `name` = course name), `Place` and `Status`, plus M2M `teachers` (`Teacher` with `last_name`/`first_name`). `start_date`/`end_date` are `DateField`s; the old `dates` string is dropped. Times live in optional `EventDay` rows (one per day, only for days whose time is known), because multi-day courses can have different times each day. `admin_id`/`admin_link`/`public_link`/`num_payments` (number of people who paid) come from the site admin. `mongo_id` links back to the Mongo document for re-imports. Postgres settings come from `POSTGRES_*` env vars, with defaults matching `compose.yaml`.
+
+**Django calendar:** `events/calendar.py::calendar_context(year)` turns events into the dicts the old pipeline expects and reuses `aol_calendar/utils/cal.py` (`get_month_dates`, `prepare_events`). The view (`events/views.py`) and `build_static` both render `events/jinja2/events/page.html`. Pages use Jinja2: the backend is configured in `config/settings.py`, and `config/jinja2.py` provides the `static`/`url` globals and the `teacher_names` filter. The Django admin uses Django templates. `static_build=True` switches to relative asset links. `can_edit` (staff users) adds links into the admin via `events/static/events/staff.js`. `calendar.css`/`calendar.js` are shared from `aol_calendar/static` via `STATICFILES_DIRS`.
 
 The sections below describe the legacy Flask/Mongo system.
 

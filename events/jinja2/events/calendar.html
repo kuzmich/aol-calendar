@@ -1,0 +1,31 @@
+  <h2 id="{{ data.month }}">{{ data.month_name }} {{ data.year }}</h2>
+  <div class="calendar" data-month="{{ data.month }}" data-year="{{ data.year }}">
+    <div class="day-of-week">пн</div>
+    <div class="day-of-week">вт</div>
+    <div class="day-of-week">ср</div>
+    <div class="day-of-week">чт</div>
+    <div class="day-of-week">пт</div>
+    <div class="day-of-week">сб</div>
+    <div class="day-of-week">вс</div>
+    {%- for week in data.dates %}
+    {%- set week_num = loop.index %}
+    {%- for date in week %}
+    <div class="day week{{ week_num }} weekday{{ loop.index }}{% if date.month != data.month %} off-month{% endif %}">{{ date.day }}</div>
+    {%- endfor %}
+    {%- endfor %}
+    {%- for event in data.events %}
+    <button class="event line-clamp {{ event.type }} event-num-{{ event.pos.index }}"
+	    style="grid-row: {{ event.pos.week + 1}}; grid-column: {{ event.pos.start }} / {{ event.pos.end + 1 }}"
+	    data-id="{{ event.id }}"
+	    data-name="{{ event.name }}"
+	    data-dates="{{ event.dates }}"
+	    {%- if event.time %} data-time="{{ event.time }}"{%- endif %}
+	    data-place="{{ event.place }}"
+	    {%- if event.teachers %} data-teachers="{{ event.teachers|join(', ') }}"{%- endif %}
+	    {%- if event.num_payments %} data-people="{{ event.num_payments }}"{%- endif %}
+	    {%- if event.public_link %} data-link="{{ event.public_link }}"{%- endif %}
+	    {%- if can_edit %} data-admin-url="{{ event.admin_url }}"{%- endif %}>
+      {{ event.name }}{% if event.teachers %} ({{ event.teachers|teacher_names }}){% endif %}
+    </button>
+    {%- endfor %}
+  </div>

@@ -132,7 +132,11 @@ def make_cal_blocks(events, year, month):
     #      'pos': {'week': 5, 'start': 1, 'end': 2, 'index': 1}},
     # ]
     for e in events:
-        for i, block in enumerate(get_cal_blocks(e['start_date'].date(), e['end_date'].date(), year, month), 1):
+        # из MongoDB приходят datetime, из Django - date
+        start_date, end_date = e['start_date'], e['end_date']
+        if isinstance(start_date, datetime):
+            start_date, end_date = start_date.date(), end_date.date()
+        for i, block in enumerate(get_cal_blocks(start_date, end_date, year, month), 1):
             block['index'] = i
             yield e | {'pos': block}
 

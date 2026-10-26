@@ -1,7 +1,12 @@
+from typing import TYPE_CHECKING
+
 from django.core.exceptions import ValidationError
 from django.db import models
 
 from aol_calendar.utils import human_dates
+
+if TYPE_CHECKING:
+    from django.db.models.fields.related_descriptors import RelatedManager
 
 
 class EventType(models.Model):
@@ -77,6 +82,9 @@ class Event(models.Model):
 
     # _id документа в MongoDB, по нему повторный импорт обновляет событие
     mongo_id = models.CharField(max_length=24, unique=True, null=True, blank=True, editable=False)
+
+    if TYPE_CHECKING:
+        days: RelatedManager['EventDay']
 
     class Meta:
         verbose_name = 'Событие'

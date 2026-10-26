@@ -1,0 +1,14 @@
+/* «+» - ссылка, а не кнопка, как во Flask-версии */
+a.add-event-btn {
+    display: grid;
+    place-items: center;
+    color: inherit;
+    text-decoration: none;
+}
+
+.event-details .edit-link {
+    display: block;
+    margin: var(--padding);
+    margin-top: 0;
+    text-align: center;
+}

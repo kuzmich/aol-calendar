@@ -13,9 +13,17 @@ from aol_calendar.utils.db import get_db
 from events.models import Event, EventDay, EventType, Place, Status, Teacher
 
 
-# написание имени в базе → правильное «Фамилия Имя»
-TEACHER_ALIASES = {
-    'Татьяна Куликова': 'Куликова Татьяна',
+# написание имени в базе → (фамилия, имя), если имя нельзя просто разделить по первому пробелу
+TEACHER_NAMES = {
+    'Татьяна Куликова': ('Куликова', 'Татьяна'),
+    'Кашикар Динеш': ('Свами Каушик', '(Каши)'),
+    'Свами Каушик (Каши)': ('Свами Каушик', '(Каши)'),
+}
+
+# правильные названия типов, у которых в базе несколько написаний
+EVENT_TYPE_NAMES = {
+    'art_excel': 'Детский курс (ART Excel)',
+    'yes': 'Подростковый курс (YES!)',
 }
 
 
@@ -44,22 +52,24 @@ class Command(BaseCommand):
         (self.created if created else self.updated)[model] += 1
 
     def import_types(self, docs):
-        # у некоторых типов несколько написаний названия, берем самое частое
+        # у некоторых типов несколько написаний названия, берем правильное или самое частое
         names = defaultdict(Counter)
         for doc in docs:
             names[doc['type']][doc['name']] += 1
 
         types = {}
         for slug, counter in names.items():
-            name = counter.most_common(1)[0][0]
+            name = EVENT_TYPE_NAMES.get(slug) or counter.most_common(1)[0][0]
             types[slug], created = EventType.objects.get_or_create(slug=slug, defaults={'name': name})
             if created:
                 self.count(EventType, created)
         return types
 
     def get_teacher(self, full_name: str):
-        full_name = TEACHER_ALIASES.get(full_name, full_name)
-        last_name, _, first_name = full_name.partition(' ')
+        if full_name in TEACHER_NAMES:
+            last_name, first_name = TEACHER_NAMES[full_name]
+        else:
+            last_name, _, first_name = full_name.partition(' ')
         teacher, created = Teacher.objects.get_or_create(last_name=last_name, first_name=first_name)
         if created:
             self.count(Teacher, created)

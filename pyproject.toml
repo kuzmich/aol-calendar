@@ -13,7 +13,7 @@ dependencies = [
     "jinja2>=3.1.6",
     "psycopg>=3.2",
     # под FreeBSD (serv00) бинарных колес нет, там psycopg работает с системной libpq
-    "psycopg-binary>=3.2; sys_platform != 'freebsd'",
+    "psycopg-binary>=3.2; platform_system != 'FreeBSD'",
     "pymongo>=4.15.4",
     "wtforms>=3.2.1",
 ]

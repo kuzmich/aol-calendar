@@ -23,8 +23,9 @@ uv run pytest tests/test_cal_utils.py::TestGetCalBlocks::test_same_month_dates
 ```
 
 - `.env` sets `AOL_CALENDAR_CONFIG`, the path to a Python config module (`instance/config.py`) with `DB_URL`, `DB_NAME`, `EMAIL`, `PASSWORD`. Scripts load it via `aol_calendar.utils.get_config()`; the Flask app reads the same `instance/config.py` via `from_pyfile`.
-- The `aa` dependency is a local editable package at `../automation` (provides `aa.proxy.admin` login/scraping for the artofliving.ru admin). `uv sync` fails without that sibling checkout.
-- Deployment: pushing to `master` triggers `.github/workflows/static.yml`, which publishes `out/` to GitHub Pages. So `out/*.html` is committed; "data:" commits are typically sync + regenerate + commit of `out/`.
+- The `aa` dependency is a local editable package at `../automation` (provides `aa.proxy.admin` login/scraping for the artofliving.ru admin). It lives in the `sync` dependency group (installed locally by default via `tool.uv.default-groups`, kept out of the wheel); `uv sync` fails without that sibling checkout.
+- Static deployment: pushing to `master` triggers `.github/workflows/static.yml`, which publishes `out/` to GitHub Pages. So `out/*.html` is committed; "data:" commits are typically sync + regenerate + commit of `out/`.
+- Django deployment (serv00, https://calendar.maxc4m.serv00.net): `uv run fab deploy` builds the wheel (packages `aol_calendar`, `config`, `events`), installs it into `~/venvs/aol-calendar` on `ssh serv00`, runs `migrate`/`collectstatic` and restarts Passenger. `uv run fab manage --args '<django-admin command>'` runs other commands there. Server-only files live in `~/domains/calendar.maxc4m.serv00.net/public_python/`: `passenger_wsgi.py` and `settings_serv00.py` (secrets, DB, paths), with templates in `deploy/`. Since the version is always 0.1.0, the wheel is reinstalled with `--force-reinstall --no-deps`.
 
 ## Architecture
 

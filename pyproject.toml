@@ -8,11 +8,12 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "aa",
     "django>=6.1,<6.2",
     "flask>=3.1.2",
     "jinja2>=3.1.6",
-    "psycopg[binary]>=3.2",
+    "psycopg>=3.2",
+    # под FreeBSD (serv00) бинарных колес нет, там psycopg работает с системной libpq
+    "psycopg-binary>=3.2; sys_platform != 'freebsd'",
     "pymongo>=4.15.4",
     "wtforms>=3.2.1",
 ]
@@ -20,12 +21,23 @@ dependencies = [
 [dependency-groups]
 dev = [
     "django-stubs>=6.1.2",
+    "fabric>=3.2.2",
     "ipython>=9.6.0",
     "pytest>=9.0.2",
 ]
+# синхронизация с админкой artofliving.ru (scripts/sync_events.py), на сервер не ставится
+sync = [
+    "aa",
+]
+
+[tool.uv]
+default-groups = ["dev", "sync"]
 
 [tool.uv.sources]
 aa = { path = "../automation", editable = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["aol_calendar", "config", "events"]
 
 [build-system]
 requires = ["hatchling"]

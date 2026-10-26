@@ -236,11 +236,17 @@ def parse_admin_course(course, year, month):
 
 def fetch_admin_courses(year, month):
     """Загружает курсы за месяц из админки artofliving.ru"""
-    from aa.proxy.admin import find_courses, log_in
+    from aa.proxy.admin import OFFLINE_ADMIN_URL, find_courses, log_in
+
+    if not (settings.AOL_ADMIN_EMAIL and settings.AOL_ADMIN_PASSWORD):
+        raise AdminLoginError('Не заданы AOL_ADMIN_EMAIL и AOL_ADMIN_PASSWORD')
 
     session = log_in(settings.AOL_ADMIN_EMAIL, settings.AOL_ADMIN_PASSWORD)
-    if session is None:
-        raise AdminLoginError('Не удалось войти в админку artofliving.ru')
+    # с неверным паролем сайт все равно отвечает на вход успехом, но список курсов отдает с кодом 403
+    # и без таблицы, а find_courses принимает его за пустой месяц
+    resp = session.get(OFFLINE_ADMIN_URL) if session is not None else None
+    if resp is None or resp.status_code != 200 or 'w0-container' not in resp.text:
+        raise AdminLoginError('Не удалось войти в админку artofliving.ru, проверьте логин и пароль')
 
     courses = find_courses(session, month=datetime(year, month, 1), include_free=True)
     # неопубликованные курсы без оплат - черновики, их не переносим

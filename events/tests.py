@@ -240,3 +240,36 @@ class SyncViewTest(SyncTestCase):
         response = self.client.get(self.url)
 
         self.assertRedirects(response, f'/admin/login/?next={self.url}', fetch_redirect_response=False)
+
+
+class FetchAdminCoursesTest(SimpleTestCase):
+
+    def admin_page(self, status_code, text):
+        session = mock.Mock()
+        session.get.return_value = mock.Mock(status_code=status_code, text=text)
+        return session
+
+    @mock.patch('django.conf.settings.AOL_ADMIN_EMAIL', '')
+    def test_no_credentials(self):
+        with self.assertRaisesMessage(sync.AdminLoginError, 'Не заданы'):
+            sync.fetch_admin_courses(2026, 11)
+
+    @mock.patch('django.conf.settings.AOL_ADMIN_PASSWORD', 'wrong')
+    @mock.patch('django.conf.settings.AOL_ADMIN_EMAIL', 'user@example.com')
+    def test_wrong_password(self):
+        # вход «успешен», но список курсов отдается с кодом 403
+        with mock.patch('aa.proxy.admin.log_in', return_value=self.admin_page(403, 'Forbidden')), \
+             mock.patch('aa.proxy.admin.find_courses') as find_courses:
+            with self.assertRaisesMessage(sync.AdminLoginError, 'Не удалось войти'):
+                sync.fetch_admin_courses(2026, 11)
+        find_courses.assert_not_called()
+
+    @mock.patch('django.conf.settings.AOL_ADMIN_PASSWORD', 'secret')
+    @mock.patch('django.conf.settings.AOL_ADMIN_EMAIL', 'user@example.com')
+    def test_courses(self):
+        draft = admin_course(id='500002', status='Не опубликован', num_payments=0)
+        with mock.patch('aa.proxy.admin.log_in', return_value=self.admin_page(200, '<div id="w0-container">')), \
+             mock.patch('aa.proxy.admin.find_courses', return_value=[admin_course(), draft]):
+            courses = sync.fetch_admin_courses(2026, 2)
+
+        self.assertEqual([c['admin_id'] for c in courses], ['500001'])

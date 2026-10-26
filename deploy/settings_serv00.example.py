@@ -29,5 +29,9 @@ DATABASES = {
     }
 }
 
+# вход в админку artofliving.ru для синхронизации курсов
+AOL_ADMIN_EMAIL = ''
+AOL_ADMIN_PASSWORD = ''
+
 STATIC_URL = '/static/'
 STATIC_ROOT = '/usr/home/maxc4m/domains/calendar.maxc4m.serv00.net/public_python/public/static'

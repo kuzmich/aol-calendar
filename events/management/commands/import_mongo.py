@@ -11,14 +11,8 @@ from django.db import transaction
 from aol_calendar.utils import get_config
 from aol_calendar.utils.db import get_db
 from events.models import Event, EventDay, EventType, Place, Status, Teacher
+from events.sync import split_teacher_name
 
-
-# написание имени в базе → (фамилия, имя), если имя нельзя просто разделить по первому пробелу
-TEACHER_NAMES = {
-    'Татьяна Куликова': ('Куликова', 'Татьяна'),
-    'Кашикар Динеш': ('Свами Каушик', '(Каши)'),
-    'Свами Каушик (Каши)': ('Свами Каушик', '(Каши)'),
-}
 
 # правильные названия типов, у которых в базе несколько написаний
 EVENT_TYPE_NAMES = {
@@ -66,10 +60,7 @@ class Command(BaseCommand):
         return types
 
     def get_teacher(self, full_name: str):
-        if full_name in TEACHER_NAMES:
-            last_name, first_name = TEACHER_NAMES[full_name]
-        else:
-            last_name, _, first_name = full_name.partition(' ')
+        last_name, first_name = split_teacher_name(full_name)
         teacher, created = Teacher.objects.get_or_create(last_name=last_name, first_name=first_name)
         if created:
             self.count(Teacher, created)

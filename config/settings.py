@@ -130,6 +130,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# вход в админку artofliving.ru для синхронизации курсов (events/sync.py)
+AOL_ADMIN_EMAIL = os.environ.get('AOL_ADMIN_EMAIL', '')
+AOL_ADMIN_PASSWORD = os.environ.get('AOL_ADMIN_PASSWORD', '')
+
 # calendar.css и calendar.js общие с Flask-версией и out/
 STATICFILES_DIRS = [BASE_DIR / 'aol_calendar' / 'static']
 

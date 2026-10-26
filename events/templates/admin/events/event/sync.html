@@ -1,0 +1,94 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .sync-month { display: flex; gap: 1rem; align-items: end; margin-bottom: 1.5rem; }
+  .sync-month label { display: block; font-weight: bold; }
+  .sync-table { width: 100%; }
+  .sync-table td { vertical-align: top; }
+  .sync-table ul { margin: 0; padding-left: 0; list-style: none; }
+  .sync-table li { margin: 0 0 0.5rem; }
+  .sync-changes { margin: 0.25rem 0 0 1.5rem; color: var(--body-quiet-color); }
+  .sync-kind { font-size: 0.8em; padding: 0.1em 0.4em; border-radius: 3px; background: var(--darkened-bg); }
+  .sync-kind-unknown { background: var(--message-error-bg); }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Начало</a>
+  &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  &rsaquo; <a href="{% url 'admin:events_event_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+  &rsaquo; Синхронизация с админкой
+</div>
+{% endblock %}
+
+{% block content %}
+<form method="post" class="sync-month">
+  {% csrf_token %}
+  <div>{{ form.month.label_tag }} {{ form.month }}</div>
+  <div>{{ form.year.label_tag }} {{ form.year }}</div>
+  <button type="submit" name="action" value="fetch" class="button">Загрузить из админки</button>
+</form>
+{{ form.non_field_errors }}{{ form.month.errors }}{{ form.year.errors }}
+
+{% if rows is not None %}
+  <h2>Курсы в админке за {{ period }}: {{ rows|length }}</h2>
+  {% if rows %}
+  <form method="post">
+    {% csrf_token %}
+    <table class="sync-table">
+      <thead>
+        <tr><th>Курс в админке</th><th>Что сделать</th></tr>
+      </thead>
+      <tbody>
+      {% for row in rows %}
+        <tr>
+          <td>
+            <strong>{{ row.course.name }}</strong>, {{ row.dates }}
+            {% if row.kind == 'update' %}<span class="sync-kind">уже связан</span>
+            {% elif row.kind == 'match' %}<span class="sync-kind">похожие события</span>
+            {% elif row.kind == 'new' %}<span class="sync-kind">нет в календаре</span>
+            {% else %}<span class="sync-kind sync-kind-unknown">неизвестный курс — добавьте название в COURSE_NAME_TYPE</span>{% endif %}
+            <br>{{ row.course.place }}
+            {% if row.course.teachers %}<br>{{ row.course.teachers|join:", " }}{% endif %}
+            <br>Оплатили: {{ row.course.num_payments|default_if_none:"—" }}, статус: {{ row.course.status|default_if_none:"—" }}
+            <br><a href="{{ row.course.admin_link }}" target="_blank">в админке #{{ row.course.admin_id }}</a>
+          </td>
+          <td>
+            <ul>
+            {% for option in row.options %}
+              <li>
+                <label>
+                  <input type="radio" name="choice_{{ row.course.admin_id }}" value="{{ option.value }}"
+                         {% if option.value == row.default %}checked{% endif %}>
+                  {{ option.label }}
+                  {% if option.event %}
+                    с <a href="{% url 'admin:events_event_change' option.event.pk %}" target="_blank">{{ option.event }}</a>, {{ option.event.place }}
+                  {% endif %}
+                </label>
+                {% if option.event %}
+                  <div class="sync-changes">
+                  {% for label, old, new in option.changes %}
+                    {{ label }}: {{ old|default_if_none:"—" }} → {{ new|default_if_none:"—" }}<br>
+                  {% empty %}
+                    без изменений
+                  {% endfor %}
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+            </ul>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <div class="submit-row">
+      <button type="submit" name="action" value="apply" class="default">Применить</button>
+    </div>
+  </form>
+  {% endif %}
+{% endif %}
+{% endblock %}
